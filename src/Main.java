@@ -2,12 +2,20 @@
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        // few random examples
-        Draw.addCharIntoHexagon(-2, 1, 'x'); // adds 'x' into hexagon labelled (-2, 1)
-        Draw.addCharIntoHexagon(2, 1, '0'); // adds '0' into hexagon labelled (2,1)
-        Draw.addCharIntoHexagon(1, -3, '0'); // adds '0' into hexagon labelled (1, -3)
 
-        // draw the board
-        Draw.drawBoard();
+        // Some examples
+        Board board = new Board(); // declares new board
+
+        // places some atoms on board
+        board.placeAtom(0, 0);
+        board.placeAtom(-3, -1);
+        board.placeAtom(2, 2);
+        board.placeAtom(0, -2);
+
+        board.printBoard(); // prints board
+
+        // prints the array representing the board
+        // (hexagon's toString method returns the co-ordinates so this just shows all the co-ordinates of all the atoms in one line)
+        System.out.println(board.getBoard());
     }
 }
