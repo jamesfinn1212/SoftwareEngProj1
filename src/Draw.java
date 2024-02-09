@@ -11,7 +11,7 @@ public class Draw {
 
     // Method to draw out the current board
     public static void drawBoard(Board b){
-        for(String line : b.getBoard()) {
+        for(String line : b.getStringBoard()) {
             System.out.println(line);
         }
     }
