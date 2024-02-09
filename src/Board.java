@@ -145,14 +145,6 @@ public class Board {
         // Add new row into the board, replacing the old one
         stringBoard[yPolar] = newRow.toString();
 
-        for(Hexagon hexagon: listBoard) {
-
-            // if the hexagon has an atom on it, draw the atom
-            if(hexagon.hasAtom()) {
-                addAtom(hexagon.getX(), hexagon.getY());
-            }
-
-        }
 
 
     }
