@@ -6,6 +6,7 @@ public class Hexagon {
     private boolean hasAtom;
 
     private boolean hasInfluence;
+    private Board.Direction influencedFrom;
 
 
     // constructor
@@ -41,9 +42,18 @@ public class Hexagon {
         return hasInfluence;
     }
 
-    public void placeInfluence(){
-        System.out.println("placimng");
+    public void placeInfluence(Board.Direction direction){
+        //System.out.println("placimng");
         hasInfluence = true;
+        influencedFrom = direction;
+    }
+    public void removeInfluence() {
+        hasInfluence = false;
+        influencedFrom = null;
+    }
+
+    public Board.Direction influencedFrom() {
+        return influencedFrom;
     }
 
 

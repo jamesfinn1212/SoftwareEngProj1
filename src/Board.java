@@ -100,6 +100,35 @@ public class Board {
         }
     }
 
+    public enum Direction { // made public for use in other classes
+        EAST,
+        WEST,
+        NORTHEAST,
+        NORTHWEST,
+        SOUTHEAST,
+        SOUTHWEST;
+
+        // method to determine whether 2 directions are "opposite" of each other
+        public boolean isOpposite(Direction otherDirection) {
+            switch (this) {
+                case EAST:
+                    return otherDirection == WEST;
+                case WEST:
+                    return otherDirection == EAST;
+                case NORTHEAST:
+                    return otherDirection == SOUTHWEST;
+                case NORTHWEST:
+                    return otherDirection == SOUTHEAST;
+                case SOUTHWEST:
+                    return otherDirection == NORTHEAST;
+                case SOUTHEAST:
+                    return otherDirection == NORTHWEST;
+            }
+
+            return false;
+        }
+    }
+
     public int getStringBoardLength(){
         return this.stringBoardLength;
     }
@@ -150,7 +179,7 @@ public class Board {
     public void addAtom(int x, int y){
         addChar(x, y, '*');
         getListHexagon(x, y).placeAtom();
-        System.out.println("add atom");
+        //System.out.println("add atom");
         addCircleOfInfluence(x, y);
     }
 
@@ -158,33 +187,54 @@ public class Board {
 
 
     public void addCircleOfInfluence(int x, int y) {
-        System.out.println("im here");
+        //System.out.println("im here");
 //checks all surrounding hexagons if they exits and if sow and influence marker
         if(getListHexagon(x+1, y) != null){
-            System.out.println("im here 20");
-            getListHexagon(x+1, y).placeInfluence();
+            //System.out.println("im here 20");
+            getListHexagon(x+1, y).placeInfluence(Direction.EAST);
         }if(getListHexagon(x, y-1) != null){
-            getListHexagon(x, y-1).placeInfluence();
+            getListHexagon(x, y-1).placeInfluence(Direction.SOUTHEAST);
         }if(getListHexagon(x-1, y-1) != null){
-            getListHexagon(x-1, y-1).placeInfluence();
+            getListHexagon(x-1, y-1).placeInfluence(Direction.SOUTHWEST);
         }if(getListHexagon(x-1, y) != null){
-            getListHexagon(x-1, y).placeInfluence();
+            getListHexagon(x-1, y).placeInfluence(Direction.WEST);
         }if(getListHexagon(x, y+1) != null) {
-            getListHexagon(x, y + 1).placeInfluence();
+            getListHexagon(x, y + 1).placeInfluence(Direction.NORTHWEST);
         }if(getListHexagon(x+1, y+1) != null){
-            getListHexagon(x+1, y+1).placeInfluence();
+            getListHexagon(x+1, y+1).placeInfluence(Direction.NORTHEAST);
         }
 
         for(Hexagon hexagon: listBoard) {
 
             // if the hexagon has an atom on it, draw the atom
             if(hexagon.hasInfluence()) {
-                System.out.println(hexagon);
-                   addChar(hexagon.getX(), hexagon.getY(), '#');
+                //System.out.println(hexagon);
+                addChar(hexagon.getX(), hexagon.getY(), '#');
             }
 
         }
 
+    }
+
+    // Method to return the next hexagon on the board in a given direction
+    public Hexagon getNextHexagon(Hexagon hexagon, Direction direction) {
+
+        switch(direction) {
+            case EAST: // x: +1, y: +0
+                return getListHexagon(hexagon.getX() + 1, hexagon.getY());
+            case WEST: // x: -1, y: +0
+                return getListHexagon(hexagon.getX() - 1, hexagon.getY());
+            case NORTHEAST: // x: +1, y: +1
+                return getListHexagon(hexagon.getX() + 1, hexagon.getY() + 1);
+            case NORTHWEST: // x: +0, y: +1
+                return getListHexagon(hexagon.getX(), hexagon.getY() + 1);
+            case SOUTHEAST: // x: +0, y: -1
+                return getListHexagon(hexagon.getX(), hexagon.getY() - 1);
+            case SOUTHWEST: // x: -1, y: -1
+                return getListHexagon(hexagon.getX() - 1, hexagon.getY() - 1);
+        }
+
+        return null;
     }
 
 
