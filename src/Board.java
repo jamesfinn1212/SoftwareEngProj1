@@ -122,14 +122,13 @@ public class Board {
             }
         }
 
-        return listBoard.get(0); // if hexagon not found, return the first hexagon on the board (this is to satisfy the IDE, there is definitely a better way of doing this lol)
+        return null; // if hexagon not found, return the first hexagon on the board (this is to satisfy the IDE, there is definitely a better way of doing this lol)
     }
 
 
     // Method to add a character into the center of hexagon using the (x, y) co-ordinates.
 
-    public void addAtom(int x, int y) {
-        getListHexagon(x, y).placeAtom(); // finds hexagon at x and y and uses "placeAtom()" from Hexagon class
+    public void addChar(int x, int y, char c) {
 
         // Polar co-ordinates conversion
         // Each center of hexagon is 12 horizontal spaces away from each other.
@@ -140,21 +139,56 @@ public class Board {
 
         // Using StringBuilder, set character at (x,y) to c
         StringBuilder newRow = new StringBuilder(stringBoard[yPolar]);
-        newRow.setCharAt(xPolar, '*');
+        newRow.setCharAt(xPolar, c);
 
         // Add new row into the board, replacing the old one
         stringBoard[yPolar] = newRow.toString();
 
+
+    }
+
+    public void addAtom(int x, int y){
+        addChar(x, y, '*');
+        getListHexagon(x, y).placeAtom();
+        System.out.println("add atom");
+        addCircleOfInfluence(x, y);
+    }
+
+
+
+
+    public void addCircleOfInfluence(int x, int y) {
+        System.out.println("im here");
+//checks all surrounding hexagons if they exits and if sow and influence marker
+        if(getListHexagon(x+1, y) != null){
+            System.out.println("im here 20");
+            getListHexagon(x+1, y).placeInfluence();
+        }if(getListHexagon(x, y-1) != null){
+            getListHexagon(x, y-1).placeInfluence();
+        }if(getListHexagon(x-1, y-1) != null){
+            getListHexagon(x-1, y-1).placeInfluence();
+        }if(getListHexagon(x-1, y) != null){
+            getListHexagon(x-1, y).placeInfluence();
+        }if(getListHexagon(x, y+1) != null) {
+            getListHexagon(x, y + 1).placeInfluence();
+        }if(getListHexagon(x+1, y+1) != null){
+            getListHexagon(x+1, y+1).placeInfluence();
+        }
+
         for(Hexagon hexagon: listBoard) {
 
             // if the hexagon has an atom on it, draw the atom
-            if(hexagon.hasAtom()) {
-                addAtom(hexagon.getX(), hexagon.getY());
+            if(hexagon.hasInfluence()) {
+                System.out.println(hexagon);
+                   addChar(hexagon.getX(), hexagon.getY(), '#');
             }
 
         }
 
-
     }
+
+
+
+
 
 }

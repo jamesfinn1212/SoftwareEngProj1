@@ -5,6 +5,8 @@ public class Hexagon {
     private final int y;
     private boolean hasAtom;
 
+    private boolean hasInfluence;
+
 
     // constructor
     public Hexagon(int x, int y) {
@@ -21,6 +23,7 @@ public class Hexagon {
         this.x = x;
         this.y = y;
         this.hasAtom = false;
+        this.hasInfluence = false;
     }
 
     // getter methods
@@ -34,9 +37,21 @@ public class Hexagon {
         return hasAtom;
     }
 
+    public boolean hasInfluence(){
+        return hasInfluence;
+    }
+
+    public void placeInfluence(){
+        System.out.println("placimng");
+        hasInfluence = true;
+    }
+
+
+
     // setter methods
     // x and y should be immutable. i.e. we should never be able to change a hexagon's position
     public void placeAtom() {
+
         hasAtom = true;
     }
 
