@@ -181,6 +181,7 @@ public class Board {
         getListHexagon(x, y).placeAtom();
         //System.out.println("add atom");
         addCircleOfInfluence(x, y);
+
     }
 
 
@@ -207,7 +208,7 @@ public class Board {
         for(Hexagon hexagon: listBoard) {
 
             // if the hexagon has an atom on it, draw the atom
-            if(hexagon.hasInfluence()) {
+            if(hexagon.hasInfluence() && !hexagon.hasAtom()) {
                 //System.out.println(hexagon);
                 addChar(hexagon.getX(), hexagon.getY(), '#');
             }

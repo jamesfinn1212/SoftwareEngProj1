@@ -23,6 +23,8 @@ public class Main {
         System.out.println("Ray 2(absorbed at (2,2) coming from EAST): " + ray2);
         System.out.println("Ray 3(absorbed at (2,2) coming from NORTHEAST): " + ray3);
 
+        Game game = new Game();
+        game.startGame();
 
     }
 }
