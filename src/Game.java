@@ -1,3 +1,4 @@
+import java.util.IllegalFormatException;
 import java.util.Scanner;
 
 public class Game {
@@ -7,6 +8,7 @@ public class Game {
         // draws empty board
         Draw.drawBoard(board1);
         //entering atoms
+
         System.out.println("Please enter location(x, y) for 6 atoms");
         for(int i = 0; i<6; i++) {
             System.out.println("Please enter x input for atom: " + (i+1));
@@ -16,7 +18,7 @@ public class Game {
             input = new Scanner(System.in);
             int y = input.nextInt();
             //check if valid
-            validateAtom(x, y);
+            validateAtom(x, y, board1);
             // need to check also if same location chosen twice
             //adds atom
             board1.addAtom(x, y);
@@ -29,14 +31,25 @@ public class Game {
 
     }
 
-    public void validateAtom(int x, int y){
+    public void validateAtom(int x, int y, Board board) throws IllegalArgumentException {
         if (x > 4 || x < -4) {
             throw new IllegalArgumentException("x co-ordinate must be between -4 and 4");
         }
         // y co-ordinate input validation
-        if (y > 4 || y < -4) {
-            throw new IllegalArgumentException("y co-ordinate must be between -4 and 4");
+        if(x > 0) {
+            if (y > 4 || y < -4 + x) {
+                throw new IllegalArgumentException("Invalid y co-ordinate");
+            }
+        }else{
+            if (y > 4 + x || y < -4) {
+                throw new IllegalArgumentException("Invalid y co-ordinate");
+            }
         }
+
+        if(board.getListHexagon(x, y).hasInfluence()) {
+            throw new IllegalArgumentException("Invalid y co-ordinate");
+        }
+
     }
 
 

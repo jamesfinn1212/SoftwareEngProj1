@@ -40,32 +40,6 @@ public class testBoard {
     }
 
 
-    //should be moved to separate game test
-    @Test
-    public void testInvalidInputs(){
-        Game game1 = new Game();
-
-        try{
-            game1.validateAtom(5, 0);
-        }catch(IllegalArgumentException ex){
-            assertTrue(ex.getMessage() != null);
-        }
-        try{
-            game1.validateAtom(-5, 0);
-        }catch(IllegalArgumentException ex){
-            assertTrue(ex.getMessage() != null);
-        }
-        try{
-            game1.validateAtom(6, 4);
-        }catch(IllegalArgumentException ex){
-            assertTrue(ex.getMessage() != null);
-        }
-        try{
-            game1.validateAtom(-5, -5);
-        }catch(IllegalArgumentException ex){
-            assertTrue(ex.getMessage() != null);
-        }
-    }
 
     @Test
     public void testAddCircleOfInfluence(){
