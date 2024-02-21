@@ -19,7 +19,7 @@ public class testBoard {
         //positive numbers
         board1.addAtom(4, 4);
         assertTrue(board1.getListHexagon(4, 4).hasAtom());
-        //sidepiece
+        //sidepieces
         board1.addAtom(4, -3);
         assertTrue(board1.getListHexagon(4, -3).hasAtom());
         //negative and zero
@@ -67,6 +67,62 @@ public class testBoard {
             assertTrue(ex.getMessage() != null);
         }
     }
+
+    @Test
+    public void testAddCircleOfInfluence(){
+
+        Board board1 = new Board();
+        board1.addAtom(0,0);
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.NORTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.NORTHWEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.WEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.SOUTHWEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.SOUTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
+                Board.Direction.EAST).hasInfluence());
+
+                board1.addAtom(0, 1);
+
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.NORTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.NORTHWEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.WEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.SOUTHWEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.SOUTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
+                Board.Direction.EAST).hasInfluence());
+
+        Board board2 = new Board();
+        board2.addAtom(-2,-4);
+
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.NORTHWEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.NORTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.EAST).hasInfluence());
+
+
+        Board board3 = new Board();
+        board3.addAtom(4, 4);
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.WEST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.SOUTHEAST).hasInfluence());
+        assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
+                Board.Direction.SOUTHWEST).hasInfluence());
+    }
+
+
 
 
 }
