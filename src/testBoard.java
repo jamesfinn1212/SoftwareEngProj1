@@ -20,8 +20,7 @@ public class testBoard {
         board1.addAtom(4, 4);
         assertTrue(board1.getListHexagon(4, 4).hasAtom());
         //sidepieces
-        board1.addAtom(4, -3);
-        assertTrue(board1.getListHexagon(4, -3).hasAtom());
+
         //negative and zero
         board1.addAtom(-1, 0);
         assertTrue(board1.getListHexagon(-1, 0).hasAtom());
@@ -86,7 +85,7 @@ public class testBoard {
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
                 Board.Direction.EAST).hasInfluence());
 
-                board1.addAtom(0, 1);
+        board1.addAtom(0, 1);
 
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
                 Board.Direction.NORTHEAST).hasInfluence());

@@ -5,8 +5,8 @@ public class Game {
     public void startGame(){
         Board board1 = new Board();
         // draws empty board
-         Draw.drawBoard(board1);
-         //entering atoms
+        Draw.drawBoard(board1);
+        //entering atoms
         System.out.println("Please enter location(x, y) for 6 atoms");
         for(int i = 0; i<6; i++) {
             System.out.println("Please enter x input for atom: " + (i+1));
