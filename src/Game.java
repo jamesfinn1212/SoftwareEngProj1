@@ -22,6 +22,11 @@ public class Game {
             board1.addAtom(x, y);
             Draw.drawBoard(board1);
         }
+
+        System.out.println("Atoms and circles of influences will now be hidden");
+        board1.hideAtoms();
+        Draw.drawBoard(board1);
+
     }
 
     public void validateAtom(int x, int y){

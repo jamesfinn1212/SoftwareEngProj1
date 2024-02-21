@@ -184,6 +184,13 @@ public class Board {
 
     }
 
+    public void hideAtoms(){
+        for(Hexagon hexagon : listBoard) {
+            addChar(hexagon.getX(), hexagon.getY(), ' ');
+        }
+    }
+
+
 
 
 
