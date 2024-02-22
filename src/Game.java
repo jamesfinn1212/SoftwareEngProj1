@@ -2,6 +2,7 @@ import java.util.IllegalFormatException;
 import java.util.Scanner;
 
 public class Game {
+    boolean isOver = false;
 
     public void startGame(){
         Board board1 = new Board();
@@ -28,6 +29,17 @@ public class Game {
         System.out.println("Atoms and circles of influences will now be hidden");
         board1.hideAtoms();
         Draw.drawBoard(board1);
+        System.out.println("Please enter hexagon co-ordinates and direction of ray");
+        while(!isOver){
+            System.out.println("Please enter input number for ray");
+            Scanner input = new Scanner(System.in);
+            int x = input.nextInt();
+            Board.Direction d = board1.findDirection(x);
+
+
+
+
+        }
 
     }
 
@@ -51,6 +63,15 @@ public class Game {
         }
 
     }
+
+    // needs testing
+
+    public void validateRay(int i){
+        if(i < 1 || i > 54){
+            throw new IllegalArgumentException("Number must be between 1 and 54");
+        }
+    }
+
 
 
 }
