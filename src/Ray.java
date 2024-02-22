@@ -12,6 +12,11 @@ public class Ray {
         // add first hexagon into linked list
         path.add(startHexagon);
 
+        // check if hexagon is on the side
+        if(!startHexagon.isSide()) {
+            throw new IllegalArgumentException("Must choose a hexagon on the side of the board for the ray to travel from");
+        }
+
         // add next hexagon into linked list based on direction
         // while next hexagon is not null
         while(board.getNextHexagon(path.getLast(), direction) != null) {

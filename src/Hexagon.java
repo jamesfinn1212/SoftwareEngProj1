@@ -52,6 +52,18 @@ public class Hexagon {
         influencedFrom = null;
     }
 
+    public boolean isSide() {
+
+        //sides are: y = -4, x = -4, y = 4, x = 4
+        // other sides: (3, -1), (2, -2), (1, -3)
+        //            : (-1, 3), (-2, 2), (-3, 1)
+
+        if((x == 3 && y == -1) || (x == 2 && y == -2) || (x == 1 && y == -3) || (x == -1 && y == 3) || (x == -2 && y == 2) || (x == -3 && y == 1)) {
+            return true;
+        }
+        return (x == 4 || x == -4 || y == 4 || y == -4);
+    }
+
     public Board.Direction influencedFrom() {
         return influencedFrom;
     }
