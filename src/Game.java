@@ -34,7 +34,11 @@ public class Game {
             System.out.println("Please enter input number for ray");
             Scanner input = new Scanner(System.in);
             int x = input.nextInt();
-            Board.Direction d = board1.findDirection(x);
+
+            Ray ray = new Ray(board1, board1.findStartHexagon(x), board1.findDirection(x));
+
+            System.out.println(ray.toString());
+
 
 
 
@@ -58,9 +62,6 @@ public class Game {
             }
         }
 
-        if(board.getListHexagon(x, y).hasInfluence()) {
-            throw new IllegalArgumentException("Invalid y co-ordinate");
-        }
 
     }
 
