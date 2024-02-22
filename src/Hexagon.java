@@ -5,6 +5,7 @@ public class Hexagon {
     private final int y;
     private boolean hasAtom;
 
+    private int numRays;
     private boolean hasInfluence;
     private Board.Direction influencedFrom;
 
@@ -25,6 +26,7 @@ public class Hexagon {
         this.y = y;
         this.hasAtom = false;
         this.hasInfluence = false;
+        this.numRays = 0;
     }
 
     // getter methods
@@ -36,6 +38,14 @@ public class Hexagon {
     }
     public boolean hasAtom() {
         return hasAtom;
+    }
+
+    public int getNumRays(){
+        return numRays;
+    }
+
+    public void setNumRays(int i){
+        this.numRays = i;
     }
 
     public boolean hasInfluence(){

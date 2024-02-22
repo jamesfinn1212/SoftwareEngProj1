@@ -8,9 +8,10 @@ public class Game {
         Board board1 = new Board();
         // draws empty board
         Draw.drawBoard(board1);
-        //entering atoms
+
 
         System.out.println("Please enter location(x, y) for 6 atoms");
+        //enter the location of 6 atoms
         for(int i = 0; i<6; i++) {
             System.out.println("Please enter x input for atom: " + (i+1));
             Scanner input = new Scanner(System.in);
@@ -18,7 +19,7 @@ public class Game {
             System.out.println("Please enter y input for atom: " + (i+1));
             input = new Scanner(System.in);
             int y = input.nextInt();
-            //check if valid
+            //check if valid co-ordinate
             validateAtom(x, y, board1);
             // need to check also if same location chosen twice
             //adds atom
@@ -26,10 +27,13 @@ public class Game {
             Draw.drawBoard(board1);
         }
 
+        // atoms are hidden
         System.out.println("Atoms and circles of influences will now be hidden");
         board1.hideAtoms();
+        //draws empty board again
         Draw.drawBoard(board1);
         System.out.println("Please enter hexagon co-ordinates and direction of ray");
+        // keeps on looping until player decides it is over
         while(!isOver){
             System.out.println("Please enter input number for ray");
             Scanner input = new Scanner(System.in);
@@ -37,6 +41,8 @@ public class Game {
 
             Ray ray = new Ray(board1, board1.findStartHexagon(x), board1.findDirection(x));
 
+            board1.addRayLine();
+            Draw.drawBoard(board1);
             System.out.println(ray.toString());
 
 

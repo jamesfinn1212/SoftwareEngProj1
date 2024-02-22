@@ -11,6 +11,8 @@ public class Ray {
 
         // add first hexagon into linked list
         path.add(startHexagon);
+        //add 1 to num of arrays
+        startHexagon.setNumRays(startHexagon.getNumRays()+1);
 
         // check if hexagon is on the side
         if(!startHexagon.isSide()) {
@@ -24,12 +26,14 @@ public class Ray {
             // if the next hexagon does not have influence, add it to the path
             if (!board.getNextHexagon(path.getLast(), direction).hasInfluence()) {
                 path.add(board.getNextHexagon(path.getLast(), direction));
+                // add 1 to num of arrays
+                path.getLast().setNumRays(path.getLast().getNumRays()+1);
             }
             else { // if the next hexagon has influence, we want to add that hexagon into the path but our direction will have to change (or get absorbed)
 
                 // add hexagon into path
                 path.add(board.getNextHexagon(path.getLast(), direction));
-
+                path.getLast().setNumRays(path.getLast().getNumRays()+1);
                 // determine new direction
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
 

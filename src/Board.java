@@ -185,6 +185,14 @@ public class Board {
 
     }
 
+    public void addRayLine(){
+        for(Hexagon hexagon : listBoard) {
+            if(hexagon.getNumRays() > 0) {
+                addChar(hexagon.getX(), hexagon.getY(), '+');
+            }
+        }
+    }
+
     public void hideAtoms(){
         for(Hexagon hexagon : listBoard) {
             addChar(hexagon.getX(), hexagon.getY(), ' ');
