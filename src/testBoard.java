@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 public class testBoard {
     //test for string and arraylist;
@@ -129,6 +132,7 @@ public class testBoard {
     @Test
     public void testFindDirection(){
 
+        //finds direction depending on number for input
         Board board = new Board();
         assertEquals(Board.Direction.SOUTHEAST, board.findDirection(7));
         assertEquals(Board.Direction.EAST, board.findDirection(2));
@@ -172,6 +176,26 @@ public class testBoard {
         assertEquals(board.getListHexagon(2,4),board.findStartHexagon(50));
         assertEquals(board.getListHexagon(1,4),board.findStartHexagon(52));
         assertEquals(board.getListHexagon(0,4),board.findStartHexagon(54));
+
+    }
+
+    @Test
+    public void testHideAtom(){
+        //draw an empty board
+        Board board1 = new Board();
+        //draw another board
+        Board board = new Board();
+        //populate board
+        board.addAtom(1, 1);
+        board.addAtom(-3 ,-2);
+        board.addAtom(4,4);
+        //hide atoms for this board
+        board.hideAtoms();
+
+
+
+
+       assertTrue(Arrays.equals(board.getStringBoard(), board1.getStringBoard()));
 
     }
 
