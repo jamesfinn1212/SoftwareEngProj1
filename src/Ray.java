@@ -38,10 +38,10 @@ public class Ray {
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
 
                 // if this new direction is the same as previous, ray is absorbed and stops going
-                if (newDirection == direction) {
-                    System.out.println("Ray absorbed!");
-                    break;
-                }
+//                if (newDirection == direction) {
+//                    System.out.println("Ray absorbed!");
+//                    break;
+//                }
 
                 direction = newDirection; // set direction to new direction so the while loop contines
             }
