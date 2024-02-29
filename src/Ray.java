@@ -60,6 +60,12 @@ public class Ray {
         if (directionOfRay.isOpposite(currentHexagon.influencedFrom())) {
             return directionOfRay; // return same direction as where ray is going
         }
+
+        // if Ray is "120 degrees" from where the hexagon is influenced from, turn 120 degrees
+        if(directionOfRay.is_120_DegreesFrom(currentHexagon.influencedFrom())) {
+            newDirection = directionOfRay.turn_120_Degrees(currentHexagon.influencedFrom());
+        }
+
         // rest of if statements for rest of ray directions...
 
         return newDirection;

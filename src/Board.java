@@ -128,6 +128,79 @@ public class Board {
 
             return false;
         }
+
+        public boolean is_120_DegreesFrom(Direction otherDirection) {
+
+            switch(this) {
+                case EAST:
+                    return otherDirection == SOUTHWEST || otherDirection == NORTHWEST;
+                case WEST:
+                    return otherDirection == SOUTHEAST || otherDirection == NORTHEAST;
+                case NORTHEAST:
+                    return otherDirection == WEST || otherDirection == SOUTHEAST;
+                case NORTHWEST:
+                    return otherDirection == EAST || otherDirection == SOUTHWEST;
+                case SOUTHWEST:
+                    return otherDirection == EAST || otherDirection == NORTHWEST;
+                case SOUTHEAST:
+                    return otherDirection == WEST || otherDirection == NORTHEAST;
+            }
+
+            return false;
+        }
+
+        public Direction turn_120_Degrees(Direction otherDirection) {
+
+            switch(this) {
+
+                case EAST:
+                    if(otherDirection == SOUTHWEST) {
+                        return SOUTHEAST;
+                    }
+                    if(otherDirection == NORTHWEST) {
+                        return NORTHEAST;
+                    }
+                case WEST:
+                    if(otherDirection == SOUTHEAST) {
+                        return SOUTHWEST;
+                    }
+                    if(otherDirection == NORTHEAST) {
+                        return NORTHEAST;
+                    }
+                case NORTHEAST:
+                    if(otherDirection == WEST) {
+                        return NORTHWEST;
+                    }
+                    if(otherDirection == SOUTHEAST) {
+                        return EAST;
+                    }
+                case NORTHWEST:
+                    if(otherDirection == EAST) {
+                        return NORTHEAST;
+                    }
+                    if(otherDirection == SOUTHWEST) {
+                        return WEST;
+                    }
+                case SOUTHWEST:
+                    if(otherDirection == EAST) {
+                        return SOUTHEAST;
+                    }
+                    if(otherDirection == NORTHWEST) {
+                        return WEST;
+                    }
+                case SOUTHEAST:
+                    if(otherDirection == WEST) {
+                        return SOUTHWEST;
+                    }
+                    if(otherDirection == NORTHEAST) {
+                        return EAST;
+                    }
+
+            }
+
+            return null;
+
+        }
     }
 
     public int getStringBoardLength(){
