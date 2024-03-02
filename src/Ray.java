@@ -19,12 +19,32 @@ public class Ray {
             throw new IllegalArgumentException("Must choose a hexagon on the side of the board for the ray to travel from");
         }
 
+        createRay(board, startHexagon, direction);
+
+
+
+
+    }
+
+    public void createRay(Board board, Hexagon startHexagon, Board.Direction direction){
+
         // add next hexagon into linked list based on direction
         // while next hexagon is not null
         while(board.getNextHexagon(path.getLast(), direction) != null) {
-
+            //if the start hexagon has an atom
+            if(startHexagon.hasAtom()){
+                //never gets to first hexagon as it contains atom
+                path.remove(startHexagon);
+                startHexagon.setNumRays(startHexagon.getNumRays()-1);
+                System.out.println("Ray absorbed start hex");
+                break;
+            }//if the start atom touches a hexagon that has an atom
+            else if(startHexagon.isHasNeighbourAtom()){
+                System.out.println("Ray absorbed beside start hex");
+                break;
+            }//if the hexagon has an atom
             // if the next hexagon does not have influence, add it to the path
-            if (!board.getNextHexagon(path.getLast(), direction).hasInfluence()) {
+            else if (!board.getNextHexagon(path.getLast(), direction).hasInfluence()) {
                 path.add(board.getNextHexagon(path.getLast(), direction));
                 // add 1 to num of arrays
                 path.getLast().setNumRays(path.getLast().getNumRays()+1);
@@ -37,28 +57,38 @@ public class Ray {
                 // determine new direction
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
 
-                // if this new direction is the same as previous, ray is absorbed and stops going
-//                if (newDirection == direction) {
-//                    System.out.println("Ray absorbed!");
-//                    break;
-//                }
+                //if direction and new direction are the same it is a direct collision
+                if(newDirection == direction){
+                    System.out.println("Im here34" );
+                    System.out.println("Ray absorbed");
+                    break;
+                }
 
                 direction = newDirection; // set direction to new direction so the while loop contines
             }
         }
-
-
     }
+
 
     // method that determines turn direction of the ray and returns it
     private Board.Direction calculateNewDirection(Hexagon currentHexagon, Board.Direction directionOfRay) {
+        //randomly set by teh end shouldn't have any effect of outcome
         Board.Direction newDirection = directionOfRay;
+        //code used for debugging
+//        System.out.println("Direction of ray " + directionOfRay);
+//        System.out.println(directionOfRay.getValue());
+//        for(Board.Direction direction : currentHexagon.getDirectionsOfInfluence()){
+//            System.out.println("Dir from " + direction + " " + direction.getValue());
+//        }
+
+        //System.out.println("ans: " + (directionOfRay.getValue() -2)%6);
 
         // cases for ray direction
 
-        // if direction of ray is opposite of where the hexagon is influenced from (i.e. there is an atom on the other side)
-        if (directionOfRay.isOpposite(currentHexagon.influencedFrom())) {
-            return directionOfRay; // return same direction as where ray is going
+        // if only influenced from one bordering atom
+        if (currentHexagon.getDirectionsOfInfluence().size() == 1) {
+            newDirection = influencedFrom1Atom(currentHexagon, directionOfRay);
+
         }
         // rest of if statements for rest of ray directions...
 
@@ -70,5 +100,37 @@ public class Ray {
         return path.toString();
     }
 
+
+    private Board.Direction influencedFrom1Atom(Hexagon currentHexagon, Board.Direction directionOfRay){
+        //if the difference between the ray and the direction of circle of influence is 3 than ray has to be absorbed
+        if(positiveModulo_6(directionOfRay.getValue(),  -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3){
+            System.out.println("Im here1");
+            return directionOfRay; // return same direction as where ray is going
+        }//if there is a 120 degree difference between ray and circle of influence it will be deflected 120
+        else if(positiveModulo_6(directionOfRay.getValue(), + 2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue() ||
+                (positiveModulo_6(directionOfRay.getValue(), -2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue())){
+            System.out.println("Im here2");
+
+            //if it is 2 bigger clockwise ray changes direction one clockwise and the opposite for counter-clockwise
+            if((directionOfRay.getValue() +2)%6 == currentHexagon.getDirectionsOfInfluence().get(0).getValue()){
+                return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 1));
+            }else{
+                return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), -1));
+            }
+
+
+        }
+        return directionOfRay;
+    }
+
+    public int positiveModulo_6(int i, int j) {
+        //ensure modulo is always positive
+        int n = (i+j)%6;
+
+        if(n>= 0){
+            return n;
+        }
+        return n + 6;
+    }
 
 }

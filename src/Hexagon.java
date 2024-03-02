@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Hexagon {
 
     // instance variables
@@ -5,9 +7,11 @@ public class Hexagon {
     private final int y;
     private boolean hasAtom;
 
+    private boolean hasNeighbourAtom;
+
     private int numRays;
     private boolean hasInfluence;
-    private Board.Direction influencedFrom;
+    private ArrayList<Board.Direction> directionsOfInfluence;
 
 
     // constructor
@@ -25,8 +29,10 @@ public class Hexagon {
         this.x = x;
         this.y = y;
         this.hasAtom = false;
+        this.hasNeighbourAtom = false;
         this.hasInfluence = false;
         this.numRays = 0;
+        this.directionsOfInfluence = new ArrayList<>();
     }
 
     // getter methods
@@ -39,6 +45,7 @@ public class Hexagon {
     public boolean hasAtom() {
         return hasAtom;
     }
+
 
     public int getNumRays(){
         return numRays;
@@ -55,11 +62,11 @@ public class Hexagon {
     public void placeInfluence(Board.Direction direction){
         //System.out.println("placimng");
         hasInfluence = true;
-        influencedFrom = direction;
+        directionsOfInfluence.add(direction);
     }
     public void removeInfluence() {
         hasInfluence = false;
-        influencedFrom = null;
+
     }
 
     public boolean isSide() {
@@ -73,11 +80,6 @@ public class Hexagon {
         }
         return (x == 4 || x == -4 || y == 4 || y == -4);
     }
-
-    public Board.Direction influencedFrom() {
-        return influencedFrom;
-    }
-
 
 
     // setter methods
@@ -99,5 +101,19 @@ public class Hexagon {
     }
 
 
+    public ArrayList<Board.Direction> getDirectionsOfInfluence() {
+        return directionsOfInfluence;
+    }
 
+    public void setDirectionsOfInfluencedInfluence(ArrayList<Board.Direction> directionsInfluecedFrom) {
+        this.directionsOfInfluence = directionsInfluecedFrom;
+    }
+
+    public boolean isHasNeighbourAtom() {
+        return hasNeighbourAtom;
+    }
+
+    public void setHasNeighbourAtom() {
+        this.hasNeighbourAtom = true;
+    }
 }

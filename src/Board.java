@@ -102,33 +102,36 @@ public class Board {
     }
 
     public enum Direction { // made public for use in other classes
-        EAST,
-        WEST,
-        NORTHEAST,
-        NORTHWEST,
-        SOUTHEAST,
-        SOUTHWEST;
+        NORTHWEST(0),
+        WEST(1),
+        SOUTHWEST(2),
+        SOUTHEAST(3),
+        EAST(4),
+        NORTHEAST(5);
 
         // method to determine whether 2 directions are "opposite" of each other
-        public boolean isOpposite(Direction otherDirection) {
-            switch (this) {
-                case EAST:
-                    return otherDirection == WEST;
-                case WEST:
-                    return otherDirection == EAST;
-                case NORTHEAST:
-                    return otherDirection == SOUTHWEST;
-                case NORTHWEST:
-                    return otherDirection == SOUTHEAST;
-                case SOUTHWEST:
-                    return otherDirection == NORTHEAST;
-                case SOUTHEAST:
-                    return otherDirection == NORTHWEST;
-            }
 
-            return false;
+        private final int value;
+
+        Direction(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        // Static method to get Direction based on the value
+        public static Direction fromValue(int value) {
+            for (Direction direction : values()) {
+                if (direction.getValue() == value) {
+                    return direction;
+                }
+            }
+            throw new IllegalArgumentException("Invalid Direction value: " + value);
         }
     }
+
 
     public int getStringBoardLength(){
         return this.stringBoardLength;
@@ -270,16 +273,22 @@ public class Board {
         if(getListHexagon(x+1, y) != null){
             //System.out.println("im here 20");
             getListHexagon(x+1, y).placeInfluence(Direction.EAST);
+            getListHexagon(x+1, y).setHasNeighbourAtom();
         }if(getListHexagon(x, y-1) != null){
             getListHexagon(x, y-1).placeInfluence(Direction.SOUTHEAST);
+            getListHexagon(x, y-1).setHasNeighbourAtom();
         }if(getListHexagon(x-1, y-1) != null){
             getListHexagon(x-1, y-1).placeInfluence(Direction.SOUTHWEST);
+            getListHexagon(x-1, y-1).setHasNeighbourAtom();
         }if(getListHexagon(x-1, y) != null){
             getListHexagon(x-1, y).placeInfluence(Direction.WEST);
+            getListHexagon(x-1, y).setHasNeighbourAtom();
         }if(getListHexagon(x, y+1) != null) {
-            getListHexagon(x, y + 1).placeInfluence(Direction.NORTHWEST);
+            getListHexagon(x, y+1).placeInfluence(Direction.NORTHWEST);
+            getListHexagon(x, y+1).setHasNeighbourAtom();
         }if(getListHexagon(x+1, y+1) != null){
             getListHexagon(x+1, y+1).placeInfluence(Direction.NORTHEAST);
+            getListHexagon(x+1, y+1).setHasNeighbourAtom();
         }
 
         for(Hexagon hexagon: listBoard) {
@@ -314,7 +323,27 @@ public class Board {
 
         return null;
     }
-
+// not needed it think
+//    public ArrayList<Direction> findDirectionsOfInfluence(Hexagon hexagon){
+//        int x = hexagon.getX();
+//        int y = hexagon.getY();
+//        ArrayList<Direction> directions = new ArrayList<>();
+//        if(getListHexagon(x+1, y) != null && getListHexagon(x+1, y).hasInfluence()){
+//            directions.add(Direction.EAST);
+//        }if(getListHexagon(x, y-1) != null && getListHexagon(x, y-1).hasInfluence()){
+//            directions.add(Direction.SOUTHEAST);
+//        }if(getListHexagon(x-1, y-1) != null && getListHexagon(x-1, y-1).hasInfluence()){
+//            directions.add(Direction.SOUTHWEST);
+//        }if(getListHexagon(x-1, y) != null && getListHexagon(x-1, y).hasInfluence()){
+//            directions.add(Direction.WEST);
+//        }if(getListHexagon(x, y+1) != null && getListHexagon(x, y+1).hasInfluence()) {
+//            directions.add(Direction.NORTHWEST);
+//        }if(getListHexagon(x+1, y+1) != null && getListHexagon(x+1, y+1).hasInfluence()){
+//            directions.add(Direction.NORTHEAST);
+//        }
+//
+//        return directions;
+//    }
 
 
 
