@@ -5,7 +5,6 @@ public class Main {
 
         Board board = new Board();
 
-        Game game = new Game();
-        game.startGame();
+        System.out.println(board.getHexagonFromNumber(27));
     }
 }

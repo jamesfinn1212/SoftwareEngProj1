@@ -17,55 +17,55 @@ public class Board {
                 "                             *           *           *           *           *           *",
                 "                         2   *           *           *           *           *           *   45",
                 "                             *           *           *           *           *           *",
-                "                            * *         * *         * *         * *         * *         * *",
+                "                            * *    1    * *    2    * *    3    * *    4    * *    5    * *",
                 "                      3   *     *     *     *     *     *     *     *     *     *     *     *   44",
                 "                        *         * *         * *         * *         * *         * *         *",
                 "                       *           *           *           *           *           *           *",
                 "                   4   *           *           *           *           *           *           *   43",
                 "                       *           *           *           *           *           *           *",
-                "                      * *         * *         * *         * *         * *         * *         * *",
+                "                      * *    6    * *    7    * *    8    * *    9    * *    10   * *    11   * *",
                 "                5   *     *     *     *     *     *     *     *     *     *     *     *     *     *   42",
                 "                  *         * *         * *         * *         * *         * *         * *         *",
                 "                 *           *           *           *           *           *           *           *",
                 "             6   *           *           *           *           *           *           *           *   41",
                 "                 *           *           *           *           *           *           *           *",
-                "                * *         * *         * *         * *         * *         * *         * *         * *",
+                "                * *    12   * *    13   * *    14   * *    15   * *    16   * *    17   * *    18   * *",
                 "          7   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   40",
                 "            *         * *         * *         * *         * *         * *         * *         * *         *",
                 "           *           *           *           *           *           *           *           *           *",
                 "       8   *           *           *           *           *           *           *           *           *   39",
                 "           *           *           *           *           *           *           *           *           *",
-                "          * *         * *         * *         * *         * *         * *         * *         * *         * *",
+                "          * *   19    * *    20   * *    21   * *    22   * *    23   * *    24   * *    25   * *    26   * *",
                 "    9   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   38",
                 "      *         * *         * *         * *         * *         * *         * *         * *         * *         *",
                 "     *           *           *           *           *           *           *           *           *           *",
                 "10   *           *           *           *           *           *           *           *           *           *   37",
                 "     *           *           *           *           *           *           *           *           *           *",
-                "      *         * *         * *         * *         * *         * *         * *         * *         * *         *",
+                "      *    27   * *    28   * *    29   * *    30   * *    31   * *    32   * *    33   * *    34   * *    35   *",
                 "   11   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   36",
                 "          * *         * *         * *         * *         * *         * *         * *         * *         * *",
                 "           *           *           *           *           *           *           *           *           *",
                 "      12   *           *           *           *           *           *           *           *           *   35",
                 "           *           *           *           *           *           *           *           *           *",
-                "            *         * *         * *         * *         * *         * *         * *         * *         *",
+                "            *   36    * *    37   * *    38   * *    39   * *    40   * *    41   * *    42   * *    43   *",
                 "         13   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   34",
                 "                * *         * *         * *         * *         * *         * *         * *         * *",
                 "                 *           *           *           *           *           *           *           *",
                 "            14   *           *           *           *           *           *           *           *   33",
                 "                 *           *           *           *           *           *           *           *",
-                "                  *         * *         * *         * *         * *         * *         * *         *",
+                "                  *   44    * *    45   * *    46   * *    47   * *    48   * *    49   * *    50   *",
                 "               15   *     *     *     *     *     *     *     *     *     *     *     *     *     *   32",
                 "                      * *         * *         * *         * *         * *         * *         * *",
                 "                       *           *           *           *           *           *           *",
                 "                  16   *           *           *           *           *           *           *   31",
                 "                       *           *           *           *           *           *           *",
-                "                        *         * *         * *         * *         * *         * *         *",
+                "                        *    51   * *    52   * *    53   * *    54   * *    55   * *    56   *",
                 "                     17   *     *     *     *     *     *     *     *     *     *     *     *   30",
                 "                            * *         * *         * *         * *         * *         * *",
                 "                             *           *           *           *           *           *",
                 "                        18   *           *           *           *           *           *   29",
                 "                             *           *           *           *           *           *",
-                "                              *         * *         * *         * *         * *         *",
+                "                              *    57   * *    58   * *    59   * *    60   * *    61   *",
                 "                           19   *     *     *     *     *     *     *     *     *     *   28",
                 "                                  * *  20 21  * *  22 23  * *  24 25  * *  26 27  * *",
 
@@ -156,6 +156,57 @@ public class Board {
         }
 
         return null; // if hexagon not found, return the first hexagon on the board (this is to satisfy the IDE, there is definitely a better way of doing this lol)
+    }
+
+    // function to get hexagon from number
+    public Hexagon getHexagonFromNumber(int hexagonNum) {
+
+        int y = 0; // start y off at 4, should decrease by 1 for each row we go down
+        int offset = -1; // represents how far the x value is from hexagon number, i.e. hexagons 1->5 have x value 0->4 so offset would be -1
+        int x;
+
+        // get the row the hexagon is in
+        if(hexagonNum <= 5) {
+            offset = -1;
+            y = 4;
+        }
+        else if(hexagonNum <= 11) {
+            offset = -7;
+            y = 3;
+        }
+        else if(hexagonNum <= 18) {
+            offset = -14;
+            y = 2;
+        }
+        else if(hexagonNum <= 26) {
+            offset = -22;
+            y = 1;
+        }
+        else if(hexagonNum <= 35) {
+            offset = -31;
+            y = 0;
+        }
+        else if(hexagonNum <= 43) {
+            offset = -40;
+            y= -1;
+        }
+        else if(hexagonNum <= 50) {
+            offset = -48;
+            y = -2;
+        }
+        else if(hexagonNum <= 56) {
+            offset = -55;
+            y = -3;
+        }
+        else if(hexagonNum <= 61) {
+            offset = -61;
+            y = -4;
+        }
+
+        x = hexagonNum + offset;
+
+        return getListHexagon(x, y);
+
     }
 
 
