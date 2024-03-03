@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 // This class represents the rays on the board.
@@ -89,6 +90,12 @@ public class Ray {
         if (currentHexagon.getDirectionsOfInfluence().size() == 1) {
             newDirection = influencedFrom1Atom(currentHexagon, directionOfRay);
 
+        }else if (currentHexagon.getDirectionsOfInfluence().size() == 2) {
+            newDirection = influencedFrom2Atom(currentHexagon, directionOfRay);
+
+        }else if (currentHexagon.getDirectionsOfInfluence().size() == 3) {
+            newDirection = influencedFrom3Atom(currentHexagon, directionOfRay);
+
         }
         // rest of if statements for rest of ray directions...
 
@@ -121,6 +128,24 @@ public class Ray {
 
         }
         return directionOfRay;
+    }
+//because the only way a ray can reach a hexagon that has t20 this patter where there is a
+//circle of influence in the opposite direction and another going in a direction one away from the one
+//going the opposite direction as in if a ray is traveling west, the circles of influence must be going east,
+// and northeast or southeast
+    private Board.Direction influencedFrom2Atom(Hexagon currentHexagon, Board.Direction directionOfRay){
+        ArrayList<Board.Direction> listOfDirection = new ArrayList<>();
+        if(positiveModulo_6(directionOfRay.getValue(),  -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3){
+            return currentHexagon.getDirectionsOfInfluence().get(1);
+        }else if(positiveModulo_6(directionOfRay.getValue(),  -currentHexagon.getDirectionsOfInfluence().get(1).getValue()) == 3){
+            return currentHexagon.getDirectionsOfInfluence().get(0);
+        }
+
+
+        return directionOfRay;
+    }
+    private Board.Direction influencedFrom3Atom(Hexagon currentHexagon, Board.Direction directionOfRay){
+        return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 3));
     }
 
     public int positiveModulo_6(int i, int j) {
