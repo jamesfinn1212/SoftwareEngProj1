@@ -140,9 +140,11 @@ public class Ray {
         }else if(positiveModulo_6(directionOfRay.getValue(),  -currentHexagon.getDirectionsOfInfluence().get(1).getValue()) == 3){
             return currentHexagon.getDirectionsOfInfluence().get(0);
         }
+        else{
+            return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 3));
+        }
 
 
-        return directionOfRay;
     }
     private Board.Direction influencedFrom3Atom(Hexagon currentHexagon, Board.Direction directionOfRay){
         return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 3));
