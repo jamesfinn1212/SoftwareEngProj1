@@ -9,38 +9,38 @@ public class testBoard {
     public void testPlaceAtom(){
         Board board1 = new Board();
         //test origin
-        board1.addAtom(0, 0);
+        board1.addAtom(31);
         assertTrue(board1.getListHexagon(0, 0).hasAtom());
 
         // zero positive number
-        board1.addAtom(0, 1);
+        board1.addAtom(22);
         assertTrue(board1.getListHexagon(0, 1).hasAtom());
 
         // positive number zero
-        board1.addAtom(1, 0);
+        board1.addAtom(32);
         assertTrue(board1.getListHexagon(0, 1).hasAtom());
         //positive numbers
-        board1.addAtom(4, 4);
+        board1.addAtom(5);
         assertTrue(board1.getListHexagon(4, 4).hasAtom());
         //sidepieces
 
         //negative and zero
-        board1.addAtom(-1, 0);
+        board1.addAtom(30);
         assertTrue(board1.getListHexagon(-1, 0).hasAtom());
         //zero and negative number
-        board1.addAtom(0,-1);
+        board1.addAtom(40);
         assertTrue(board1.getListHexagon(0, -1).hasAtom());
         //negative and negative
-        board1.addAtom(-4,-4);
+        board1.addAtom(57);
         assertTrue(board1.getListHexagon(-4, -4).hasAtom());
 
         Board board2 = new Board();
 
 
-        board2.addAtom(0, 1);
-        board2.addAtom(0, 0);
-        board2.addAtom(3, 2);
-        board2.addAtom(-1, 3);
+        board2.addAtom(22);
+        board2.addAtom(31);
+        board2.addAtom(17);
+        board2.addAtom(6);
         // check if atoms that don't contain an atom have an atom
         assertFalse(board2.getListHexagon(0, 2).hasAtom());
         assertFalse(board2.getListHexagon(0, 4).hasAtom());
@@ -60,7 +60,7 @@ public class testBoard {
     public void testAddCircleOfInfluence(){
 //adding atoms to board and checking if surrounding atoms have influence
         Board board1 = new Board();
-        board1.addAtom(0,0);
+        board1.addAtom(31);
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
                 Board.Direction.NORTHEAST).hasInfluence());
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
@@ -74,7 +74,7 @@ public class testBoard {
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 0),
                 Board.Direction.EAST).hasInfluence());
 
-        board1.addAtom(0, 1);
+        board1.addAtom(22);
 
         assertTrue(board1.getNextHexagon(board1.getListHexagon(0, 1),
                 Board.Direction.NORTHEAST).hasInfluence());
@@ -90,7 +90,7 @@ public class testBoard {
                 Board.Direction.EAST).hasInfluence());
 
         Board board2 = new Board();
-        board2.addAtom(-2,-4);
+        board2.addAtom(59);
 
         assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
                 Board.Direction.NORTHWEST).hasInfluence());
@@ -101,7 +101,7 @@ public class testBoard {
 
 
         Board board3 = new Board();
-        board3.addAtom(4, 4);
+        board3.addAtom(5);
         assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
                 Board.Direction.WEST).hasInfluence());
         assertTrue(board1.getNextHexagon(board2.getListHexagon(0, 1),
@@ -110,7 +110,7 @@ public class testBoard {
                 Board.Direction.SOUTHWEST).hasInfluence());
 
         Board board4 = new Board();
-        board4.addAtom(0,0);
+        board4.addAtom(31);
 
         assertFalse(board4.getListHexagon(-1, 1).hasInfluence());
         assertFalse(board4.getListHexagon(0, 2).hasInfluence());
@@ -186,9 +186,9 @@ public class testBoard {
         //draw another board
         Board board = new Board();
         //populate board
-        board.addAtom(1, 1);
-        board.addAtom(-3 ,-2);
-        board.addAtom(4,4);
+        board.addAtom(23);
+        board.addAtom(45);
+        board.addAtom(5);
         //hide atoms for this board
         board.hideAtoms();
 

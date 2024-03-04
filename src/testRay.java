@@ -18,7 +18,7 @@ public class testRay {
     void testAbsorption() {
 
         Board board = new Board();
-        board.addAtom(2, 2); // atom added at (2,2)
+        board.addAtom(16); // atom added at (2,2)
 
         // this ray should get absorbed by the atom at (2,2), therefore should stop right behind
         Ray ray2 = new Ray(board, board.getListHexagon(-2, 2), Board.Direction.EAST);

@@ -22,7 +22,7 @@ public class testHexagon {
 
         // Test adding atoms and circle of influence
         Board board1 = new Board();
-        board1.addAtom(2, 3);// add atom to the board
+        board1.addAtom(9);// add atom to the board
         Hexagon hexagon1 = board1.getListHexagon(2, 3);
 
         // Test to see if the atom was added
@@ -58,7 +58,7 @@ public class testHexagon {
         // test the same for another set of co-ordinates (-3, -2)
         Board board2 = new Board();
 
-        board2.addAtom(-3, -2);// add atom to the board
+        board2.addAtom(45);// add atom to the board
         Hexagon hexagon2 = board2.getListHexagon(-3, -2);
 
         // Test to see if the atom was added

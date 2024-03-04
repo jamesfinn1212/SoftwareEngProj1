@@ -11,13 +11,13 @@ public class testGame {
         Board board = new Board();
 
         try {
-            game1.validateAtom(1, 0, board);
-            game1.validateAtom(0, 0, board);
-            game1.validateAtom(-4, -2, board);
-            game1.validateAtom(4, 3, board);
-            game1.validateAtom(2, -2, board);
-            game1.validateAtom(-1, -4, board);
-            game1.validateAtom(-1, -2, board);
+            game1.validateAtom(21, board);
+            game1.validateAtom(30, board);
+            game1.validateAtom(45, board);
+            game1.validateAtom(11, board);
+            game1.validateAtom(13, board);
+            game1.validateAtom(61, board);
+            game1.validateAtom(1, board);
         }catch(Exception ex){
             if(ex.getMessage() != null){
                 fail("All valid inputs no reason for fail");
@@ -38,64 +38,64 @@ public class testGame {
 
 
         try{
-            game1.validateAtom(5, 0, board);
+            game1.validateAtom(68, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(-5, 0, board);
+            game1.validateAtom(79, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(6, 4, board);
+            game1.validateAtom(105, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(-4, 1, board);
+            game1.validateAtom(-8, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(-3, 3, board);
-        }catch(IllegalArgumentException ex){
-            assertTrue(ex.getMessage() != null);
-        }
-
-        try{
-            game1.validateAtom(3, -2, board);
+            game1.validateAtom(0, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
 
-        board.addAtom(1, 1);
-        board.addAtom(-4, 0);
-        board.addAtom(0, 0);
-        board.addAtom(2,3);
-        board.addAtom(4, 0);
         try{
-            game1.validateAtom(1, 1, board);
+            game1.validateAtom(-10, board);
+        }catch(IllegalArgumentException ex){
+            assertTrue(ex.getMessage() != null);
+        }
+
+        board.addAtom(27);
+        board.addAtom(31);
+        board.addAtom(61);
+        board.addAtom(1);
+        board.addAtom(4);
+        try{
+            game1.validateAtom(27, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(-4, 0, board);
+            game1.validateAtom(41, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(0, 0, board);
+            game1.validateAtom(61, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(2, 3, board);
+            game1.validateAtom(1, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }
         try{
-            game1.validateAtom(4, 0, board);
+            game1.validateAtom(4, board);
         }catch(IllegalArgumentException ex){
             assertTrue(ex.getMessage() != null);
         }

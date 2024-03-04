@@ -198,11 +198,13 @@ public class Board {
 
     }
 
-    public void addAtom(int x, int y){
-        addChar(x, y, '*');
-        getListHexagon(x, y).placeAtom();
+    public void addAtom(int hexagonNumber){
+
+        Hexagon hexagon = getHexagonFromNumber(hexagonNumber);
+        addChar(hexagon.getX(), hexagon.getY(), '*');
+        hexagon.placeAtom();
         //System.out.println("add atom");
-        addCircleOfInfluence(x, y);
+        addCircleOfInfluence(hexagon.getX(), hexagon.getY());
 
     }
 
@@ -340,6 +342,21 @@ public class Board {
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+
+        // stringbuilder to make final string
+        StringBuilder output = new StringBuilder();
+
+        // iterate over stringboard
+        for(String line : stringBoard) {
+            output.append(line);
+            output.append("\n");
+        }
+
+        return output.toString();
     }
 // not needed it think
 //    public ArrayList<Direction> findDirectionsOfInfluence(Hexagon hexagon){
