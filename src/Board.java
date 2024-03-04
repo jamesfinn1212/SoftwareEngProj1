@@ -161,53 +161,20 @@ public class Board {
     // function to get hexagon from number
     public Hexagon getHexagonFromNumber(int hexagonNum) {
 
-        int y = 0; // start y off at 4, should decrease by 1 for each row we go down
-        int offset = -1; // represents how far the x value is from hexagon number, i.e. hexagons 1->5 have x value 0->4 so offset would be -1
-        int x;
+        // iterate over board
+        for(Hexagon hexagon : listBoard) {
 
-        // get the row the hexagon is in
-        if(hexagonNum <= 5) {
-            offset = -1;
-            y = 4;
-        }
-        else if(hexagonNum <= 11) {
-            offset = -7;
-            y = 3;
-        }
-        else if(hexagonNum <= 18) {
-            offset = -14;
-            y = 2;
-        }
-        else if(hexagonNum <= 26) {
-            offset = -22;
-            y = 1;
-        }
-        else if(hexagonNum <= 35) {
-            offset = -31;
-            y = 0;
-        }
-        else if(hexagonNum <= 43) {
-            offset = -40;
-            y= -1;
-        }
-        else if(hexagonNum <= 50) {
-            offset = -48;
-            y = -2;
-        }
-        else if(hexagonNum <= 56) {
-            offset = -55;
-            y = -3;
-        }
-        else if(hexagonNum <= 61) {
-            offset = -61;
-            y = -4;
+            // if the hexagon is of that number
+            if(hexagon.getHexagonNum() == hexagonNum) {
+                return hexagon;
+            }
+
         }
 
-        x = hexagonNum + offset;
-
-        return getListHexagon(x, y);
-
+        return null;
     }
+
+
 
 
     // Method to add a character into the center of hexagon using the (x, y) co-ordinates.

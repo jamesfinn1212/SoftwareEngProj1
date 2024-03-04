@@ -5,6 +5,6 @@ public class Main {
 
         Board board = new Board();
 
-        System.out.println(board.getHexagonFromNumber(27));
+        System.out.println(board.getHexagonFromNumber(31));
     }
 }

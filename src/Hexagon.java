@@ -5,6 +5,7 @@ public class Hexagon {
     // instance variables
     private final int x;
     private final int y;
+    private final int hexagonNum;
     private boolean hasAtom;
 
     private boolean hasNeighbourAtom;
@@ -33,6 +34,7 @@ public class Hexagon {
         this.hasInfluence = false;
         this.numRays = 0;
         this.directionsOfInfluence = new ArrayList<>();
+        this.hexagonNum = getHexagonNumFromCord(x, y);
     }
 
     // getter methods
@@ -50,6 +52,8 @@ public class Hexagon {
     public int getNumRays(){
         return numRays;
     }
+
+    public int getHexagonNum() { return hexagonNum; }
 
     public void setNumRays(int i){
         this.numRays = i;
@@ -115,5 +119,43 @@ public class Hexagon {
 
     public void setHasNeighbourAtom() {
         this.hasNeighbourAtom = true;
+    }
+
+    // method that calculates hexagon number from a given co-ordinate
+    private int getHexagonNumFromCord(int x, int y) {
+
+        int offset = 0;
+
+
+        if(y == 4) {
+            offset = -1;
+        }
+        else if(y == 3) {
+            offset = -7;
+        }
+        else if(y == 2) {
+            offset = -14;
+        }
+        else if(y == 1) {
+            offset = -22;
+        }
+        else if(y == 0) {
+            offset = -31;
+        }
+        else if(y == -1) {
+            offset = -40;
+        }
+        else if(y == -2) {
+            offset = -48;
+        }
+        else if(y == -3) {
+            offset = -55;
+        }
+        else if(y == -4) {
+            offset = -61;
+        }
+
+
+        return x - offset;
     }
 }
