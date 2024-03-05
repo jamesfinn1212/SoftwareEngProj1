@@ -59,5 +59,181 @@ public class testRay {
 
     }
 
+    @Test
+    void testAbsorbedFromSide(){
+        Board board = new Board();
+        board.addAtom(-2, -4);
+        board.addAtom(4, 2);
+        Ray ray1 = new Ray(board, board.findStartHexagon(23), board.findDirection(23));
+        String s = "[]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(24), board.findDirection(24));
+        s = "[]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(25), board.findDirection(25));
+        s = "[(-1, -4)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(26), board.findDirection(26));
+        s = "[(-1, -4)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(21), board.findDirection(21));
+        s = "[(-3, -4)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(22), board.findDirection(22));
+        s = "[(-3, -4)]";
+        assertEquals(s, ray1.toString());
+
+
+
+    }
+    @Test
+    void testInfluencedFrom1AtomAbsorbed(){
+
+        //testing to be absorbed
+        Board board = new Board();
+        board.addAtom(0, 0);
+        //from northwest
+        Ray ray1 = new Ray(board, board.findStartHexagon(19), board.findDirection(19));
+        String s = "[(-4, -4), (-3, -3), (-2, -2), (-1, -1)]";
+        assertEquals(s, ray1.toString());
+        //from north-east
+        ray1 = new Ray(board, board.findStartHexagon(28), board.findDirection(28));
+        s = "[(0, -4), (0, -3), (0, -2), (0, -1)]";
+        assertEquals(s, ray1.toString());
+        //from east
+        ray1 = new Ray(board, board.findStartHexagon(10), board.findDirection(10));
+        s = "[(-4, 0), (-3, 0), (-2, 0), (-1, 0)]";
+        assertEquals(s, ray1.toString());
+        //from west
+        ray1 = new Ray(board, board.findStartHexagon(37), board.findDirection(37));
+        s = "[(4, 0), (3, 0), (2, 0), (1, 0)]";
+        assertEquals(s, ray1.toString());
+        //from south-east
+        ray1 = new Ray(board, board.findStartHexagon(1), board.findDirection(1));
+        s = "[(0, 4), (0, 3), (0, 2), (0, 1)]";
+        assertEquals(s, ray1.toString());
+        //from south-west
+        ray1 = new Ray(board, board.findStartHexagon(46), board.findDirection(46));
+        s = "[(4, 4), (3, 3), (2, 2), (1, 1)]";
+        assertEquals(s, ray1.toString());
+
+    }
+
+    @Test
+    void testInfluencedFrom1Atom120(){
+
+        //testing to be absorbed
+        Board board = new Board();
+        board.addAtom(0, 0);
+        //from northwest
+        Ray ray1 = new Ray(board, board.findStartHexagon(17), board.findDirection(17));
+        String s = "[(-4, -3), (-3, -2), (-2, -1), (-1, 0), (-1, 1), (-1, 2), (-1, 3)]";
+        assertEquals(s, ray1.toString());
+        //from north-east
+        ray1 = new Ray(board, board.findStartHexagon(30), board.findDirection(30));
+        s = "[(1, -3), (1, -2), (1, -1), (1, 0), (2, 1), (3, 2), (4, 3)]";
+        assertEquals(s, ray1.toString());
+        //from east
+        ray1 = new Ray(board, board.findStartHexagon(3), board.findDirection(3));
+        s = "[(-1, 3), (-1, 2), (-1, 1), (-1, 0), (-2, -1), (-3, -2), (-4, -3)]";
+        assertEquals(s, ray1.toString());
+        //from west
+        ray1 = new Ray(board, board.findStartHexagon(44), board.findDirection(44));
+        s = "[(4, 3), (3, 2), (2, 1), (1, 0), (1, -1), (1, -2), (1, -3)]";
+        assertEquals(s, ray1.toString());
+        //from south-east
+        ray1 = new Ray(board, board.findStartHexagon(53), board.findDirection(53));
+        s = "[(1, 4), (1, 3), (1, 2), (1, 1), (2, 1), (3, 1), (4, 1)]";
+        assertEquals(s, ray1.toString());
+        //from south-west
+        ray1 = new Ray(board, board.findStartHexagon(48), board.findDirection(48));
+        s = "[(3, 4), (2, 3), (1, 2), (0, 1), (-1, 1), (-2, 1), (-3, 1)]";
+        assertEquals(s, ray1.toString());
+        ray1 = new Ray(board, board.findStartHexagon(26), board.findDirection(26));
+        s = "[(-1, -4), (-1, -3), (-1, -2), (-1, -1), (-2, -1), (-3, -1), (-4, -1)]";
+        assertEquals(s, ray1.toString());
+        //from south-west
+        ray1 = new Ray(board, board.findStartHexagon(21), board.findDirection(21));
+        s = "[(-3, -4), (-2, -3), (-1, -2), (0, -1), (1, -1), (2, -1), (3, -1)]";
+        assertEquals(s, ray1.toString());
+
+    }
+
+    @Test
+    void testInfluencedFrom2Atom60(){
+
+        //testing cases for when it is absorbed
+        Board board = new Board();
+        board.addAtom(0, 0);
+        board.addAtom(1, 1);
+        //
+        Ray ray1 = new Ray(board, board.findStartHexagon(30), board.findDirection(30));
+        String s = "[(1, -3), (1, -2), (1, -1), (1, 0), (2, 0), (3, 0), (4, 0)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(37), board.findDirection(37));
+        s = "[(4, 0), (3, 0), (2, 0), (1, 0), (1, -1), (1, -2), (1, -3)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(8), board.findDirection(8));
+        s = "[(-3, 1), (-2, 1), (-1, 1), (0, 1), (0, 2), (0, 3), (0, 4)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(1), board.findDirection(1));
+        s = "[(0, 4), (0, 3), (0, 2), (0, 1), (-1, 1), (-2, 1), (-3, 1)]";
+        assertEquals(s, ray1.toString());
+
+
+    }
+
+    @Test
+    void testInfluencedFrom2Atom180(){
+
+        //testing cases for when it is absorbed
+        Board board = new Board();
+        board.addAtom(-1, 0);
+        board.addAtom(1, 1);
+        //
+        Ray ray1 = new Ray(board, board.findStartHexagon(28), board.findDirection(28));
+        String s = "[(0, -4), (0, -3), (0, -2), (0, -1), (0, 0), (0, -1), (0, -2), (0, -3), (0, -4)]";
+        assertEquals(s, ray1.toString());
+
+        ray1 = new Ray(board, board.findStartHexagon(1), board.findDirection(1));
+        s = "[(0, 4), (0, 3), (0, 2), (0, 1), (0, 2), (0, 3), (0, 4)]";
+        assertEquals(s, ray1.toString());
+
+
+    }
+    @Test
+    void testInfluencedFrom3Atom180(){
+
+        //testing cases for when it is absorbed
+        Board board = new Board();
+        board.addAtom(-1, 0);
+        board.addAtom(1, 1);
+        board.addAtom(0,1);
+        //
+        Ray ray1 = new Ray(board, board.findStartHexagon(28), board.findDirection(28));
+        String s = "[(0, -4), (0, -3), (0, -2), (0, -1), (0, 0), (0, -1), (0, -2), (0, -3), (0, -4)]";
+        assertEquals(s, ray1.toString());
+
+
+        Board board1 = new Board();
+        board1.addAtom(-1, 0);
+        board1.addAtom(1, 1);
+        board1.addAtom(0,0);
+        ray1 = new Ray(board1, board1.findStartHexagon(1), board1.findDirection(1));
+        s = "[(0, 4), (0, 3), (0, 2), (0, 1), (0, 2), (0, 3), (0, 4)]";
+        assertEquals(s, ray1.toString());
+
+
+
+    }
+
 }
 

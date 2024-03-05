@@ -5,10 +5,14 @@ public class Main {
 
         Board board = new Board();
 
+
         System.out.println(board.getHexagonFromNumber(27));
 
         Game game = new Game();
 
         game.startGame();
+
+        System.out.println(board.getHexagonFromNumber(31));
+
     }
 }

@@ -60,7 +60,6 @@ public class Ray {
 
                 //if direction and new direction are the same it is a direct collision
                 if(newDirection == direction){
-                    System.out.println("Im here34" );
                     System.out.println("Ray absorbed");
                     break;
                 }
@@ -111,12 +110,12 @@ public class Ray {
     private Board.Direction influencedFrom1Atom(Hexagon currentHexagon, Board.Direction directionOfRay){
         //if the difference between the ray and the direction of circle of influence is 3 than ray has to be absorbed
         if(positiveModulo_6(directionOfRay.getValue(),  -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3){
-            System.out.println("Im here1");
+
             return directionOfRay; // return same direction as where ray is going
         }//if there is a 120 degree difference between ray and circle of influence it will be deflected 120
         else if(positiveModulo_6(directionOfRay.getValue(), + 2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue() ||
                 (positiveModulo_6(directionOfRay.getValue(), -2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue())){
-            System.out.println("Im here2");
+
 
             //if it is 2 bigger clockwise ray changes direction one clockwise and the opposite for counter-clockwise
             if((directionOfRay.getValue() +2)%6 == currentHexagon.getDirectionsOfInfluence().get(0).getValue()){
