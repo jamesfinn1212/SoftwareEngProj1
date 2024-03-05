@@ -8,6 +8,7 @@ public class Main {
         System.out.println(board.getHexagonFromNumber(27));
 
         Game game = new Game();
+
         game.startGame();
     }
 }
