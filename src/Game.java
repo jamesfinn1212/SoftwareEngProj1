@@ -13,12 +13,12 @@ public class Game {
         System.out.println("Please enter location(x, y) for 6 atoms");
         //enter the location of 6 atoms
         for(int i = 0; i<6; i++) {
-            System.out.println("Please enter x input for atom: " + (i+1));
+            System.out.println("Please enter number for atom: " + (i+1));
             Scanner input = new Scanner(System.in);
-            int x = input.nextInt();
-            System.out.println("Please enter y input for atom: " + (i+1));
-            input = new Scanner(System.in);
-            int y = input.nextInt();
+            int j = input.nextInt();
+            int x = board1.getHexagonFromNumber(j).getX();
+            int y = board1.getHexagonFromNumber(j).getY();
+
             //check if valid co-ordinate
             validateAtom(x, y, board1);
             // need to check also if same location chosen twice
