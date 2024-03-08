@@ -118,4 +118,18 @@ public class testHexagon {
 
     }
 
+    // Test cases for hexagon numbers
+    @Test
+    void testHexagonNumber() {
+        Hexagon h1 = new Hexagon(0, 0);
+        Hexagon h2 = new Hexagon(3,3 );
+        Hexagon h3 = new Hexagon(-1, -2);
+        Hexagon h4 = new Hexagon(-4, -2);
+
+        assertEquals(31, h1.getHexagonNum());
+        assertEquals(10, h2.getHexagonNum());
+        assertEquals(47, h3.getHexagonNum());
+        assertEquals(44, h4.getHexagonNum());
+    }
+
 }
