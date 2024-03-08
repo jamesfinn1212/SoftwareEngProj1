@@ -37,11 +37,11 @@ public class Ray {
                 //never gets to first hexagon as it contains atom
                 path.remove(startHexagon);
                 startHexagon.setNumRays(startHexagon.getNumRays()-1);
-                System.out.println("Ray absorbed start hex");
+                System.out.println("Absorbed");
                 break;
             }//if the start atom touches a hexagon that has an atom
             else if(startHexagon.isHasNeighbourAtom()){
-                System.out.println("Ray absorbed beside start hex");
+                System.out.println("Reflected");
                 break;
             }//if the hexagon has an atom
             // if the next hexagon does not have influence, add it to the path
@@ -60,7 +60,7 @@ public class Ray {
 
                 //if direction and new direction are the same it is a direct collision
                 if(newDirection == direction){
-                    System.out.println("Ray absorbed");
+                    System.out.println("Absorbed");
                     break;
                 }
 
