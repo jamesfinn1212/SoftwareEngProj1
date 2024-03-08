@@ -125,11 +125,13 @@ public class testHexagon {
         Hexagon h2 = new Hexagon(3,3 );
         Hexagon h3 = new Hexagon(-1, -2);
         Hexagon h4 = new Hexagon(-4, -2);
+        Hexagon h5 = new Hexagon (0, -1);
 
         assertEquals(31, h1.getHexagonNum());
         assertEquals(10, h2.getHexagonNum());
         assertEquals(47, h3.getHexagonNum());
         assertEquals(44, h4.getHexagonNum());
+        assertEquals(40, h5.getHexagonNum());
     }
 
 }

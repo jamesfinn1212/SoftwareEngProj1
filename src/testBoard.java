@@ -209,11 +209,13 @@ public class testBoard {
         Hexagon h2 = board.getHexagonFromNumber(10);
         Hexagon h3 = board.getHexagonFromNumber(47);
         Hexagon h4 = board.getHexagonFromNumber(44);
+        Hexagon h5 = board.getHexagonFromNumber(40);
 
         assertEquals("(0, 0)", h1.toString());
         assertEquals("(3, 3)", h2.toString());
         assertEquals("(-1, -2)", h3.toString());
         assertEquals("(-4, -2)", h4.toString());
+        assertEquals("(0, -1)", h5.toString());
 
 
     }
