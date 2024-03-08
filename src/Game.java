@@ -10,17 +10,33 @@ public class Game {
         Draw.drawBoard(board1);
 
 
-        System.out.println("Please enter location(x, y) for 6 atoms");
+        System.out.println("Please enter location for 6 atoms");
         //enter the location of 6 atoms
         for(int i = 0; i<6; i++) {
-            System.out.println("Please enter number for atom: " + (i+1));
+            int j;
+            int y;
+            int x;
             Scanner input = new Scanner(System.in);
-            int j = input.nextInt();
-            int x = board1.getHexagonFromNumber(j).getX();
-            int y = board1.getHexagonFromNumber(j).getY();
+
 
             //check if valid co-ordinate
-            validateAtom(x, y, board1);
+            while(true){
+                try{
+                    System.out.println("Please enter number for atom: " + (i+1));
+                    j = input.nextInt();
+                    validateHexagonInput(j);
+                    x = board1.getHexagonFromNumber(j).getX();
+                    y = board1.getHexagonFromNumber(j).getY();
+                    validateAtom(x, y, board1);
+                    break;
+                }catch (IllegalArgumentException ex){
+                    System.out.println(ex.getMessage());
+                }
+
+            }
+
+
+
             // need to check also if same location chosen twice
             //adds atom
             board1.addAtom(x, y);
@@ -39,6 +55,14 @@ public class Game {
             Scanner input = new Scanner(System.in);
             int x = input.nextInt();
 
+            while(true){
+                try {
+                    validateRay(x);
+                    break;
+                }catch (IllegalArgumentException ex){
+                    System.out.println(ex.getMessage());
+                }
+            }
             Ray ray = new Ray(board1, board1.findStartHexagon(x), board1.findDirection(x));
 
             board1.addRayLine();
@@ -53,27 +77,35 @@ public class Game {
 
     }
 
+    public void validateHexagonInput(int i){
+        if(i < 1 || i > 61){
+            throw new IllegalArgumentException("Invalid atom input");
+        }
+    }
+
     public void validateAtom(int x, int y, Board board) throws IllegalArgumentException {
         if (x > 4 || x < -4) {
-            throw new IllegalArgumentException("x co-ordinate must be between -4 and 4");
+            throw new IllegalArgumentException("Invalid atom input");
         }
         // y co-ordinate input validation
         if(x > 0) {
             if (y > 4 || y < -4 + x) {
-                throw new IllegalArgumentException("Invalid y co-ordinate");
+                throw new IllegalArgumentException("Invalid atom input");
             }
         }else{
             if (y > 4 + x || y < -4) {
-                throw new IllegalArgumentException("Invalid y co-ordinate");
+                throw new IllegalArgumentException("Invalid atom input");
             }
         }
-
+        if(board.getListHexagon(x, y).hasAtom()){
+            throw new IllegalArgumentException("Hexagon already contains atom");
+        }
 
     }
 
-    // needs testing
 
-    public void validateRay(int i){
+
+    public void validateRay(int i) throws  IllegalArgumentException{
         if(i < 1 || i > 54){
             throw new IllegalArgumentException("Number must be between 1 and 54");
         }
