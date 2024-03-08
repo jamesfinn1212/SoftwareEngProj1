@@ -5,6 +5,7 @@ public class Board {
     private static final int yOrigin = 28;
 
     private final ArrayList<Hexagon> listBoard = new ArrayList<>();
+    private ArrayList<Ray> rays = new ArrayList<>();
 
     private final String[] stringBoard;
 
@@ -144,6 +145,10 @@ public class Board {
         return listBoard;
     }
 
+    public ArrayList<Ray> getRays() {
+        return rays;
+    }
+
     public Hexagon getListHexagon(int x, int y) {
 
         // iterate over board
@@ -204,6 +209,10 @@ public class Board {
         //System.out.println("add atom");
         addCircleOfInfluence(x, y);
 
+    }
+
+    public void addRay(Ray ray) {
+        rays.add(ray);
     }
 
     public void addRayLine(){
@@ -341,6 +350,7 @@ public class Board {
 
         return null;
     }
+
 // not needed it think
 //    public ArrayList<Direction> findDirectionsOfInfluence(Hexagon hexagon){
 //        int x = hexagon.getX();

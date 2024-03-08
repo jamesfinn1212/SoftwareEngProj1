@@ -20,6 +20,7 @@ public class Ray {
             throw new IllegalArgumentException("Must choose a hexagon on the side of the board for the ray to travel from");
         }
 
+        board.addRay(this);
         createRay(board, startHexagon, direction);
 
 
@@ -157,6 +158,10 @@ public class Ray {
             return n;
         }
         return n + 6;
+    }
+
+    public LinkedList<Hexagon> getPath() {
+        return path;
     }
 
 }
