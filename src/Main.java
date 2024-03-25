@@ -17,7 +17,8 @@ public class Main {
         // This ray just hits the one atom, starts at (0, -4) and comes out at (4, 2)
         Ray ray2 = new Ray(board, board.getListHexagon(0, -4), Board.Direction.NORTHWEST);
 
-
+        Game game = new Game();
+       // game.startGame();
 
         // Draws GUI
         SwingUtilities.invokeLater(() -> {
@@ -31,6 +32,8 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+
+
 
     }
 }

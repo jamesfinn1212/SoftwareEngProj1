@@ -117,12 +117,14 @@ public class GUI extends JPanel {
         */
 
         // draw hexagons from the board
+
+
         for(Hexagon hexagon: board.getListBoard()) {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
 
             drawHexagon(g, xValue, yValue, 30);
-            drawText(g, xValue, yValue, hexagon.toString());
+            drawText(g, xValue, yValue, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
         }
 
         // draw circles of influence and atoms 2nd so they're not getting overlapped by existing hexagons

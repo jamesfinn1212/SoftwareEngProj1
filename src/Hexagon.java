@@ -122,7 +122,7 @@ public class Hexagon {
     }
 
     // method that calculates hexagon number from a given co-ordinate
-    private int getHexagonNumFromCord(int x, int y) {
+    public int getHexagonNumFromCord(int x, int y) {
 
         int offset = 0;
 
