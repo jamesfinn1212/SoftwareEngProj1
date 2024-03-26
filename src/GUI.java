@@ -36,11 +36,17 @@ public class GUI extends JPanel {
                 // Handle mouse clicks to identify the clicked hexagon
                 Hexagon clickedHexagon = getFromPixelPosition(e.getX(), e.getY());
                 if (clickedHexagon != null) {
-
                     System.out.println(clickedHexagon.getHexagonNum()); // currently just prints out clicked hexagon number. should place atom/ray/marker based on input
 
                     if(currentAction == Action.PLACE_ATOM) {
-                        clickedHexagon.placeAtom(); // places atom
+
+                        // if the hexagon has no atom, place an atom, else remove the atom
+                        if(!clickedHexagon.hasAtom()) {
+                            clickedHexagon.placeAtom();
+                        }
+                        else {
+                            clickedHexagon.removeAtom();
+                        }
                     }
 
                     if(currentAction == Action.PLACE_RAY) {
