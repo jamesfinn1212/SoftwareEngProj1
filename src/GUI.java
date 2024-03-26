@@ -2,43 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.*;
 import java.util.List;
-
-class HexagonCoordinates {
-    int x;
-    int y;
-    int pixelX;
-    int pixelY;
-
-    public HexagonCoordinates(int x, int y, int pixelX, int pixelY) {
-        this.x = x;
-        this.y = y;
-        this.pixelX = pixelX;
-        this.pixelY = pixelY;
-    }
-
-    public int getPixelX() {
-        return pixelX;
-    }
-
-    public int getPixelY() {
-        return pixelY;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public String toString() {
-        return "Logical Coordinates: (" + x + ", " + y + "), Pixel Coordinates: (" + pixelX + ", " + pixelY + ")";
-    }
-}
 
 public class GUI extends JPanel {
 
@@ -46,48 +12,72 @@ public class GUI extends JPanel {
     private static final int HEX_DISTANCE = 2;
     private static final int CENTER_PIXEL_X = 600;
     private static final int CENTER_PIXEL_Y = 300;
+    private static final int HEX_SIDE_LENGTH = 30;
 
-    private int clickedHexagonX = -1;
-    private int clickedHexagonY = -1;
+    private static final int HEX_HOVER_INCREMENT = 2;
 
-    private List<HexagonCoordinates> grid = new ArrayList<>();
-    private Set<HexagonCoordinates> clickedAtoms = new HashSet<>();
+    private enum Action {
+        PLACE_ATOM, PLACE_RAY;
+    }
+
+    public Action currentAction = Action.PLACE_ATOM;
     private Board board;
+    private Hexagon hoveredHexagon;
 
     public GUI(Board board) {
         setBackground(Color.BLACK);
         this.board = board;
+
+        // checks if mouse is clicked
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 // Handle mouse clicks to identify the clicked hexagon
-                HexagonCoordinates clickedHexagon = getFromPixelPosition(e.getX(), e.getY());
+                Hexagon clickedHexagon = getFromPixelPosition(e.getX(), e.getY());
                 if (clickedHexagon != null) {
-                    if (clickedAtoms.size() < 6) {
-                        clickedAtoms.add(clickedHexagon);
+
+                    System.out.println(clickedHexagon.getHexagonNum()); // currently just prints out clicked hexagon number. should place atom/ray/marker based on input
+
+                    if(currentAction == Action.PLACE_ATOM) {
+                        clickedHexagon.placeAtom(); // places atom
                     }
-                    repaint();  // Repaint the panel to show the circle
+
+                    if(currentAction == Action.PLACE_RAY) {
+
+                        // only shoot ray if hexagon is a side hexagon
+                        if(clickedHexagon.isSide()) {
+
+                            // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
+                        }
+                    }
+
+                    repaint();  // Repaint the panel
                 }
             }
         });
 
-        //initializeGrid();  // Populate the grid
-    }
-
-    private HexagonCoordinates getFromPosition(int x, int y) {
-        for (HexagonCoordinates hexCoord : grid) {
-            if (hexCoord.getX() == x && hexCoord.getY() == y) {
-                return hexCoord;
+        // checks for mouse movement
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                hoveredHexagon = getFromPixelPosition(e.getX(), e.getY());
+                repaint();
             }
-        }
-        return null;
+        });
+
     }
 
-    private HexagonCoordinates getFromPixelPosition(int x, int y) {
-        for (HexagonCoordinates hexCoord : grid) {
-            if (hexCoord.getPixelX() <= x && x <= hexCoord.getPixelX() + HEX_RADIUS * 2 - 5 &&
-                    hexCoord.getPixelY() <= y && y <= hexCoord.getPixelY() + HEX_RADIUS * 2 - 5) {
-                return hexCoord;
+    private Hexagon getFromPixelPosition(int x, int y) {
+
+
+        for (Hexagon hexagon : board.getListBoard()) {
+
+            int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
+            int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
+
+            if ( xValue <= x && yValue <= y && x <= xValue + HEX_RADIUS *2 - 5 && y <= yValue + HEX_RADIUS *2 -5 ) {
+                return hexagon;
             }
         }
         return null;
@@ -97,33 +87,23 @@ public class GUI extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-        /*
-        for (HexagonCoordinates hexCoord : grid) {
-            int x = hexCoord.getPixelX();
-            int y = hexCoord.getPixelY();
-            drawHexagon(g, x, y, HEX_RADIUS);
-            // Display text in the center of the hexagon
-            String text = hexCoord.getX() + ", " + hexCoord.getY();
-            drawText(g, x, y, text);
-        }
-
-        for (HexagonCoordinates clickedHexagon : clickedAtoms) {
-            int x = clickedHexagon.getPixelX();
-            int y = clickedHexagon.getPixelY();
-            drawCircle(g, x + 10, y + 10, HEX_RADIUS - 10);
-            drawCircleOfInfluence(g, x - 10, y - 10, HEX_RADIUS + 10);
-        }
-        */
-
         // draw hexagons from the board
 
 
         for(Hexagon hexagon: board.getListBoard()) {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
+            int sideLength = HEX_SIDE_LENGTH;
 
-            drawHexagon(g, xValue, yValue, 30);
+            // if hexagon is being hovered over
+            if (hexagon == hoveredHexagon) {
+                sideLength += HEX_HOVER_INCREMENT;
+
+                xValue -= HEX_HOVER_INCREMENT;
+                yValue -= HEX_HOVER_INCREMENT;
+            }
+
+            drawHexagon(g, xValue, yValue, sideLength);
             drawText(g, xValue, yValue, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
         }
 
@@ -199,6 +179,7 @@ public class GUI extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         LinkedList<Hexagon> path = ray.getPath();
+        g2d.setColor(Color.LIGHT_GRAY);
         int size = path.size();
         int i = 0;
 
@@ -216,6 +197,8 @@ public class GUI extends JPanel {
             }
             i++;
             size--;
+
+
         }
 
 
