@@ -91,20 +91,22 @@ public class GUI extends JPanel {
 
 
         for(Hexagon hexagon: board.getListBoard()) {
-            int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
-            int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
+            int xValueHex = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
+            int yValueHex = CENTER_PIXEL_Y - (52*hexagon.getY());
+            int xValueText = xValueHex;
+            int yValueText = yValueHex;
             int sideLength = HEX_SIDE_LENGTH;
 
             // if hexagon is being hovered over
             if (hexagon == hoveredHexagon) {
                 sideLength += HEX_HOVER_INCREMENT;
 
-                xValue -= HEX_HOVER_INCREMENT;
-                yValue -= HEX_HOVER_INCREMENT;
+                xValueHex -= HEX_HOVER_INCREMENT;
+                yValueHex -= HEX_HOVER_INCREMENT;
             }
 
-            drawHexagon(g, xValue, yValue, sideLength);
-            drawText(g, xValue, yValue, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
+            drawHexagon(g, xValueHex, yValueHex, sideLength);
+            drawText(g, xValueText, yValueText, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
         }
 
         // draw circles of influence and atoms 2nd so they're not getting overlapped by existing hexagons
