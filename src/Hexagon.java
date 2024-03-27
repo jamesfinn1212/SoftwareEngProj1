@@ -89,7 +89,6 @@ public class Hexagon {
     // setter methods
     // x and y should be immutable. i.e. we should never be able to change a hexagon's position
     public void placeAtom() {
-
         hasAtom = true;
     }
 

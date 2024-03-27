@@ -20,6 +20,11 @@ public class GUI extends JPanel {
         PLACE_ATOM, PLACE_RAY;
     }
 
+    // splitting hexagon into 6 sections
+    private enum Hexagon_Section {
+        TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT;
+    }
+
     public Action currentAction = Action.PLACE_ATOM;
     private Board board;
     private Hexagon hoveredHexagon;
@@ -35,18 +40,22 @@ public class GUI extends JPanel {
 
                 // Handle mouse clicks to identify the clicked hexagon
                 Hexagon clickedHexagon = getFromPixelPosition(e.getX(), e.getY());
+                Hexagon_Section sectionClicked = getSectionClicked(e.getX(), e.getY(), clickedHexagon);
+                Board.Direction directionOfRay = getDirectionFromSection(sectionClicked);
+
                 if (clickedHexagon != null) {
-                    System.out.println(clickedHexagon.getHexagonNum()); // currently just prints out clicked hexagon number. should place atom/ray/marker based on input
 
                     if(currentAction == Action.PLACE_ATOM) {
 
                         // if the hexagon has no atom, place an atom, else remove the atom
                         if(!clickedHexagon.hasAtom()) {
-                            clickedHexagon.placeAtom();
+                            board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
                         else {
                             clickedHexagon.removeAtom();
                         }
+
+
                     }
 
                     if(currentAction == Action.PLACE_RAY) {
@@ -55,7 +64,10 @@ public class GUI extends JPanel {
                         if(clickedHexagon.isSide()) {
 
                             // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
+                            Ray newRay = new Ray(board, clickedHexagon, directionOfRay);
+
                         }
+
                     }
 
                     repaint();  // Repaint the panel
@@ -212,5 +224,79 @@ public class GUI extends JPanel {
 
     }
 
+    // method that returns section of the hexagon clicked
+    private Hexagon_Section getSectionClicked(int clickedX, int clickedY, Hexagon clickedHexagon) {
+        Hexagon_Section section = null;
+
+        // get xValue and yValue of the center of clicked hexagon
+        int xCenter = CENTER_PIXEL_X + (60*clickedHexagon.getX() - 30*clickedHexagon.getY()) + HEX_SIDE_LENGTH;
+        int yCenter = CENTER_PIXEL_Y - (52*clickedHexagon.getY()) + HEX_SIDE_LENGTH;
+
+        int x_length = clickedX - xCenter;
+        int y_length = clickedY - yCenter;
+
+        double angle = Math.atan2(y_length, x_length);
+
+        // Adjusting the range to [0, 2π)
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+
+        // change angle to degrees for easier comparison
+        double angleDegrees = Math.toDegrees(angle);
+
+        // determine which section was clicked based on angle within the hexagon
+        if(angleDegrees >= 30 && angleDegrees <= 90) {
+            return Hexagon_Section.BOTTOM_RIGHT;
+        }
+        if(angleDegrees >= 90 && angleDegrees <= 150) {
+            return Hexagon_Section.BOTTOM_LEFT;
+        }
+        if(angleDegrees >= 150 && angleDegrees <= 210) {
+            return Hexagon_Section.LEFT;
+        }
+        if(angleDegrees >= 210 && angleDegrees <= 270) {
+            return Hexagon_Section.TOP_LEFT;
+        }
+        if(angleDegrees >= 270 && angleDegrees <= 330) {
+            return Hexagon_Section.TOP_RIGHT;
+        }
+
+        // last range is for RIGHT if degrees is 330 -> 360 or 0 -> 30.
+        if((angleDegrees >= 330 && angleDegrees <= 360) || (angleDegrees >= 0 && angleDegrees <= 30)) {
+            return Hexagon_Section.RIGHT;
+        }
+
+
+
+        return section;
+    }
+
+    // returns ray direction based on section of the hexagon clicked
+    private Board.Direction getDirectionFromSection(Hexagon_Section section) {
+
+        switch(section) {
+            case RIGHT:
+                return Board.Direction.WEST;
+            case LEFT:
+                return Board.Direction.EAST;
+            case TOP_LEFT:
+                return Board.Direction.SOUTHEAST;
+            case TOP_RIGHT:
+                return Board.Direction.SOUTHWEST;
+            case BOTTOM_LEFT:
+                return Board.Direction.NORTHEAST;
+            case BOTTOM_RIGHT:
+                return Board.Direction.NORTHWEST;
+            default:
+                return null;
+        }
+
+    }
+
+    // method to set action
+    public void setAction(Action action) {
+        currentAction = action;
+    }
 }
 

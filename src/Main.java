@@ -8,8 +8,12 @@ public class Main {
         Board board = new Board();
 
 
-        Game game = new Game();
+
+
+
+        //Game game = new Game();
        // game.startGame();
+
 
         // Draws GUI
         SwingUtilities.invokeLater(() -> {
@@ -23,6 +27,8 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+
+
 
 
     }
