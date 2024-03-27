@@ -7,6 +7,8 @@ public class Board {
     private final ArrayList<Hexagon> listBoard = new ArrayList<>();
     private ArrayList<Ray> rays = new ArrayList<>();
 
+    public int numAtomsPlaced = 0;
+
     private final String[] stringBoard;
 
     private final int stringBoardLength;

@@ -16,7 +16,7 @@ public class GUI extends JPanel {
 
     private static final int HEX_HOVER_INCREMENT = 2;
 
-    private enum Action {
+    public enum Action {
         PLACE_ATOM, PLACE_RAY;
     }
 
@@ -50,9 +50,11 @@ public class GUI extends JPanel {
                         // if the hexagon has no atom, place an atom, else remove the atom
                         if(!clickedHexagon.hasAtom()) {
                             board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
+                            board.numAtomsPlaced++;
                         }
                         else {
                             clickedHexagon.removeAtom();
+                            board.numAtomsPlaced--;
                         }
 
 
@@ -299,4 +301,3 @@ public class GUI extends JPanel {
         currentAction = action;
     }
 }
-

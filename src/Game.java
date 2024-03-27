@@ -1,31 +1,65 @@
+import javax.swing.*;
 import java.util.IllegalFormatException;
 import java.util.Scanner;
 
 public class Game {
     boolean isOver = false;
 
+
+
+
+
     public void startGame(){
         Board board1 = new Board();
         // draws empty board
         Draw.drawBoard(board1);
+        GUI gui = new GUI(board1);
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Blackbox GUI");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+            frame.add(gui);
+
+            frame.setSize(1500, 750);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+
+
+
+        });
+
+        while(board1.numAtomsPlaced < 6){
+            gui.setAction(GUI.Action.PLACE_ATOM);
+            System.out.println("Im here");
+        }
+
+        while(!isOver){
+            gui.setAction(GUI.Action.PLACE_RAY);
+        }
+
+
+
+
+
 
 
         System.out.println("Please enter location(x, y) for 6 atoms");
         //enter the location of 6 atoms
-        for(int i = 0; i<6; i++) {
-            System.out.println("Please enter number for atom: " + (i+1));
-            Scanner input = new Scanner(System.in);
-            int j = input.nextInt();
-            int x = board1.getHexagonFromNumber(j).getX();
-            int y = board1.getHexagonFromNumber(j).getY();
-
-            //check if valid co-ordinate
-            validateAtom(x, y, board1);
-            // need to check also if same location chosen twice
-            //adds atom
-            board1.addAtom(x, y);
-            Draw.drawBoard(board1);
-        }
+//        for(int i = 0; i<6; i++) {
+//            System.out.println("Please enter number for atom: " + (i+1));
+//            Scanner input = new Scanner(System.in);
+//            int j = input.nextInt();
+//            int x = board1.getHexagonFromNumber(j).getX();
+//            int y = board1.getHexagonFromNumber(j).getY();
+//
+//            //check if valid co-ordinate
+//            validateAtom(x, y, board1);
+//            // need to check also if same location chosen twice
+//            //adds atom
+//            board1.addAtom(x, y);
+//            Draw.drawBoard(board1);
+//        }
 
         // atoms are hidden
         System.out.println("Atoms and circles of influences will now be hidden");

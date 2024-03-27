@@ -8,27 +8,21 @@ public class Main {
         Board board = new Board();
 
 
+        Game game = new Game();
+       game.startGame();
 
-
-
-        //Game game = new Game();
-       // game.startGame();
-
-
-        // Draws GUI
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Blackbox GUI");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            GUI gui = new GUI(board);
-            frame.add(gui);
-
-            frame.setSize(1500, 750);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-
-
+//         Draws GUI
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("Blackbox GUI");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//            GUI gui = new GUI(board);
+//            frame.add(gui);
+//
+//            frame.setSize(1500, 750);
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//        });
 
 
     }
