@@ -16,6 +16,8 @@ public class GUI extends JPanel {
 
     private static final int HEX_HOVER_INCREMENT = 2;
 
+    private ArrayList<Hexagon> clickedHexagons = new ArrayList<>();
+
     public enum Action {
         PLACE_ATOM, PLACE_RAY;
     }
@@ -47,15 +49,17 @@ public class GUI extends JPanel {
 
                     if(currentAction == Action.PLACE_ATOM) {
 
-                        // if the hexagon has no atom, place an atom, else remove the atom
+
+                        // if the hexagon has no atom, place that hexagon in the array, otherwise
                         if(!clickedHexagon.hasAtom()) {
                             board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
-                            board.numAtomsPlaced++;
+
                         }
                         else {
-                            clickedHexagon.removeAtom();
-                            board.numAtomsPlaced--;
+                            board.removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
+
+
 
 
                     }
@@ -134,8 +138,8 @@ public class GUI extends JPanel {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
 
-            // if the hexagon has an atom in it, draw the atom
-            if(hexagon.hasAtom()) {
+            // if the hexagon has an atom in it and it is not hidden, draw the atom
+            if(hexagon.hasAtom() && !hexagon.isHidden()) {
                 drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
             }
@@ -301,3 +305,4 @@ public class GUI extends JPanel {
         currentAction = action;
     }
 }
+

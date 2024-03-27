@@ -136,6 +136,7 @@ public class Board {
     }
 
 
+
     public int getStringBoardLength(){
         return this.stringBoardLength;
     }
@@ -210,7 +211,16 @@ public class Board {
         getListHexagon(x, y).placeAtom();
         //System.out.println("add atom");
         addCircleOfInfluence(x, y);
+        numAtomsPlaced++;
 
+    }
+
+    public void removeAtom(int x, int y) {
+        addChar(x, y, ' ');
+        getListHexagon(x, y).removeAtom();
+        //System.out.println("add atom");
+        removeCircleOfInfluence(x, y);
+        numAtomsPlaced--;
     }
 
     public void addRay(Ray ray) {
@@ -228,6 +238,15 @@ public class Board {
     public void hideAtoms(){
         for(Hexagon hexagon : listBoard) {
             addChar(hexagon.getX(), hexagon.getY(), ' ');
+            hexagon.hideAtom();
+        }
+
+
+    }
+
+    public void showAtoms() {
+        for(Hexagon hexagon : listBoard) {
+            hexagon.showAtom();
         }
     }
 
@@ -330,6 +349,39 @@ public class Board {
 
         }
 
+    }
+
+    public void removeCircleOfInfluence(int x, int y) {
+        if(getListHexagon(x+1, y) != null){
+            //System.out.println("im here 20");
+            getListHexagon(x+1, y).removeInfluence();
+            getListHexagon(x+1, y).removeHasNeighbourAtom();
+        }if(getListHexagon(x, y-1) != null){
+            getListHexagon(x, y-1).removeInfluence();
+            getListHexagon(x, y-1).removeHasNeighbourAtom();
+        }if(getListHexagon(x-1, y-1) != null){
+            getListHexagon(x-1, y-1).removeInfluence();
+            getListHexagon(x-1, y-1).removeHasNeighbourAtom();
+        }if(getListHexagon(x-1, y) != null){
+            getListHexagon(x-1, y).removeInfluence();
+            getListHexagon(x-1, y).removeHasNeighbourAtom();
+        }if(getListHexagon(x, y+1) != null) {
+            getListHexagon(x, y+1).removeInfluence();
+            getListHexagon(x, y+1).removeHasNeighbourAtom();
+        }if(getListHexagon(x+1, y+1) != null){
+            getListHexagon(x+1, y+1).removeInfluence();
+            getListHexagon(x+1, y+1).removeHasNeighbourAtom();
+        }
+
+        for(Hexagon hexagon: listBoard) {
+
+            // if the hexagon has an atom on it, draw the atom
+            if(!hexagon.hasInfluence() && !hexagon.hasAtom() && hexagon.getNumRays() == 0) {
+                //System.out.println(hexagon);
+                addChar(hexagon.getX(), hexagon.getY(), ' ');
+            }
+
+        }
     }
 
     // Method to return the next hexagon on the board in a given direction

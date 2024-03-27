@@ -13,6 +13,8 @@ public class Game {
         Board board1 = new Board();
         // draws empty board
         Draw.drawBoard(board1);
+
+
         GUI gui = new GUI(board1);
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Blackbox GUI");
@@ -29,14 +31,28 @@ public class Game {
 
         });
 
-        while(board1.numAtomsPlaced < 6){
-            gui.setAction(GUI.Action.PLACE_ATOM);
-            System.out.println("Im here");
+        while(!isOver) {
+
+            // place atoms
+            while (board1.numAtomsPlaced < 6) {
+                gui.setAction(GUI.Action.PLACE_ATOM);
+            }
+
+            // hide atoms
+            board1.hideAtoms();
+
+            while (board1.getRays().size() < 5) {
+                gui.setAction(GUI.Action.PLACE_RAY);
+                System.out.println(board1.getRays().size());
+            }
+
+            // show atoms
+            board1.showAtoms();
+
+            break;
+
         }
 
-        while(!isOver){
-            gui.setAction(GUI.Action.PLACE_RAY);
-        }
 
 
 
@@ -44,6 +60,7 @@ public class Game {
 
 
 
+/*
         System.out.println("Please enter location(x, y) for 6 atoms");
         //enter the location of 6 atoms
 //        for(int i = 0; i<6; i++) {
@@ -79,11 +96,13 @@ public class Game {
             Draw.drawBoard(board1);
             System.out.println(ray.toString());
 
+}
+ */
 
 
 
 
-        }
+
 
     }
 

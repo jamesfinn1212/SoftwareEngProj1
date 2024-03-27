@@ -8,6 +8,7 @@ public class Hexagon {
     private final int hexagonNum;
     private boolean hasAtom;
 
+    private boolean isHidden = false;
     private boolean hasNeighbourAtom;
 
     private int numRays;
@@ -116,9 +117,15 @@ public class Hexagon {
         return hasNeighbourAtom;
     }
 
+    public void hideAtom() {isHidden = true;}
+    public void showAtom() {isHidden = false;}
+
+    public boolean isHidden() {return isHidden;}
+
     public void setHasNeighbourAtom() {
         this.hasNeighbourAtom = true;
     }
+    public void removeHasNeighbourAtom() {this.hasNeighbourAtom = false;}
 
     // method that calculates hexagon number from a given co-ordinate
     public int getHexagonNumFromCord(int x, int y) {
