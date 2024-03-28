@@ -43,19 +43,19 @@ public class Ray {
             }//if the start atom touches a hexagon that has an atom
             else if(startHexagon.isHasNeighbourAtom()){
                 System.out.println("Ray absorbed beside start hex");
+                System.out.println("Atom beside ray");
                 break;
-            }//if the hexagon has an atom
+            }
             // if the next hexagon does not have influence, add it to the path
-            else if (!board.getNextHexagon(path.getLast(), direction).hasInfluence()) {
+            else if (!path.getLast().hasInfluence()) {
+
                 path.add(board.getNextHexagon(path.getLast(), direction));
                 // add 1 to num of arrays
                 path.getLast().setNumRays(path.getLast().getNumRays()+1);
             }
             else { // if the next hexagon has influence, we want to add that hexagon into the path but our direction will have to change (or get absorbed)
 
-                // add hexagon into path
-                path.add(board.getNextHexagon(path.getLast(), direction));
-                path.getLast().setNumRays(path.getLast().getNumRays()+1);
+
                 // determine new direction
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
 
@@ -66,6 +66,10 @@ public class Ray {
                 }
 
                 direction = newDirection; // set direction to new direction so the while loop contines
+
+                // add hexagon into path
+                path.add(board.getNextHexagon(path.getLast(), direction));
+                path.getLast().setNumRays(path.getLast().getNumRays()+1);
             }
         }
     }

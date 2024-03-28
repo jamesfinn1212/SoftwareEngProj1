@@ -53,6 +53,7 @@ public class GUI extends JPanel {
                         // if the hexagon has no atom, place that hexagon in the array, otherwise
                         if(!clickedHexagon.hasAtom()) {
                             board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
+                            Draw.drawBoard(board);
 
                         }
                         else {

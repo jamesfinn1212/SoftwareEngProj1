@@ -211,6 +211,7 @@ public class Board {
         getListHexagon(x, y).placeAtom();
         //System.out.println("add atom");
         addCircleOfInfluence(x, y);
+        edgeCaseNeighbouringHasAtom(x, y);
         numAtomsPlaced++;
 
     }
@@ -313,6 +314,42 @@ public class Board {
         return null;
     }
 
+    public ArrayList<Hexagon> neighbouringHexagons(int x, int y){
+
+
+        ArrayList<Hexagon> neighbouringHexes = new ArrayList<>();
+        if(getListHexagon(x+1, y) != null){
+            neighbouringHexes.add(getListHexagon(x+1, y));
+        }if(getListHexagon(x, y-1) != null){
+            neighbouringHexes.add(getListHexagon(x, y-1));
+        }if(getListHexagon(x-1, y-1) != null){
+            neighbouringHexes.add(getListHexagon(x-1, y-1));
+        }if(getListHexagon(x-1, y) != null){
+            neighbouringHexes.add(getListHexagon(x-1, y));
+        }if(getListHexagon(x, y+1) != null) {
+            neighbouringHexes.add(getListHexagon(x, y+1));
+        }if(getListHexagon(x+1, y+1) != null){
+            neighbouringHexes.add(getListHexagon(x+1, y+1));
+        }
+
+        return neighbouringHexes;
+    }
+
+    //for the edge case when way is entred and hexagon beside it on the edge contains an atom
+    public void edgeCaseNeighbouringHasAtom(int x, int y ){
+        ArrayList<Hexagon> neighbouringHexes = neighbouringHexagons(x, y);
+        if(getListHexagon(x, y).isSide()){
+            for(Hexagon hexagon : neighbouringHexes){
+                if(hexagon.isSide()){
+                    hexagon.setHasNeighbourAtom();
+                    System.out.println("Hexagon name " +  hexagon);
+                }
+            }
+        }
+
+    }
+
+
 
 
     public void addCircleOfInfluence(int x, int y) {
@@ -321,22 +358,16 @@ public class Board {
         if(getListHexagon(x+1, y) != null){
             //System.out.println("im here 20");
             getListHexagon(x+1, y).placeInfluence(Direction.EAST);
-            getListHexagon(x+1, y).setHasNeighbourAtom();
         }if(getListHexagon(x, y-1) != null){
             getListHexagon(x, y-1).placeInfluence(Direction.SOUTHEAST);
-            getListHexagon(x, y-1).setHasNeighbourAtom();
         }if(getListHexagon(x-1, y-1) != null){
             getListHexagon(x-1, y-1).placeInfluence(Direction.SOUTHWEST);
-            getListHexagon(x-1, y-1).setHasNeighbourAtom();
         }if(getListHexagon(x-1, y) != null){
             getListHexagon(x-1, y).placeInfluence(Direction.WEST);
-            getListHexagon(x-1, y).setHasNeighbourAtom();
         }if(getListHexagon(x, y+1) != null) {
             getListHexagon(x, y+1).placeInfluence(Direction.NORTHWEST);
-            getListHexagon(x, y+1).setHasNeighbourAtom();
         }if(getListHexagon(x+1, y+1) != null){
             getListHexagon(x+1, y+1).placeInfluence(Direction.NORTHEAST);
-            getListHexagon(x+1, y+1).setHasNeighbourAtom();
         }
 
         for(Hexagon hexagon: listBoard) {

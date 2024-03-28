@@ -36,18 +36,21 @@ public class Game {
             // place atoms
             while (board1.numAtomsPlaced < 6) {
                 gui.setAction(GUI.Action.PLACE_ATOM);
+              //  Draw.drawBoard(board1);
             }
+
 
             // hide atoms
             board1.hideAtoms();
 
             while (board1.getRays().size() < 5) {
                 gui.setAction(GUI.Action.PLACE_RAY);
-                System.out.println(board1.getRays().size());
+               // System.out.println(board1.getRays().size());
             }
 
             // show atoms
             board1.showAtoms();
+
 
             break;
 
