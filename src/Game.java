@@ -42,6 +42,8 @@ public class Game {
 
             // hide atoms
             board1.hideAtoms();
+            board1.isHexCoordVisible = false;
+            board1.isArrowsVisible =true;
 
             while (board1.getRays().size() < 5) {
                 gui.setAction(GUI.Action.PLACE_RAY);

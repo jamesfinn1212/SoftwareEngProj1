@@ -8,6 +8,8 @@ public class Board {
     private ArrayList<Ray> rays = new ArrayList<>();
 
     public int numAtomsPlaced = 0;
+    public boolean isHexCoordVisible = true;
+    public boolean isArrowsVisible = false;
 
     private final String[] stringBoard;
 
@@ -342,7 +344,6 @@ public class Board {
             for(Hexagon hexagon : neighbouringHexes){
                 if(hexagon.isSide()){
                     hexagon.setHasNeighbourAtom();
-                    System.out.println("Hexagon name " +  hexagon);
                 }
             }
         }

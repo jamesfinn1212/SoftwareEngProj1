@@ -53,6 +53,7 @@ public class GUI extends JPanel {
                         // if the hexagon has no atom, place that hexagon in the array, otherwise
                         if(!clickedHexagon.hasAtom()) {
                             board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
+                            System.out.println("Hexagon Clicked" + clickedHexagon);
                             Draw.drawBoard(board);
 
                         }
@@ -101,6 +102,7 @@ public class GUI extends JPanel {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
 
+
             if ( xValue <= x && yValue <= y && x <= xValue + HEX_RADIUS *2 - 5 && y <= yValue + HEX_RADIUS *2 -5 ) {
                 return hexagon;
             }
@@ -113,25 +115,27 @@ public class GUI extends JPanel {
         super.paintComponent(g);
 
         // draw hexagons from the board
-
-
         for(Hexagon hexagon: board.getListBoard()) {
+
             int xValueHex = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValueHex = CENTER_PIXEL_Y - (52*hexagon.getY());
-            int xValueText = xValueHex;
-            int yValueText = yValueHex;
             int sideLength = HEX_SIDE_LENGTH;
 
             // if hexagon is being hovered over
             if (hexagon == hoveredHexagon) {
                 sideLength += HEX_HOVER_INCREMENT;
-
-                xValueHex -= HEX_HOVER_INCREMENT;
-                yValueHex -= HEX_HOVER_INCREMENT;
             }
 
+
+
+            // Draw the hexagon with different colored sections
             drawHexagon(g, xValueHex, yValueHex, sideLength);
-            drawText(g, xValueText, yValueText, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
+            if(board.isHexCoordVisible){
+                drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
+
+            }
+
+
         }
 
         // draw circles of influence and atoms 2nd so they're not getting overlapped by existing hexagons
@@ -151,9 +155,9 @@ public class GUI extends JPanel {
             drawRay(g, ray);
         }
     }
-
     private void drawHexagon(Graphics g, int x, int y, int sideLength) {
 
+        int inset = 5;
         int centerX = x + sideLength;
         int centerY = y + sideLength;
 
@@ -166,10 +170,68 @@ public class GUI extends JPanel {
             yPoints[a] = (int) (centerY + sideLength * Math.sin(angle));
         }
 
+
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(3));
         g2d.setColor(Color.YELLOW);
         g2d.fillPolygon(xPoints, yPoints, 6);
+        //if
+        for (int i = 0; i < 6; i++) {
+
+                double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
+                double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
+               if(isArrowNeeded(x, y, i) && board.isArrowsVisible){
+
+                    g2d.setColor(Color.RED);
+                    int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
+                    int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
+                    g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
+
+                }
+
+
+
+
+
+        }
+
+
+    }
+
+
+    //find a quater and 3 quater//
+    private double midpoint(double x1, double x2){
+        double x = (x1 + x2)/2.0;
+        return x;
+    }
+
+    private boolean isArrowNeeded(int x, int y, int i){
+        Hexagon hexagon = getFromPixelPosition(x + 30, y + 30);
+       // System.out.println("Heaxagon being considered" + hexagon);
+        if(hexagon.isSide()){
+
+            if(hexagon.getY() == 4 && (i == 2 || i == 3)){
+                return true;
+            }
+            if(hexagon.getY() ==-4 && (i == 0|| i == 5)){
+              //  System.out.println("Arrows being added" + hexagon);
+                return true;
+            }
+            if(hexagon.getX()  == -4 && (i == 1 || i ==0)){
+                return true;
+            }
+            if(hexagon.getY() - hexagon.getX() == 4 && (i == 1 || i ==2)){
+                return true;
+            }
+            if(hexagon.getX()  == 4 && (i == 3 || i ==4)){
+                return true;
+            }
+            if(hexagon.getY() - hexagon.getX() == -4 && (i == 4 || i ==5)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void drawCircle(Graphics g, int x, int y, int radius) {
