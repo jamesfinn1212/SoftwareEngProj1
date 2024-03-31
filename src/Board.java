@@ -10,7 +10,7 @@ public class Board {
     public int numAtomsPlaced = 0;
     public boolean isHexCoordVisible = true;
     public boolean isArrowsVisible = false;
-
+    public boolean isHexSideNumVisible = false;
     private final String[] stringBoard;
 
     private final int stringBoardLength;
