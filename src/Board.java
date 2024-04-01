@@ -135,6 +135,17 @@ public class Board {
             }
             throw new IllegalArgumentException("Invalid Direction value: " + value);
         }
+
+        // returns the opposite direction
+        public Direction getOpposite() {
+            int thisDirectionValue = this.getValue();
+
+            // opposite directions are always 3 away from each other.
+            // use %6 so we stay within 0-5 bounds
+            thisDirectionValue = (thisDirectionValue + 3)%6;
+
+            return fromValue(thisDirectionValue);
+        }
     }
 
 

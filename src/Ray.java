@@ -6,10 +6,15 @@ public class Ray {
 
     // instance variables
     private final LinkedList<Hexagon> path = new LinkedList<>();
+    private Board.Direction direction;
+
+    private Board.Direction startDirection; // direction the ray is going at the start
 
     // constructor
     public Ray(Board board, Hexagon startHexagon, Board.Direction direction) {
 
+        this.direction = direction;
+        this.startDirection = direction;
         // add first hexagon into linked list
         path.add(startHexagon);
         //add 1 to num of arrays
@@ -21,14 +26,14 @@ public class Ray {
         }
 
         board.addRay(this);
-        createRay(board, startHexagon, direction);
+        createRay(board, startHexagon);
 
 
 
 
     }
 
-    public void createRay(Board board, Hexagon startHexagon, Board.Direction direction){
+    public void createRay(Board board, Hexagon startHexagon){
 
         // add next hexagon into linked list based on direction
         // while next hexagon is not null
@@ -167,5 +172,11 @@ public class Ray {
     public LinkedList<Hexagon> getPath() {
         return path;
     }
+
+    public Board.Direction getDirection() {
+        return direction;
+    }
+
+    public Board.Direction getStartDirection() {return startDirection;}
 
 }

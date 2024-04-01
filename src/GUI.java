@@ -121,9 +121,12 @@ public class GUI extends JPanel {
             int yValueHex = CENTER_PIXEL_Y - (52*hexagon.getY());
             int sideLength = HEX_SIDE_LENGTH;
 
-            // if hexagon is being hovered over
+            // if hexagon is being hovered over add the hover increment
             if (hexagon == hoveredHexagon) {
                 sideLength += HEX_HOVER_INCREMENT;
+
+                xValueHex -= HEX_HOVER_INCREMENT;
+                yValueHex -= HEX_HOVER_INCREMENT;
             }
 
 
@@ -132,8 +135,15 @@ public class GUI extends JPanel {
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
             if(board.isHexCoordVisible){
+
+                // dont want the text to be affected by being hovered over so undo the increment
+                if(hexagon == hoveredHexagon) {
+                    xValueHex += HEX_HOVER_INCREMENT;
+                    yValueHex += HEX_HOVER_INCREMENT;
+                }
+
                 drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
-                  //drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getX()) + " " + hexagon.getY());
+                //drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getX()) + " " + hexagon.getY());
 
             }
             if(board.isHexSideNumVisible){
@@ -146,7 +156,7 @@ public class GUI extends JPanel {
         for(Hexagon hexagon: board.getListBoard()) {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
-          //  drawHexSideNum(g, hexagon.getX(), hexagon.getY());
+            //  drawHexSideNum(g, hexagon.getX(), hexagon.getY());
 
             // if the hexagon has an atom in it and it is not hidden, draw the atom
             if(hexagon.hasAtom() && !hexagon.isHidden()) {
@@ -185,16 +195,16 @@ public class GUI extends JPanel {
         //if
         for (int i = 0; i < 6; i++) {
 
-                double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
-                double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
-               if(isArrowNeeded(x, y, i) && board.isArrowsVisible){
+            double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
+            double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
+            if(isArrowNeeded(x, y, i) && board.isArrowsVisible){
 
-                    g2d.setColor(Color.RED);
-                    int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
-                    int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
-                    g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
+                g2d.setColor(Color.RED);
+                int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
+                int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
+                g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
 
-                }
+            }
 
 
 
@@ -214,14 +224,14 @@ public class GUI extends JPanel {
 
     private boolean isArrowNeeded(int x, int y, int i){
         Hexagon hexagon = getFromPixelPosition(x + 30, y + 30);
-       // System.out.println("Heaxagon being considered" + hexagon);
+        // System.out.println("Heaxagon being considered" + hexagon);
         if(hexagon.isSide()){
 
             if(hexagon.getY() == 4 && (i == 2 || i == 3)){
                 return true;
             }
             if(hexagon.getY() ==-4 && (i == 0|| i == 5)){
-              //  System.out.println("Arrows being added" + hexagon);
+                //  System.out.println("Arrows being added" + hexagon);
                 return true;
             }
             if(hexagon.getX()  == -4 && (i == 1 || i ==0)){
@@ -341,21 +351,57 @@ public class GUI extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         LinkedList<Hexagon> path = ray.getPath();
+        Board.Direction startDirection = ray.getStartDirection();
+        Board.Direction endDirection = ray.getDirection();
         g2d.setColor(Color.LIGHT_GRAY);
+
+
         int size = path.size();
         int i = 0;
+        int xOffset = 0;
+        int yOffset = 0;
 
         while(size > 0) {
             if(i + 1 < path.size()) {
                 Hexagon startHexagon = path.get(i);
                 Hexagon endHexagon = path.get(i + 1);
 
+
                 int x1Value = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY());
                 int y1Value = CENTER_PIXEL_Y - (52 * startHexagon.getY());
+
+                // if we are drawing on the first hexagon in the path
+                if(i == 0) {
+                    xOffset = getXOffset(startDirection);
+                    yOffset = getYOffset(startDirection);
+
+                    x1Value += xOffset;
+                    y1Value += yOffset;
+                }
+
+
+
                 int x2Value = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY());
                 int y2Value = CENTER_PIXEL_Y - (52 * endHexagon.getY());
 
+                // if we are drawing on the last hexagon in the path
+                if(i + 1 == path.size() - 1) {
+
+                    // only draw further if the ray has NOT been absorbed
+                    // i.e must check if the hexagon after the end hexagon is null
+
+                    if(board.getNextHexagon(endHexagon, endDirection) == null) {
+                        xOffset = getXOffset(endDirection.getOpposite()); // get opposite direction so can use same function as for startDirection
+                        yOffset = getYOffset(endDirection.getOpposite());
+
+                        x2Value += xOffset;
+                        y2Value += yOffset;
+                    }
+                }
+
                 g2d.drawLine(x1Value + 30, y1Value + 30, x2Value + 30, y2Value + 30);
+
+
             }
             i++;
             size--;
@@ -439,6 +485,49 @@ public class GUI extends JPanel {
     // method to set action
     public void setAction(Action action) {
         currentAction = action;
+    }
+
+    // method that returns how far back on x axist you should draw ray for it to start at side
+    private int getXOffset(Board.Direction direction) {
+        int offset = 0;
+
+        switch(direction)  {
+            case WEST:
+                offset = 24;
+                break;
+            case EAST:
+                offset = -24;
+                break;
+            case NORTHWEST:
+            case SOUTHWEST:
+                offset = 12;
+                break;
+            case SOUTHEAST:
+            case NORTHEAST:
+                offset = -12;
+                break;
+        }
+
+        return offset;
+    }
+
+    private int getYOffset(Board.Direction direction) {
+
+        int offset = 0;
+
+        switch(direction)  {
+            case NORTHWEST:
+            case NORTHEAST:
+                offset = 21;
+                break;
+            case SOUTHEAST:
+            case SOUTHWEST:
+                offset = -21;
+                break;
+
+        }
+
+        return offset;
     }
 }
 

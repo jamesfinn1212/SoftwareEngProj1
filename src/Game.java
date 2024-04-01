@@ -36,7 +36,7 @@ public class Game {
             // place atoms
             while (board1.numAtomsPlaced < 6) {
                 gui.setAction(GUI.Action.PLACE_ATOM);
-              //  Draw.drawBoard(board1);
+                //  Draw.drawBoard(board1);
             }
 
 
@@ -48,7 +48,7 @@ public class Game {
 
             while (board1.getRays().size() < 5) {
                 gui.setAction(GUI.Action.PLACE_RAY);
-               // System.out.println(board1.getRays().size());
+                // System.out.println(board1.getRays().size());
             }
 
             // show atoms
