@@ -366,6 +366,12 @@ public class GUI extends JPanel {
                 Hexagon startHexagon = path.get(i);
                 Hexagon endHexagon = path.get(i + 1);
 
+                // edge case if end hexagon is null, set to start hexagon
+                // this occurs if the ray is deflected in a direction where there is no hexagon
+                if(endHexagon == null) {
+                    endHexagon = path.get(i);
+                }
+
 
                 int x1Value = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY());
                 int y1Value = CENTER_PIXEL_Y - (52 * startHexagon.getY());
@@ -381,8 +387,10 @@ public class GUI extends JPanel {
 
 
 
+
                 int x2Value = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY());
                 int y2Value = CENTER_PIXEL_Y - (52 * endHexagon.getY());
+
 
                 // if we are drawing on the last hexagon in the path
                 if(i + 1 == path.size() - 1) {

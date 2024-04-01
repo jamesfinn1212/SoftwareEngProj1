@@ -430,6 +430,10 @@ public class Board {
     // Method to return the next hexagon on the board in a given direction
     public Hexagon getNextHexagon(Hexagon hexagon, Direction direction) {
 
+        if(hexagon == null) {
+            return null;
+        }
+
         switch(direction) {
             case EAST: // x: +1, y: +0
                 return getListHexagon(hexagon.getX() + 1, hexagon.getY());
