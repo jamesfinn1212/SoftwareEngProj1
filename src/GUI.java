@@ -69,7 +69,7 @@ public class GUI extends JPanel {
                     if(currentAction == Action.PLACE_RAY) {
 
                         // only shoot ray if hexagon is a side hexagon
-                        if(clickedHexagon.isSide()) {
+                        if(clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon) ) {
 
                             // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
                             Ray newRay = new Ray(board, clickedHexagon, directionOfRay);
@@ -536,6 +536,22 @@ public class GUI extends JPanel {
         }
 
         return offset;
+    }
+
+    // method that returns direction the section is in from center of the hexagon
+    private Board.Direction getDirectionOfSectionFromCenter(Hexagon_Section section) {
+        return getDirectionFromSection(section).getOpposite(); // direction of section from center is the opposite of the direction the ray would be going
+    }
+
+    // method that returns true if a section clicked is on the side of the board
+    private boolean sectionOnSide(Hexagon_Section clickedSection, Hexagon clickedHexagon) {
+
+        Board.Direction directionOfSectionFromCenter = getDirectionOfSectionFromCenter(clickedSection);
+
+        if(board.getNextHexagon(clickedHexagon, directionOfSectionFromCenter) == null) { // if there is no hexagon in this direction
+            return true;
+        }
+        return false;
     }
 }
 
