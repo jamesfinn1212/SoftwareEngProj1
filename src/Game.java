@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Game {
     boolean isOver = false;
+    boolean drawGuessAtoms = false;
     private Board board;
 
     public Game() {
@@ -34,11 +35,12 @@ public class Game {
 
         });
 
-        while(!isOver) {
+
 
             // place atoms
             while (board.numAtomsPlaced < 6) {
                 gui.setAction(GUI.Action.PLACE_ATOM);
+               // System.out.println(board.numAtomsPlaced);
                 //  Draw.drawBoard(board1);
             }
 
@@ -48,19 +50,27 @@ public class Game {
             board.isHexCoordVisible = false;
             board.isArrowsVisible =true;
             board.isHexSideNumVisible = true;
-
+            gui.setAction(GUI.Action.PLACE_RAY);
             while (board.getRays().size() < 5) {
-                gui.setAction(GUI.Action.PLACE_RAY);
-                // System.out.println(board1.getRays().size());
+
+                 System.out.println(board.getRays().size());
             }
+
+
+            while(board.numGuessAtomsPlaced < 6) {
+                drawGuessAtoms = true;
+                gui.setAction(GUI.Action.Guess_Atom);
+              //  System.out.println(board.numGuessAtomsPlaced);
+            }
+            drawGuessAtoms = false;
 
             // show atoms
             board.showAtoms();
 
 
-            break;
 
-        }
+
+
 
 
 

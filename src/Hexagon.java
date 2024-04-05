@@ -7,6 +7,7 @@ public class Hexagon {
     private final int y;
     private final int hexagonNum;
     private boolean hasAtom;
+    private boolean hasGuessAtom;
 
     private boolean isHidden = false;
     private boolean hasNeighbourAtom;
@@ -36,6 +37,7 @@ public class Hexagon {
         this.numRays = 0;
         this.directionsOfInfluence = new ArrayList<>();
         this.hexagonNum = getHexagonNumFromCord(x, y);
+        this.hasGuessAtom = false;
     }
 
     // getter methods
@@ -119,6 +121,14 @@ public class Hexagon {
 
     public void hideAtom() {isHidden = true;}
     public void showAtom() {isHidden = false;}
+
+    public boolean isHasGuessAtom() {
+        return hasGuessAtom;
+    }
+    public void setHasGuessAtom(){
+        this.hasGuessAtom = true;
+    }
+
 
     public boolean isHidden() {return isHidden;}
 

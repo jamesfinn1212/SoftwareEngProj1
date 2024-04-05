@@ -8,6 +8,8 @@ public class Board {
     private ArrayList<Ray> rays = new ArrayList<>();
 
     public int numAtomsPlaced = 0;
+
+    public int numGuessAtomsPlaced = 0;
     public boolean isHexCoordVisible = true;
     public boolean isArrowsVisible = false;
     public boolean isHexSideNumVisible = false;
@@ -196,6 +198,10 @@ public class Board {
     }
 
 
+    public void addGuessAtom(int x, int y){
+        getListHexagon(x, y).setHasGuessAtom();
+        numGuessAtomsPlaced++;
+    }
 
 
     // Method to add a character into the center of hexagon using the (x, y) co-ordinates.

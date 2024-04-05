@@ -19,7 +19,7 @@ public class GUI extends JPanel {
     private ArrayList<Hexagon> clickedHexagons = new ArrayList<>();
 
     public enum Action {
-        PLACE_ATOM, PLACE_RAY;
+        PLACE_ATOM, PLACE_RAY, Guess_Atom;
     }
 
     // splitting hexagon into 6 sections
@@ -76,6 +76,9 @@ public class GUI extends JPanel {
 
                         }
 
+                    }
+                    if(currentAction == Action.Guess_Atom){
+                        game.getBoard().addGuessAtom(clickedHexagon.getX(), clickedHexagon.getY());
                     }
 
                     repaint();  // Repaint the panel
@@ -152,6 +155,7 @@ public class GUI extends JPanel {
                 drawHexSideNum(g, xValueHex, yValueHex);
             }
 
+
         }
 
         // draw circles of influence and atoms 2nd so they're not getting overlapped by existing hexagons
@@ -162,6 +166,11 @@ public class GUI extends JPanel {
 
             // if the hexagon has an atom in it and it is not hidden, draw the atom
             if(hexagon.hasAtom() && !hexagon.isHidden()) {
+                drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
+                drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
+            }
+            if(game.drawGuessAtoms && hexagon.isHasGuessAtom()){
+                System.out.println("Im here guess atom");
                 drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
             }
@@ -269,6 +278,7 @@ public class GUI extends JPanel {
         double x = (x1 + x2)/2.0;
         return x;
     }
+    //start code to make marker
     private void drawMarker(Graphics g, Ray ray){
         Graphics2D g2d = (Graphics2D) g;
 
