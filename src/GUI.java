@@ -28,12 +28,12 @@ public class GUI extends JPanel {
     }
 
     public Action currentAction = Action.PLACE_ATOM;
-    private Board board;
+    private Game game;
     private Hexagon hoveredHexagon;
 
-    public GUI(Board board) {
+    public GUI(Game game) {
         setBackground(Color.BLACK);
-        this.board = board;
+        this.game  = game;
 
         // checks if mouse is clicked
         addMouseListener(new MouseAdapter() {
@@ -52,13 +52,13 @@ public class GUI extends JPanel {
 
                         // if the hexagon has no atom, place that hexagon in the array, otherwise
                         if(!clickedHexagon.hasAtom()) {
-                            board.addAtom(clickedHexagon.getX(), clickedHexagon.getY());
+                            game.getBoard().addAtom(clickedHexagon.getX(), clickedHexagon.getY());
                             System.out.println("Hexagon Clicked" + clickedHexagon);
-                            Draw.drawBoard(board);
+                            Draw.drawBoard(game.getBoard());
 
                         }
                         else {
-                            board.removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
+                            game.getBoard().removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
 
 
@@ -72,7 +72,7 @@ public class GUI extends JPanel {
                         if(clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon) ) {
 
                             // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
-                            Ray newRay = new Ray(board, clickedHexagon, directionOfRay);
+                            Ray newRay = new Ray(game.getBoard(), clickedHexagon, directionOfRay);
 
                         }
 
@@ -97,7 +97,7 @@ public class GUI extends JPanel {
     private Hexagon getFromPixelPosition(int x, int y) {
 
 
-        for (Hexagon hexagon : board.getListBoard()) {
+        for (Hexagon hexagon : game.getBoard().getListBoard()) {
 
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
@@ -115,7 +115,7 @@ public class GUI extends JPanel {
         super.paintComponent(g);
 
         // draw hexagons from the board
-        for(Hexagon hexagon: board.getListBoard()) {
+        for(Hexagon hexagon: game.getBoard().getListBoard()) {
 
             int xValueHex = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValueHex = CENTER_PIXEL_Y - (52*hexagon.getY());
@@ -134,7 +134,7 @@ public class GUI extends JPanel {
             // Draw the hexagon with different colored sections
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
-            if(board.isHexCoordVisible){
+            if(game.getBoard().isHexCoordVisible){
 
                 // dont want the text to be affected by being hovered over so undo the increment
                 if(hexagon == hoveredHexagon) {
@@ -146,14 +146,14 @@ public class GUI extends JPanel {
                 //drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getX()) + " " + hexagon.getY());
 
             }
-            if(board.isHexSideNumVisible){
+            if(game.getBoard().isHexSideNumVisible){
                 drawHexSideNum(g, xValueHex, yValueHex);
             }
 
         }
 
         // draw circles of influence and atoms 2nd so they're not getting overlapped by existing hexagons
-        for(Hexagon hexagon: board.getListBoard()) {
+        for(Hexagon hexagon: game.getBoard().getListBoard()) {
             int xValue = CENTER_PIXEL_X + (60*hexagon.getX() - 30*hexagon.getY());
             int yValue = CENTER_PIXEL_Y - (52*hexagon.getY());
             //  drawHexSideNum(g, hexagon.getX(), hexagon.getY());
@@ -166,7 +166,7 @@ public class GUI extends JPanel {
         }
 
         // draw rays
-        for(Ray ray: board.getRays()) {
+        for(Ray ray: game.getBoard().getRays()) {
             drawRay(g, ray);
         }
     }
@@ -197,7 +197,7 @@ public class GUI extends JPanel {
 
             double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
             double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
-            if(isArrowNeeded(x, y, i) && board.isArrowsVisible){
+            if(isArrowNeeded(x, y, i) && game.getBoard().isArrowsVisible){
 
                 g2d.setColor(Color.RED);
                 int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
@@ -398,7 +398,7 @@ public class GUI extends JPanel {
                     // only draw further if the ray has NOT been absorbed
                     // i.e must check if the hexagon after the end hexagon is null
 
-                    if(board.getNextHexagon(endHexagon, endDirection) == null) {
+                    if(game.getBoard().getNextHexagon(endHexagon, endDirection) == null) {
                         xOffset = getXOffset(endDirection.getOpposite()); // get opposite direction so can use same function as for startDirection
                         yOffset = getYOffset(endDirection.getOpposite());
 
@@ -548,7 +548,7 @@ public class GUI extends JPanel {
 
         Board.Direction directionOfSectionFromCenter = getDirectionOfSectionFromCenter(clickedSection);
 
-        if(board.getNextHexagon(clickedHexagon, directionOfSectionFromCenter) == null) { // if there is no hexagon in this direction
+        if(game.getBoard().getNextHexagon(clickedHexagon, directionOfSectionFromCenter) == null) { // if there is no hexagon in this direction
             return true;
         }
         return false;

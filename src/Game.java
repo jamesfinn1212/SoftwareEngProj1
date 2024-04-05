@@ -4,18 +4,21 @@ import java.util.Scanner;
 
 public class Game {
     boolean isOver = false;
+    private Board board;
 
-
-
+    public Game() {
+        board = new Board();
+    }
 
 
     public void startGame(){
-        Board board1 = new Board();
+
+
         // draws empty board
-        Draw.drawBoard(board1);
+        Draw.drawBoard(board);
 
 
-        GUI gui = new GUI(board1);
+        GUI gui = new GUI(this);
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Blackbox GUI");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,35 +37,30 @@ public class Game {
         while(!isOver) {
 
             // place atoms
-            while (board1.numAtomsPlaced < 6) {
+            while (board.numAtomsPlaced < 6) {
                 gui.setAction(GUI.Action.PLACE_ATOM);
                 //  Draw.drawBoard(board1);
             }
 
 
             // hide atoms
-            board1.hideAtoms();
-            board1.isHexCoordVisible = false;
-            board1.isArrowsVisible =true;
-            board1.isHexSideNumVisible = true;
+            board.hideAtoms();
+            board.isHexCoordVisible = false;
+            board.isArrowsVisible =true;
+            board.isHexSideNumVisible = true;
 
-            while (board1.getRays().size() < 5) {
+            while (board.getRays().size() < 5) {
                 gui.setAction(GUI.Action.PLACE_RAY);
                 // System.out.println(board1.getRays().size());
             }
 
             // show atoms
-            board1.showAtoms();
+            board.showAtoms();
 
 
             break;
 
         }
-
-
-
-
-
 
 
 
@@ -105,12 +103,11 @@ public class Game {
 }
  */
 
-
-
-
-
-
     }
+    public Board getBoard(){
+        return this.board;
+    }
+
 
     public void validateAtom(int x, int y, Board board) throws IllegalArgumentException {
         if (x > 4 || x < -4) {
