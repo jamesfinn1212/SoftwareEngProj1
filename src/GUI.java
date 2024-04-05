@@ -129,7 +129,9 @@ public class GUI extends JPanel {
                 yValueHex -= HEX_HOVER_INCREMENT;
             }
 
-
+            if(hexagon.getX() == -4 && hexagon.getY() == 0 && hexagon == hoveredHexagon){
+                specialDrawHexagon(g, xValueHex, yValueHex, sideLength);
+            }
 
             // Draw the hexagon with different colored sections
             drawHexagon(g, xValueHex, yValueHex, sideLength);
@@ -168,6 +170,7 @@ public class GUI extends JPanel {
         // draw rays
         for(Ray ray: game.getBoard().getRays()) {
             drawRay(g, ray);
+         //   drawMarker(g, ray);
         }
     }
     private void drawHexagon(Graphics g, int x, int y, int sideLength) {
@@ -215,12 +218,107 @@ public class GUI extends JPanel {
 
     }
 
+    private void specialDrawHexagon(Graphics g, int x, int y, int sideLength) {
+
+        int inset = 5;
+        int centerX = x + sideLength;
+        int centerY = y + sideLength;
+
+        int[] xPoints = new int[6];
+        int[] yPoints = new int[6];
+
+        for (int a = 0; a < 6; a++) {
+            double angle = 2 * Math.PI / 6 * a + Math.PI / 2;
+            xPoints[a] = (int) (centerX + sideLength * Math.cos(angle));
+            yPoints[a] = (int) (centerY + sideLength * Math.sin(angle));
+        }
+
+        System.out.println("First set of points " + Arrays.toString(xPoints) + Arrays.toString(yPoints));
+
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(Color.YELLOW);
+        g2d.fillPolygon(xPoints, yPoints, 6);
+
+        //if
+        for (int i = 0; i < 6; i++) {
+
+            double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
+            double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
+            if(isArrowNeeded(x, y, i) && game.getBoard().isArrowsVisible){
+
+                g2d.setColor(Color.RED);
+                int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
+                int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
+                g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
+
+            }
+
+
+
+
+
+        }
+
+
+    }
 
     //find a quater and 3 quater//
     private double midpoint(double x1, double x2){
         double x = (x1 + x2)/2.0;
         return x;
     }
+    private void drawMarker(Graphics g, Ray ray){
+        Graphics2D g2d = (Graphics2D) g;
+
+        int sideLength = 30;
+
+        Board.Direction direction = ray.getDirection();
+        Hexagon startHex = ray.getPath().getFirst();
+        Hexagon endHex = ray.getPath().getLast();
+
+        int xStartCentre = CENTER_PIXEL_X + (60*startHex.getX() - 30*startHex.getY()) + 30;
+        int yStartCentre = CENTER_PIXEL_Y - (52*startHex.getY()) + 30;
+
+        if(hoveredHexagon == startHex){
+            sideLength += HEX_HOVER_INCREMENT;
+            xStartCentre-= HEX_HOVER_INCREMENT;
+            yStartCentre -= HEX_HOVER_INCREMENT;
+        }
+        int xEndCentre = 0;
+        int yEndCentre = 0;
+        int[] xStartPoints = new int[6];
+        int[] yStartPoints = new int[6];
+        int[] xEndPoints = new int[6];
+        int[] yEndPoints = new int[6];
+        int[] xTriangle = new int[0];
+        int[] yTriangle = new int[0];
+
+
+        for (int a = 0; a < 6; a++) {
+            double angle = 2 * Math.PI / 6 * a + Math.PI / 2;
+            xStartPoints[a] = (int) (xStartCentre + sideLength * Math.cos(angle));
+            yStartPoints[a] = (int) (yStartCentre + sideLength * Math.sin(angle));
+        }
+        System.out.println("Second set of point " + Arrays.toString(xStartPoints) + Arrays.toString(yStartPoints));
+
+        if(ray.getStartDirection() == Board.Direction.EAST){
+            double xMidPoint = midpoint(xStartPoints[1], xStartPoints[2]);
+            double yMidPoint = midpoint(yStartPoints[1], yStartPoints[2]);
+            g2d.fillOval((int) xMidPoint, (int) yMidPoint, 6, 6);
+            xTriangle = new int[]{(int)(midpoint(xMidPoint, xStartPoints[1])),(int)(midpoint(xMidPoint, xStartPoints[2])) ,(int)(midpoint(xMidPoint, xStartCentre))};
+            yTriangle = new int[]{(int)(midpoint(yMidPoint, yStartPoints[1])),(int)(midpoint(yMidPoint, yStartPoints[2])) ,(int)(midpoint(yMidPoint, yStartCentre))};
+
+//            xTriangle = new int[]{xStartPoints[1],xStartPoints[2] , xStartCentre};
+//            yTriangle = new int[]{xStartPoints[1])),(int)(midpoint(yMidPoint, xStartPoints[2])) ,(int)(midpoint(yMidPoint, xStartCentre))};
+
+            g2d.setColor(Color.GREEN);
+            g2d.fillPolygon(xTriangle, yTriangle, 3);
+        }
+
+    }
+
 
     private boolean isArrowNeeded(int x, int y, int i){
         Hexagon hexagon = getFromPixelPosition(x + 30, y + 30);
