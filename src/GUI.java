@@ -170,7 +170,7 @@ public class GUI extends JPanel {
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
             }
             if(game.drawGuessAtoms && hexagon.isHasGuessAtom()){
-                System.out.println("Im here guess atom");
+
                 drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
             }
@@ -178,7 +178,7 @@ public class GUI extends JPanel {
 
         // draw rays
         for(Ray ray: game.getBoard().getRays()) {
-            //drawRay(g, ray);
+            drawRay(g, ray);
             drawMarker(g, ray);
         }
     }
@@ -242,7 +242,7 @@ public class GUI extends JPanel {
             yPoints[a] = (int) (centerY + sideLength * Math.sin(angle));
         }
 
-        System.out.println("First set of points " + Arrays.toString(xPoints) + Arrays.toString(yPoints));
+
 
 
         Graphics2D g2d = (Graphics2D) g;
@@ -344,6 +344,14 @@ public class GUI extends JPanel {
         Board.Direction startDirection = ray.getStartDirection();
         Hexagon startHexagon = ray.getPath().getFirst();
         Hexagon endHexagon = ray.getPath().getLast();
+        int pathSize = ray.getPath().size();
+
+        // edge case if end hexagon is null, set to hexagon previous
+        // this occurs if the ray is deflected in a direction where there is no hexagon
+        if(endHexagon == null) {
+            endHexagon = ray.getPath().get(pathSize - 2);
+        }
+
 
         int xStartHexCenter = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY()) + sideLength;
         int yStartHexCenter = CENTER_PIXEL_Y - (52 * startHexagon.getY()) + sideLength;
@@ -508,6 +516,23 @@ public class GUI extends JPanel {
         int yOffset = 0;
 
         while(size > 0) {
+
+            // edge case for if there is only 1 hexagon in the path and the ray has been absorbed
+            if(path.size() == 1 && ray.isAbsorbed()) {
+
+                Hexagon startHexagon = path.getFirst();
+
+                int xValueCenter = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY()) + HEX_SIDE_LENGTH;
+                int yValueCenter = CENTER_PIXEL_Y - (52 * startHexagon.getY()) + HEX_SIDE_LENGTH;
+                xOffset = getXOffset(ray.getStartDirection());
+                yOffset = getYOffset(ray.getStartDirection());
+
+
+
+                g2d.drawLine(xValueCenter, yValueCenter, xOffset + xValueCenter, yOffset + yValueCenter);
+
+            }
+
             if(i + 1 < path.size()) {
                 Hexagon startHexagon = path.get(i);
                 Hexagon endHexagon = path.get(i + 1);
@@ -519,41 +544,41 @@ public class GUI extends JPanel {
                 }
 
 
-                int x1Value = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY());
-                int y1Value = CENTER_PIXEL_Y - (52 * startHexagon.getY());
+                int x1Value = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY()) + HEX_SIDE_LENGTH;
+                int y1Value = CENTER_PIXEL_Y - (52 * startHexagon.getY()) + HEX_SIDE_LENGTH;
 
                 // if we are drawing on the first hexagon in the path
                 if(i == 0) {
                     xOffset = getXOffset(startDirection);
                     yOffset = getYOffset(startDirection);
 
-                    x1Value += xOffset;
-                    y1Value += yOffset;
+                    // draw line from side to middle
+
+                    g2d.drawLine(x1Value, y1Value, xOffset + x1Value, yOffset + y1Value);
                 }
 
 
 
-
-                int x2Value = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY());
-                int y2Value = CENTER_PIXEL_Y - (52 * endHexagon.getY());
+                int x2Value = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY()) + HEX_SIDE_LENGTH;
+                int y2Value = CENTER_PIXEL_Y - (52 * endHexagon.getY()) + HEX_SIDE_LENGTH;
 
 
                 // if we are drawing on the last hexagon in the path
                 if(i + 1 == path.size() - 1) {
 
                     // only draw further if the ray has NOT been absorbed
-                    // i.e must check if the hexagon after the end hexagon is null
 
-                    if(game.getBoard().getNextHexagon(endHexagon, endDirection) == null) {
+                    if(!ray.isAbsorbed()) {
                         xOffset = getXOffset(endDirection.getOpposite()); // get opposite direction so can use same function as for startDirection
                         yOffset = getYOffset(endDirection.getOpposite());
 
-                        x2Value += xOffset;
-                        y2Value += yOffset;
+                        // draw line from side ot middle
+                        g2d.drawLine(x2Value, y2Value, xOffset + x2Value, yOffset + y2Value);
                     }
+
                 }
 
-                g2d.drawLine(x1Value + 30, y1Value + 30, x2Value + 30, y2Value + 30);
+                g2d.drawLine(x1Value, y1Value, x2Value, y2Value);
 
 
             }

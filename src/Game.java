@@ -52,17 +52,17 @@ public class Game {
             board.isHexSideNumVisible = true;
             gui.setAction(GUI.Action.PLACE_RAY);
             while (board.getRays().size() < 5) {
-
-                 System.out.println(board.getRays().size());
             }
 
-
+            /*
             while(board.numGuessAtomsPlaced < 6) {
                 drawGuessAtoms = true;
                 gui.setAction(GUI.Action.Guess_Atom);
               //  System.out.println(board.numGuessAtomsPlaced);
             }
             drawGuessAtoms = false;
+
+             */
 
             // show atoms
             board.showAtoms();
