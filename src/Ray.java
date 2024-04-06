@@ -7,6 +7,7 @@ public class Ray {
     // instance variables
     private final LinkedList<Hexagon> path = new LinkedList<>();
     private Board.Direction direction;
+    private boolean absorbed = false;
 
     private Board.Direction startDirection; // direction the ray is going at the start
 
@@ -44,11 +45,13 @@ public class Ray {
                 path.remove(startHexagon);
                 startHexagon.setNumRays(startHexagon.getNumRays()-1);
                 System.out.println("Ray absorbed start hex");
+                absorbed = true;
                 break;
             }//if the start atom touches a hexagon that has an atom
             else if(startHexagon.isHasNeighbourAtom()){
                 System.out.println("Ray absorbed beside start hex");
                 System.out.println("Atom beside ray");
+                absorbed = true;
                 break;
             }
             // if the next hexagon does not have influence, add it to the path
@@ -67,6 +70,7 @@ public class Ray {
                 //if direction and new direction are the same it is a direct collision
                 if(newDirection == direction){
                     System.out.println("Ray absorbed");
+                    absorbed = true;
                     break;
                 }
 
@@ -178,5 +182,6 @@ public class Ray {
     }
 
     public Board.Direction getStartDirection() {return startDirection;}
+    public boolean isAbsorbed() {return absorbed;}
 
 }

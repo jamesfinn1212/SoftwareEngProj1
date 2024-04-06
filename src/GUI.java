@@ -178,8 +178,8 @@ public class GUI extends JPanel {
 
         // draw rays
         for(Ray ray: game.getBoard().getRays()) {
-            drawRay(g, ray);
-         //   drawMarker(g, ray);
+            //drawRay(g, ray);
+            drawMarker(g, ray);
         }
     }
     private void drawHexagon(Graphics g, int x, int y, int sideLength) {
@@ -279,6 +279,8 @@ public class GUI extends JPanel {
         return x;
     }
     //start code to make marker
+
+    /*
     private void drawMarker(Graphics g, Ray ray){
         Graphics2D g2d = (Graphics2D) g;
 
@@ -326,6 +328,42 @@ public class GUI extends JPanel {
             g2d.setColor(Color.GREEN);
             g2d.fillPolygon(xTriangle, yTriangle, 3);
         }
+
+    }
+
+
+     */
+
+    private void drawMarker(Graphics g, Ray ray) {
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        int sideLength = 30;
+
+        Board.Direction endDirection = ray.getDirection();
+        Board.Direction startDirection = ray.getStartDirection();
+        Hexagon startHexagon = ray.getPath().getFirst();
+        Hexagon endHexagon = ray.getPath().getLast();
+
+        int xStartHexCenter = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY()) + sideLength;
+        int yStartHexCenter = CENTER_PIXEL_Y - (52 * startHexagon.getY()) + sideLength;
+
+        int xEndHexCenter = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY()) + sideLength;
+        int yEndHexCenter = CENTER_PIXEL_Y - (52 * endHexagon.getY()) + sideLength;
+
+
+        xStartHexCenter += getXOffset(startDirection);
+        yStartHexCenter += getYOffset(startDirection);
+        xEndHexCenter += getXOffset(endDirection.getOpposite());
+        yEndHexCenter += getYOffset(endDirection.getOpposite());
+
+        g2d.drawRect(xStartHexCenter, yStartHexCenter, 5, 5);
+
+        // only want to draw the end marker if ray is NOT absorbed.
+        if(!ray.isAbsorbed()) {
+            g2d.drawRect(xEndHexCenter, yEndHexCenter, 5, 5);
+        }
+
 
     }
 
