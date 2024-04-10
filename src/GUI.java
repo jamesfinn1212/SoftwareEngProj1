@@ -15,6 +15,8 @@ public class GUI extends JPanel {
     private static final int HEX_HOVER_INCREMENT = 2;
 
     private JButton endGameButton;
+    CardLayout cardLayout;
+    JPanel cardPanel;
 
 
 
@@ -24,12 +26,17 @@ public class GUI extends JPanel {
     }
 
 
-    private Game game;
+    private static Game game;
     private Hexagon hoveredHexagon;
 
-    public GUI(Game game) {
+    // skeleton GUI constructor
+
+
+    public GUI(Game game, CardLayout cardLayout, JPanel cardPanel) {
         setBackground(Color.BLACK);
         this.game  = game;
+        this.cardLayout = cardLayout;
+        this.cardPanel = cardPanel;
 
         // checks if mouse is clicked
         addMouseListener(new MouseAdapter() {
@@ -107,7 +114,7 @@ public class GUI extends JPanel {
 
     }
 
-    private Hexagon getFromPixelPosition(int x, int y) {
+    private static Hexagon getFromPixelPosition(int x, int y) {
 
 
         for (Hexagon hexagon : game.getBoard().getListBoard()) {
@@ -199,7 +206,7 @@ public class GUI extends JPanel {
         endGameButton.setVisible(visible);
         endGameButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
-    private void drawHexagon(Graphics g, int x, int y, int sideLength) {
+    public static void drawHexagon(Graphics g, int x, int y, int sideLength) {
 
         int inset = 5;
         int centerX = x + sideLength;
@@ -226,22 +233,20 @@ public class GUI extends JPanel {
 
             double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
             double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
-            if(isArrowNeeded(x, y, i) && game.getCurrentAction() == Game.Action.PLACE_RAY){
 
-                g2d.setColor(Color.RED);
-                int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
-                int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
-                g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
+            try {
+                if (isArrowNeeded(x, y, i) && game.getCurrentAction() == Game.Action.PLACE_RAY) {
 
-            }
+                    g2d.setColor(Color.RED);
+                    int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
+                    int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
 
+                    g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
 
-
-
+                }
+            } catch (Exception ex) {}
 
         }
-
-
     }
 
     private void specialDrawHexagon(Graphics g, int x, int y, int sideLength) {
@@ -291,7 +296,7 @@ public class GUI extends JPanel {
     }
 
     //find a quater and 3 quater//
-    private double midpoint(double x1, double x2){
+    private static double midpoint(double x1, double x2){
         double x = (x1 + x2)/2.0;
         return x;
     }
@@ -393,7 +398,7 @@ public class GUI extends JPanel {
     }
 
 
-    private boolean isArrowNeeded(int x, int y, int i){
+    private static boolean isArrowNeeded(int x, int y, int i){
         Hexagon hexagon = getFromPixelPosition(x + 30, y + 30);
         // System.out.println("Heaxagon being considered" + hexagon);
         if(hexagon.isSide()){
@@ -736,6 +741,49 @@ public class GUI extends JPanel {
             return true;
         }
         return false;
+    }
+
+    // method for the Home Screen, returns a panel of Home Screen
+    public JPanel setHomeScreen() {
+        JPanel homePanel;
+        JLabel titleLabel;
+
+        // Create home panel
+        homePanel = new JPanel();
+        homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.PAGE_AXIS));
+        homePanel.setBorder(BorderFactory.createEmptyBorder(50, 20, 50, 20));
+        homePanel.setBackground(Color.BLACK);
+
+        // Create title label
+        titleLabel = new JLabel("Black Box game");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+        titleLabel.setForeground(Color.YELLOW);
+        homePanel.add(titleLabel);
+
+        // Add vertical glue to push components to the top
+        homePanel.add(Box.createVerticalGlue());
+
+        // create button
+        JButton startButton = new HexagonButton("Start Game");
+        startButton.setPreferredSize(new Dimension(300, 300));
+        startButton.setFocusPainted(false);
+
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Switch to the GUI panel
+                cardLayout.show(cardPanel, "guiPlayer1");
+            }
+        });
+
+        startButton.setAlignmentX(CENTER_ALIGNMENT);
+        startButton.setAlignmentY(CENTER_ALIGNMENT);
+
+        homePanel.add(startButton);
+
+        homePanel.add(Box.createVerticalGlue());
+
+        return homePanel;
     }
 }
 

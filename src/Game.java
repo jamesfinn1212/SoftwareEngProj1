@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Game {
     public enum Action {
@@ -20,16 +21,42 @@ public class Game {
         player2.setSetter(false);
     }
     public void startGame() {
+
+        // card panel that swaps to rest of game after start button is clicked
+        JPanel cardPanel = new JPanel();
+        CardLayout cardLayout = new CardLayout();
+        cardPanel.setLayout(cardLayout);
+
         // Create GUI for player 1
-        GUI guiPlayer1 = new GUI(this);
+        GUI guiPlayer1 = new GUI(this, cardLayout, cardPanel);
+
+
 
         // Create JFrame for player 1
         JFrame framePlayer1 = new JFrame("Player 1's Turn");
         framePlayer1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*
         framePlayer1.add(guiPlayer1);
         framePlayer1.setSize(1500, 750);
         framePlayer1.setLocationRelativeTo(null);
         framePlayer1.setVisible(true);
+
+         */
+
+
+        // home screen panel
+        JPanel homescreen = guiPlayer1.setHomeScreen();
+
+        cardPanel.add(homescreen, "homeScreen");
+        cardPanel.add(guiPlayer1, "guiPlayer1");
+
+        framePlayer1.add(cardPanel);
+        framePlayer1.setSize(1500, 750);
+        framePlayer1.setLocationRelativeTo(null);
+        framePlayer1.setVisible(true);
+
+
+
 
         // Start player 1's turn
         player1.setScore(startRound(guiPlayer1));
@@ -38,7 +65,7 @@ public class Game {
         framePlayer1.dispose();
 
         // Create GUI for player 2
-        GUI guiPlayer2 = new GUI(this);
+        GUI guiPlayer2 = new GUI(this, cardLayout, cardPanel);
 
         // Create JFrame for player 2
         JFrame framePlayer2 = new JFrame("Player 2's Turn");
