@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -16,18 +14,16 @@ public class GUI extends JPanel {
 
     private static final int HEX_HOVER_INCREMENT = 2;
 
-    private ArrayList<Hexagon> clickedHexagons = new ArrayList<>();
+    private JButton endGameButton;
 
-    public enum Action {
-        PLACE_ATOM, PLACE_RAY, Guess_Atom;
-    }
+
 
     // splitting hexagon into 6 sections
     private enum Hexagon_Section {
         TOP_LEFT, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT, LEFT;
     }
 
-    public Action currentAction = Action.PLACE_ATOM;
+
     private Game game;
     private Hexagon hoveredHexagon;
 
@@ -47,7 +43,7 @@ public class GUI extends JPanel {
 
                 if (clickedHexagon != null) {
 
-                    if(currentAction == Action.PLACE_ATOM) {
+                    if(game.getCurrentAction() == Game.Action.PLACE_ATOM) {
 
 
                         // if the hexagon has no atom, place that hexagon in the array, otherwise
@@ -61,23 +57,21 @@ public class GUI extends JPanel {
                             game.getBoard().removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
 
-
-
-
                     }
 
-                    if(currentAction == Action.PLACE_RAY) {
-
+                    if(game.getCurrentAction() == Game.Action.PLACE_RAY) {
+                        toggleEndGameButtonVisibility(true);
                         // only shoot ray if hexagon is a side hexagon
                         if(clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon) ) {
 
                             // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
                             Ray newRay = new Ray(game.getBoard(), clickedHexagon, directionOfRay);
-
+                            game.getBoard().numRaysPlaced++;
                         }
 
                     }
-                    if(currentAction == Action.Guess_Atom){
+                    if(game.getCurrentAction() == Game.Action.Guess_Atom){
+                        toggleEndGameButtonVisibility(false);
                         game.getBoard().addGuessAtom(clickedHexagon.getX(), clickedHexagon.getY());
                     }
 
@@ -94,6 +88,22 @@ public class GUI extends JPanel {
                 repaint();
             }
         });
+
+        // Create the JButton
+        endGameButton = new JButton("Click to Guess Atoms");
+        endGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.setIsOver(true); // Call the endGame() method of the Game class when the button is clicked
+            }
+        });
+
+        // Initially hide and disable the button
+        endGameButton.setVisible(false);
+        endGameButton.setEnabled(false);
+
+        // Add the button to the GUI
+        add(endGameButton);
 
     }
 
@@ -139,7 +149,7 @@ public class GUI extends JPanel {
             // Draw the hexagon with different colored sections
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
-            if(game.getBoard().isHexCoordVisible){
+            if(game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.Guess_Atom){
 
                 // dont want the text to be affected by being hovered over so undo the increment
                 if(hexagon == hoveredHexagon) {
@@ -151,7 +161,7 @@ public class GUI extends JPanel {
                 //drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getX()) + " " + hexagon.getY());
 
             }
-            if(game.getBoard().isHexSideNumVisible){
+            if(game.getCurrentAction() == Game.Action.PLACE_RAY){
                 drawHexSideNum(g, xValueHex, yValueHex);
             }
 
@@ -178,9 +188,16 @@ public class GUI extends JPanel {
 
         // draw rays
         for(Ray ray: game.getBoard().getRays()) {
-            drawRay(g, ray);
+            if(game.getCurrentAction() == Game.Action.PLACE_RAY) {
+                drawRay(g, ray);
+            }
             drawMarker(g, ray);
         }
+    }
+
+    public void toggleEndGameButtonVisibility(boolean visible) {
+        endGameButton.setVisible(visible);
+        endGameButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
     private void drawHexagon(Graphics g, int x, int y, int sideLength) {
 
@@ -209,7 +226,7 @@ public class GUI extends JPanel {
 
             double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
             double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
-            if(isArrowNeeded(x, y, i) && game.getBoard().isArrowsVisible){
+            if(isArrowNeeded(x, y, i) && game.getCurrentAction() == Game.Action.PLACE_RAY){
 
                 g2d.setColor(Color.RED);
                 int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
@@ -406,8 +423,6 @@ public class GUI extends JPanel {
 
     private void drawCircle(Graphics g, int x, int y, int radius) {
         Graphics2D g2d = (Graphics2D) g;
-
-
         g2d.setColor(Color.RED);
         g2d.fillOval(x, y, radius * 2, radius * 2);
     }
@@ -662,9 +677,7 @@ public class GUI extends JPanel {
     }
 
     // method to set action
-    public void setAction(Action action) {
-        currentAction = action;
-    }
+
 
     // method that returns how far back on x axist you should draw ray for it to start at side
     private int getXOffset(Board.Direction direction) {

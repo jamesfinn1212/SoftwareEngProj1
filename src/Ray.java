@@ -69,6 +69,7 @@ public class Ray {
 
                 //if direction and new direction are the same it is a direct collision
                 if(newDirection == direction){
+                    path.add(board.getNextHexagon(path.getLast(), direction));
                     System.out.println("Ray absorbed");
                     absorbed = true;
                     break;

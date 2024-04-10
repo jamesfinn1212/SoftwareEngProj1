@@ -7,7 +7,9 @@ public class Board {
     private final ArrayList<Hexagon> listBoard = new ArrayList<>();
     private ArrayList<Ray> rays = new ArrayList<>();
 
+    //make private and getters and setter
     public int numAtomsPlaced = 0;
+    public int numRaysPlaced = 0;
 
     public int numGuessAtomsPlaced = 0;
     public boolean isHexCoordVisible = true;
