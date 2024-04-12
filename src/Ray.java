@@ -8,6 +8,7 @@ public class Ray {
     private final LinkedList<Hexagon> path = new LinkedList<>();
     private Board.Direction direction;
     private boolean absorbed = false;
+    private final Hexagon startHexagon;
 
     private Board.Direction startDirection; // direction the ray is going at the start
 
@@ -18,8 +19,7 @@ public class Ray {
         this.startDirection = direction;
         // add first hexagon into linked list
         path.add(startHexagon);
-        //add 1 to num of arrays
-        startHexagon.setNumRays(startHexagon.getNumRays()+1);
+        this.startHexagon = startHexagon;
 
         // check if hexagon is on the side
         if(!startHexagon.isSide()) {
@@ -43,7 +43,6 @@ public class Ray {
             if(startHexagon.hasAtom()){
                 //never gets to first hexagon as it contains atom
                 path.remove(startHexagon);
-                startHexagon.setNumRays(startHexagon.getNumRays()-1);
                 System.out.println("Ray absorbed start hex");
                 absorbed = true;
                 break;
@@ -59,7 +58,6 @@ public class Ray {
 
                 path.add(board.getNextHexagon(path.getLast(), direction));
                 // add 1 to num of arrays
-                path.getLast().setNumRays(path.getLast().getNumRays()+1);
             }
             else { // if the next hexagon has influence, we want to add that hexagon into the path but our direction will have to change (or get absorbed)
 
@@ -79,7 +77,6 @@ public class Ray {
 
                 // add hexagon into path
                 path.add(board.getNextHexagon(path.getLast(), direction));
-                path.getLast().setNumRays(path.getLast().getNumRays()+1);
             }
         }
     }
@@ -89,14 +86,7 @@ public class Ray {
     private Board.Direction calculateNewDirection(Hexagon currentHexagon, Board.Direction directionOfRay) {
         //randomly set by teh end shouldn't have any effect of outcome
         Board.Direction newDirection = directionOfRay;
-        //code used for debugging
-//        System.out.println("Direction of ray " + directionOfRay);
-//        System.out.println(directionOfRay.getValue());
-//        for(Board.Direction direction : currentHexagon.getDirectionsOfInfluence()){
-//            System.out.println("Dir from " + direction + " " + direction.getValue());
-//        }
 
-        //System.out.println("ans: " + (directionOfRay.getValue() -2)%6);
 
         // cases for ray direction
 
@@ -185,4 +175,7 @@ public class Ray {
     public Board.Direction getStartDirection() {return startDirection;}
     public boolean isAbsorbed() {return absorbed;}
 
+    public Hexagon getStartHexagon() {
+        return startHexagon;
+    }
 }

@@ -13,6 +13,11 @@ public class Player {
         this.score = score;
     }
 
+    public int getScore(){
+        return this.score;
+    }
+
+
     public boolean isSetter() {
         return setter;
     }

@@ -14,7 +14,8 @@ public class GUI extends JPanel {
 
     private static final int HEX_HOVER_INCREMENT = 2;
 
-    private JButton endGameButton;
+    private final JButton endGameButton;
+    private final JButton endRoundButton;
     CardLayout cardLayout;
     JPanel cardPanel;
 
@@ -56,7 +57,6 @@ public class GUI extends JPanel {
                         // if the hexagon has no atom, place that hexagon in the array, otherwise
                         if(!clickedHexagon.hasAtom()) {
                             game.getBoard().addAtom(clickedHexagon.getX(), clickedHexagon.getY());
-                            System.out.println("Hexagon Clicked" + clickedHexagon);
                             Draw.drawBoard(game.getBoard());
 
                         }
@@ -66,7 +66,7 @@ public class GUI extends JPanel {
 
                     }
 
-                    if(game.getCurrentAction() == Game.Action.PLACE_RAY) {
+                    if(game.getCurrentAction() == Game.Action.PLACE_RAY ) {
                         toggleEndGameButtonVisibility(true);
                         // only shoot ray if hexagon is a side hexagon
                         if(clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon) ) {
@@ -77,8 +77,9 @@ public class GUI extends JPanel {
                         }
 
                     }
-                    if(game.getCurrentAction() == Game.Action.Guess_Atom){
+                    if(game.getCurrentAction() == Game.Action.GUESS_ATOM){
                         toggleEndGameButtonVisibility(false);
+                        toggleEndRoundButtonVisibility(false);
                         game.getBoard().addGuessAtom(clickedHexagon.getX(), clickedHexagon.getY());
                     }
 
@@ -111,6 +112,23 @@ public class GUI extends JPanel {
 
         // Add the button to the GUI
         add(endGameButton);
+
+        // Create the JButton
+        endRoundButton = new JButton("End Round");
+        endRoundButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.setIsRoundOver(true); // Call the endGame() method of the Game class when the button is clicked
+            }
+        });
+
+
+        // Initially hide and disable the button
+        endRoundButton.setVisible(false);
+        endRoundButton.setEnabled(false);
+
+        // Add the button to the GUI
+        add(endRoundButton);
 
     }
 
@@ -149,15 +167,12 @@ public class GUI extends JPanel {
                 yValueHex -= HEX_HOVER_INCREMENT;
             }
 
-            if(hexagon.getX() == -4 && hexagon.getY() == 0 && hexagon == hoveredHexagon){
-                specialDrawHexagon(g, xValueHex, yValueHex, sideLength);
-            }
 
             // Draw the hexagon with different colored sections
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
-            if(game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.Guess_Atom){
-
+            if(game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.GUESS_ATOM){
+                    toggleEndRoundButtonVisibility(false);
                 // dont want the text to be affected by being hovered over so undo the increment
                 if(hexagon == hoveredHexagon) {
                     xValueHex += HEX_HOVER_INCREMENT;
@@ -171,6 +186,10 @@ public class GUI extends JPanel {
             if(game.getCurrentAction() == Game.Action.PLACE_RAY){
                 drawHexSideNum(g, xValueHex, yValueHex);
             }
+            if(game.getCurrentAction() == Game.Action.SHOW_BOARD){
+                toggleEndGameButtonVisibility(false);
+                toggleEndRoundButtonVisibility(true);
+            }
 
 
         }
@@ -182,11 +201,11 @@ public class GUI extends JPanel {
             //  drawHexSideNum(g, hexagon.getX(), hexagon.getY());
 
             // if the hexagon has an atom in it and it is not hidden, draw the atom
-            if(hexagon.hasAtom() && !hexagon.isHidden()) {
+            if(hexagon.hasAtom() && (game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.SHOW_BOARD)) {
                 drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
             }
-            if(game.drawGuessAtoms && hexagon.isHasGuessAtom()){
+            if(game.getCurrentAction() == Game.Action.GUESS_ATOM && hexagon.hasGuessAtom()){
 
                 drawCircle(g, xValue + 10, yValue + 10, HEX_RADIUS - 10);
                 drawCircleOfInfluence(g, xValue - 10, yValue - 10, HEX_RADIUS + 10);
@@ -195,16 +214,22 @@ public class GUI extends JPanel {
 
         // draw rays
         for(Ray ray: game.getBoard().getRays()) {
-            if(game.getCurrentAction() == Game.Action.PLACE_RAY) {
+            if(game.getCurrentAction() == Game.Action.PLACE_RAY || game.getCurrentAction() == Game.Action.SHOW_BOARD) {
                 drawRay(g, ray);
             }
-            drawMarker(g, ray);
+
+                drawMarker(g, ray);
+
         }
     }
 
     public void toggleEndGameButtonVisibility(boolean visible) {
         endGameButton.setVisible(visible);
         endGameButton.setEnabled(visible); // Enable/disable the button based on visibility
+    }
+    public void toggleEndRoundButtonVisibility(boolean visible) {
+        endRoundButton.setVisible(visible);
+        endRoundButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
     public static void drawHexagon(Graphics g, int x, int y, int sideLength) {
 
@@ -249,51 +274,7 @@ public class GUI extends JPanel {
         }
     }
 
-    private void specialDrawHexagon(Graphics g, int x, int y, int sideLength) {
 
-        int inset = 5;
-        int centerX = x + sideLength;
-        int centerY = y + sideLength;
-
-        int[] xPoints = new int[6];
-        int[] yPoints = new int[6];
-
-        for (int a = 0; a < 6; a++) {
-            double angle = 2 * Math.PI / 6 * a + Math.PI / 2;
-            xPoints[a] = (int) (centerX + sideLength * Math.cos(angle));
-            yPoints[a] = (int) (centerY + sideLength * Math.sin(angle));
-        }
-
-
-
-
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(new BasicStroke(3));
-        g2d.setColor(Color.YELLOW);
-        g2d.fillPolygon(xPoints, yPoints, 6);
-
-        //if
-        for (int i = 0; i < 6; i++) {
-
-            double xMiddle = midpoint(xPoints[i], xPoints[(i + 1) % 6]);
-            double yMiddle = midpoint(yPoints[i], yPoints[(i + 1) % 6]);
-            if(isArrowNeeded(x, y, i) && game.getBoard().isArrowsVisible){
-
-                g2d.setColor(Color.RED);
-                int[] xPointsTriangle = {(int) Math.round(midpoint(centerX, xMiddle)), (int) Math.round(midpoint(xPoints[i], xMiddle)), (int) Math.round(midpoint(xMiddle, xPoints[(i + 1) % 6]))};
-                int[] yPointsTriangle = {(int) Math.round(midpoint(centerY, yMiddle)), (int) Math.round(midpoint(yPoints[i], yMiddle)), (int) Math.round(midpoint(yMiddle, yPoints[(i + 1) % 6]))};
-                g2d.fillPolygon(xPointsTriangle, yPointsTriangle, 3);
-
-            }
-
-
-
-
-
-        }
-
-
-    }
 
     //find a quater and 3 quater//
     private static double midpoint(double x1, double x2){
@@ -302,100 +283,86 @@ public class GUI extends JPanel {
     }
     //start code to make marker
 
-    /*
-    private void drawMarker(Graphics g, Ray ray){
+
+    private void drawMarker(Graphics g, Ray ray) {
         Graphics2D g2d = (Graphics2D) g;
 
         int sideLength = 30;
+        Hexagon startHex;
+        Hexagon endHex;
 
-        Board.Direction direction = ray.getDirection();
-        Hexagon startHex = ray.getPath().getFirst();
-        Hexagon endHex = ray.getPath().getLast();
+        Board.Direction startDirection = ray.getStartDirection();
+        if(ray.getPath().isEmpty()){
+            startHex = ray.getStartHexagon();
+            endHex = ray.getStartHexagon();
+        }else{
+            startHex = ray.getPath().getFirst();
+            endHex = ray.getPath().getLast();
+        }
+
 
         int xStartCentre = CENTER_PIXEL_X + (60*startHex.getX() - 30*startHex.getY()) + 30;
         int yStartCentre = CENTER_PIXEL_Y - (52*startHex.getY()) + 30;
+
+        int xEndCentre = CENTER_PIXEL_X + (60*endHex.getX() - 30*endHex.getY()) + 30;
+        int yEndCentre = CENTER_PIXEL_Y - (52*endHex.getY()) + 30;
 
         if(hoveredHexagon == startHex){
             sideLength += HEX_HOVER_INCREMENT;
             xStartCentre-= HEX_HOVER_INCREMENT;
             yStartCentre -= HEX_HOVER_INCREMENT;
         }
-        int xEndCentre = 0;
-        int yEndCentre = 0;
+        if(hoveredHexagon == endHex){
+            sideLength += HEX_HOVER_INCREMENT;
+            xEndCentre-= HEX_HOVER_INCREMENT;
+            yEndCentre -= HEX_HOVER_INCREMENT;
+        }
+
         int[] xStartPoints = new int[6];
         int[] yStartPoints = new int[6];
         int[] xEndPoints = new int[6];
         int[] yEndPoints = new int[6];
-        int[] xTriangle = new int[0];
-        int[] yTriangle = new int[0];
+
 
 
         for (int a = 0; a < 6; a++) {
             double angle = 2 * Math.PI / 6 * a + Math.PI / 2;
             xStartPoints[a] = (int) (xStartCentre + sideLength * Math.cos(angle));
             yStartPoints[a] = (int) (yStartCentre + sideLength * Math.sin(angle));
-        }
-        System.out.println("Second set of point " + Arrays.toString(xStartPoints) + Arrays.toString(yStartPoints));
 
-        if(ray.getStartDirection() == Board.Direction.EAST){
-            double xMidPoint = midpoint(xStartPoints[1], xStartPoints[2]);
-            double yMidPoint = midpoint(yStartPoints[1], yStartPoints[2]);
-            g2d.fillOval((int) xMidPoint, (int) yMidPoint, 6, 6);
-            xTriangle = new int[]{(int)(midpoint(xMidPoint, xStartPoints[1])),(int)(midpoint(xMidPoint, xStartPoints[2])) ,(int)(midpoint(xMidPoint, xStartCentre))};
-            yTriangle = new int[]{(int)(midpoint(yMidPoint, yStartPoints[1])),(int)(midpoint(yMidPoint, yStartPoints[2])) ,(int)(midpoint(yMidPoint, yStartCentre))};
-
-//            xTriangle = new int[]{xStartPoints[1],xStartPoints[2] , xStartCentre};
-//            yTriangle = new int[]{xStartPoints[1])),(int)(midpoint(yMidPoint, xStartPoints[2])) ,(int)(midpoint(yMidPoint, xStartCentre))};
-
-            g2d.setColor(Color.GREEN);
-            g2d.fillPolygon(xTriangle, yTriangle, 3);
-        }
-
-    }
-
-
-     */
-
-    private void drawMarker(Graphics g, Ray ray) {
-
-        Graphics2D g2d = (Graphics2D) g;
-
-        int sideLength = 30;
-
-        Board.Direction endDirection = ray.getDirection();
-        Board.Direction startDirection = ray.getStartDirection();
-        Hexagon startHexagon = ray.getPath().getFirst();
-        Hexagon endHexagon = ray.getPath().getLast();
-        int pathSize = ray.getPath().size();
-
-        // edge case if end hexagon is null, set to hexagon previous
-        // this occurs if the ray is deflected in a direction where there is no hexagon
-        if(endHexagon == null) {
-            endHexagon = ray.getPath().get(pathSize - 2);
+            xEndPoints[a] = (int) (xEndCentre + sideLength * Math.cos(angle));
+            yEndPoints[a] = (int) (yEndCentre + sideLength * Math.sin(angle));
         }
 
 
-        int xStartHexCenter = CENTER_PIXEL_X + (60 * startHexagon.getX() - 30 * startHexagon.getY()) + sideLength;
-        int yStartHexCenter = CENTER_PIXEL_Y - (52 * startHexagon.getY()) + sideLength;
-
-        int xEndHexCenter = CENTER_PIXEL_X + (60 * endHexagon.getX() - 30 * endHexagon.getY()) + sideLength;
-        int yEndHexCenter = CENTER_PIXEL_Y - (52 * endHexagon.getY()) + sideLength;
+        int uniqueColor = ray.hashCode(); // Using ray's hash code for uniqueness
+        Color color = new Color(uniqueColor*1079%333*1088);
 
 
-        xStartHexCenter += getXOffset(startDirection);
-        yStartHexCenter += getYOffset(startDirection);
-        xEndHexCenter += getXOffset(endDirection.getOpposite());
-        yEndHexCenter += getYOffset(endDirection.getOpposite());
+        int point1 = (5-startDirection.getValue());
+        int point2 = (point1 + 1) % 6;
 
-        g2d.drawRect(xStartHexCenter, yStartHexCenter, 5, 5);
+        double xMidPoint = midpoint(xStartPoints[point1], xStartPoints[point2]);
+        double yMidPoint = midpoint(yStartPoints[point1], yStartPoints[point2]);
 
-        // only want to draw the end marker if ray is NOT absorbed.
+        g2d.setColor(color);
+        g2d.fillOval((int) xMidPoint-6, (int) yMidPoint-6, 13, 13);
+
         if(!ray.isAbsorbed()) {
-            g2d.drawRect(xEndHexCenter, yEndHexCenter, 5, 5);
+            int endPoint1 = (5-ray.getDirection().getOpposite().getValue());
+            int endPoint2 = (endPoint1 + 1) % 6;
+
+            xMidPoint = midpoint(xEndPoints[endPoint1], xEndPoints[endPoint2]);
+            yMidPoint = midpoint(yEndPoints[endPoint1], yEndPoints[endPoint2]);
+
+            g2d.fillOval((int) xMidPoint-6, (int) yMidPoint-6, 13, 13);
         }
 
-
     }
+
+
+
+
 
 
     private static boolean isArrowNeeded(int x, int y, int i){
@@ -612,7 +579,7 @@ public class GUI extends JPanel {
     }
 
     // method that returns section of the hexagon clicked
-    private Hexagon_Section getSectionClicked(int clickedX, int clickedY, Hexagon clickedHexagon) {
+    private Hexagon_Section getSectionClicked(int clickedX, int clickedY, Hexagon clickedHexagon) throws NullPointerException {
         Hexagon_Section section = null;
 
         // get xValue and yValue of the center of clicked hexagon
@@ -784,6 +751,62 @@ public class GUI extends JPanel {
         homePanel.add(Box.createVerticalGlue());
 
         return homePanel;
+    }
+
+    public static JPanel generateScorecard() {
+        JPanel scorecardPanel = new JPanel();
+        scorecardPanel.setLayout(new BoxLayout(scorecardPanel, BoxLayout.PAGE_AXIS));
+        scorecardPanel.setBackground(Color.BLACK); // Set background color
+
+        JLabel titleLabel = new JLabel("Scorecard");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36)); // Increase font size
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setForeground(Color.YELLOW); // Set text color
+        scorecardPanel.add(titleLabel);
+        scorecardPanel.add(Box.createVerticalStrut(50)); // Add some spacing
+
+        // Display scores for player 1 and player 2
+        JLabel player1ScoreLabel = new JLabel("Player 1 Score: " + game.getPlayer1().getScore());
+        JLabel player2ScoreLabel = new JLabel("Player 2 Score: " + game.getPlayer2().getScore());
+        player1ScoreLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
+        player2ScoreLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
+        player1ScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        player2ScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        player1ScoreLabel.setForeground(Color.YELLOW); // Set text color
+        player2ScoreLabel.setForeground(Color.YELLOW); // Set text color
+        scorecardPanel.add(player1ScoreLabel);
+        scorecardPanel.add(player2ScoreLabel);
+
+        // Determine winner
+        JLabel winnerLabel = new JLabel();
+        if (game.getPlayer1().getScore() > game.getPlayer2().getScore()) {
+            winnerLabel.setText("Player 1 wins!");
+        } else if (game.getPlayer1().getScore() < game.getPlayer2().getScore()) {
+            winnerLabel.setText("Player 2 wins!");
+        } else {
+            winnerLabel.setText("It's a tie!");
+        }
+        winnerLabel.setFont(new Font("Arial", Font.BOLD, 30)); // Increase font size
+        winnerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        winnerLabel.setForeground(Color.YELLOW); // Set text color
+        scorecardPanel.add(winnerLabel);
+        scorecardPanel.add(Box.createVerticalStrut(50)); // Add some spacing
+
+        // Add "End Game" button
+        JButton endGameButton = new JButton("End Game");
+        endGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        endGameButton.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
+        endGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Close the application
+                System.exit(0);
+            }
+        });
+        scorecardPanel.add(endGameButton);
+
+        return scorecardPanel;
+
     }
 }
 

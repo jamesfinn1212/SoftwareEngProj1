@@ -6,13 +6,13 @@ public class Hexagon {
     private final int x;
     private final int y;
     private final int hexagonNum;
-    private boolean hasAtom;
-    private boolean hasGuessAtom;
+    private boolean containsAtom;
+    private boolean containsGuessAtom;
 
     private boolean isHidden = false;
     private boolean hasNeighbourAtom;
 
-    private int numRays;
+
     private boolean hasInfluence;
     private ArrayList<Board.Direction> directionsOfInfluence;
 
@@ -31,13 +31,12 @@ public class Hexagon {
         // declare variables
         this.x = x;
         this.y = y;
-        this.hasAtom = false;
+        this.containsAtom = false;
         this.hasNeighbourAtom = false;
         this.hasInfluence = false;
-        this.numRays = 0;
         this.directionsOfInfluence = new ArrayList<>();
         this.hexagonNum = getHexagonNumFromCord(x, y);
-        this.hasGuessAtom = false;
+        this.containsGuessAtom = false;
     }
 
     // getter methods
@@ -47,27 +46,21 @@ public class Hexagon {
     public int getY() {
         return y;
     }
-    public boolean hasAtom() {
-        return hasAtom;
+    public boolean containsAtom() {
+        return containsAtom;
     }
 
 
-    public int getNumRays(){
-        return numRays;
-    }
+
 
     public int getHexagonNum() { return hexagonNum; }
 
-    public void setNumRays(int i){
-        this.numRays = i;
-    }
 
     public boolean hasInfluence(){
         return hasInfluence;
     }
 
     public void placeInfluence(Board.Direction direction){
-        //System.out.println("placimng");
         hasInfluence = true;
         directionsOfInfluence.add(direction);
     }
@@ -91,13 +84,13 @@ public class Hexagon {
 
     // setter methods
     // x and y should be immutable. i.e. we should never be able to change a hexagon's position
-    public void placeAtom() {
-        hasAtom = true;
+    public void setContainsAtom(boolean bool) {
+        containsAtom = bool;
     }
 
     // remove atom
-    public void removeAtom() {
-        hasAtom = false;
+    public boolean hasAtom() {
+        return containsAtom;
     }
 
     // toString method override returns co-ordinate of Hexagon
@@ -111,7 +104,7 @@ public class Hexagon {
         return directionsOfInfluence;
     }
 
-    public void setDirectionsOfInfluencedInfluence(ArrayList<Board.Direction> directionsInfluecedFrom) {
+    public void setDirectionsOfInfluenced(ArrayList<Board.Direction> directionsInfluecedFrom) {
         this.directionsOfInfluence = directionsInfluecedFrom;
     }
 
@@ -122,18 +115,18 @@ public class Hexagon {
     public void hideAtom() {isHidden = true;}
     public void showAtom() {isHidden = false;}
 
-    public boolean isHasGuessAtom() {
-        return hasGuessAtom;
+    public boolean hasGuessAtom() {
+        return containsGuessAtom;
     }
-    public void setHasGuessAtom(){
-        this.hasGuessAtom = true;
+    public void setContainsGuessAtom(boolean bool){
+        this.containsGuessAtom = bool;
     }
 
 
     public boolean isHidden() {return isHidden;}
 
-    public void setHasNeighbourAtom() {
-        this.hasNeighbourAtom = true;
+    public void setHasNeighbourAtom(boolean bool) {
+        this.hasNeighbourAtom = bool;
     }
     public void removeHasNeighbourAtom() {this.hasNeighbourAtom = false;}
 

@@ -5,16 +5,14 @@ public class Board {
     private static final int yOrigin = 28;
 
     private final ArrayList<Hexagon> listBoard = new ArrayList<>();
-    private ArrayList<Ray> rays = new ArrayList<>();
+    private ArrayList<Ray> rays;
 
     //make private and getters and setter
     public int numAtomsPlaced = 0;
     public int numRaysPlaced = 0;
 
     public int numGuessAtomsPlaced = 0;
-    public boolean isHexCoordVisible = true;
-    public boolean isArrowsVisible = false;
-    public boolean isHexSideNumVisible = false;
+
     private final String[] stringBoard;
 
     private final int stringBoardLength;
@@ -81,6 +79,7 @@ public class Board {
 
         };
         this.stringBoardLength = stringBoard.length;
+        this.rays = new ArrayList<>();
 
         int key = 0; // this key ensures we don't fill in hexagons that do not exist
 
@@ -169,6 +168,10 @@ public class Board {
         return rays;
     }
 
+
+
+
+
     public Hexagon getListHexagon(int x, int y) {
 
         // iterate over board
@@ -201,7 +204,7 @@ public class Board {
 
 
     public void addGuessAtom(int x, int y){
-        getListHexagon(x, y).setHasGuessAtom();
+        getListHexagon(x, y).setContainsGuessAtom(true);
         numGuessAtomsPlaced++;
     }
 
@@ -229,8 +232,7 @@ public class Board {
 
     public void addAtom(int x, int y){
         addChar(x, y, '*');
-        getListHexagon(x, y).placeAtom();
-        //System.out.println("add atom");
+        getListHexagon(x, y).setContainsAtom(true);
         addCircleOfInfluence(x, y);
         edgeCaseNeighbouringHasAtom(x, y);
         numAtomsPlaced++;
@@ -239,8 +241,7 @@ public class Board {
 
     public void removeAtom(int x, int y) {
         addChar(x, y, ' ');
-        getListHexagon(x, y).removeAtom();
-        //System.out.println("add atom");
+        getListHexagon(x, y).setContainsAtom(false);
         removeCircleOfInfluence(x, y);
         numAtomsPlaced--;
     }
@@ -249,13 +250,10 @@ public class Board {
         rays.add(ray);
     }
 
-    public void addRayLine(){
-        for(Hexagon hexagon : listBoard) {
-            if(hexagon.getNumRays() > 0) {
-                addChar(hexagon.getX(), hexagon.getY(), '+');
-            }
-        }
-    }
+
+
+
+
 
     public void hideAtoms(){
         for(Hexagon hexagon : listBoard) {
@@ -362,7 +360,7 @@ public class Board {
         if(getListHexagon(x, y).isSide()){
             for(Hexagon hexagon : neighbouringHexes){
                 if(hexagon.isSide()){
-                    hexagon.setHasNeighbourAtom();
+                    hexagon.setHasNeighbourAtom(true);
                 }
             }
         }
@@ -373,10 +371,8 @@ public class Board {
 
 
     public void addCircleOfInfluence(int x, int y) {
-        //System.out.println("im here");
 //checks all surrounding hexagons if they exits and if sow and influence marker
         if(getListHexagon(x+1, y) != null){
-            //System.out.println("im here 20");
             getListHexagon(x+1, y).placeInfluence(Direction.EAST);
         }if(getListHexagon(x, y-1) != null){
             getListHexagon(x, y-1).placeInfluence(Direction.SOUTHEAST);
@@ -394,7 +390,6 @@ public class Board {
 
             // if the hexagon has an atom on it, draw the atom
             if(hexagon.hasInfluence() && !hexagon.hasAtom()) {
-                //System.out.println(hexagon);
                 addChar(hexagon.getX(), hexagon.getY(), '#');
             }
 
@@ -404,7 +399,6 @@ public class Board {
 
     public void removeCircleOfInfluence(int x, int y) {
         if(getListHexagon(x+1, y) != null){
-            //System.out.println("im here 20");
             getListHexagon(x+1, y).removeInfluence();
             getListHexagon(x+1, y).removeHasNeighbourAtom();
         }if(getListHexagon(x, y-1) != null){
@@ -424,15 +418,7 @@ public class Board {
             getListHexagon(x+1, y+1).removeHasNeighbourAtom();
         }
 
-        for(Hexagon hexagon: listBoard) {
 
-            // if the hexagon has an atom on it, draw the atom
-            if(!hexagon.hasInfluence() && !hexagon.hasAtom() && hexagon.getNumRays() == 0) {
-                //System.out.println(hexagon);
-                addChar(hexagon.getX(), hexagon.getY(), ' ');
-            }
-
-        }
     }
 
     // Method to return the next hexagon on the board in a given direction
@@ -460,27 +446,7 @@ public class Board {
         return null;
     }
 
-// not needed it think
-//    public ArrayList<Direction> findDirectionsOfInfluence(Hexagon hexagon){
-//        int x = hexagon.getX();
-//        int y = hexagon.getY();
-//        ArrayList<Direction> directions = new ArrayList<>();
-//        if(getListHexagon(x+1, y) != null && getListHexagon(x+1, y).hasInfluence()){
-//            directions.add(Direction.EAST);
-//        }if(getListHexagon(x, y-1) != null && getListHexagon(x, y-1).hasInfluence()){
-//            directions.add(Direction.SOUTHEAST);
-//        }if(getListHexagon(x-1, y-1) != null && getListHexagon(x-1, y-1).hasInfluence()){
-//            directions.add(Direction.SOUTHWEST);
-//        }if(getListHexagon(x-1, y) != null && getListHexagon(x-1, y).hasInfluence()){
-//            directions.add(Direction.WEST);
-//        }if(getListHexagon(x, y+1) != null && getListHexagon(x, y+1).hasInfluence()) {
-//            directions.add(Direction.NORTHWEST);
-//        }if(getListHexagon(x+1, y+1) != null && getListHexagon(x+1, y+1).hasInfluence()){
-//            directions.add(Direction.NORTHEAST);
-//        }
-//
-//        return directions;
-//    }
+
 
 
 
