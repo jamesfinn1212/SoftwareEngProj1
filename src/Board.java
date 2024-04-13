@@ -204,8 +204,13 @@ public class Board {
 
 
     public void addGuessAtom(int x, int y){
-        getListHexagon(x, y).setContainsGuessAtom(true);
-        numGuessAtomsPlaced++;
+        if(!getListHexagon(x, y).hasGuessAtom()) {
+            getListHexagon(x, y).setContainsGuessAtom(true);
+            numGuessAtomsPlaced++;
+        }else{
+            getListHexagon(x, y).setContainsGuessAtom(false);
+            numGuessAtomsPlaced--;
+        }
     }
 
 

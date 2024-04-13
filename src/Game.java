@@ -124,17 +124,16 @@ public class Game {
     private int calculateScore(){
         int score = 0;
 
-        score += board.numRaysPlaced;
+        score += board.getRays().size();
 
         for(Hexagon hexagon : board.getListBoard()){
-            if(hexagon.hasAtom() && !hexagon.hasAtom()){
+            if(hexagon.hasAtom() && !hexagon.hasGuessAtom()){
                 score += 5;
             }
         }
         return score;
     }
     private void reset(){
-        System.out.println("reseting");
         this.isOver = false;
         currentAction = Action.GUESS_ATOM;
         board.numGuessAtomsPlaced = 0;
