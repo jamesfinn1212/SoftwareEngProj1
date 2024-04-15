@@ -16,8 +16,12 @@ public class GUI extends JPanel {
 
     private final JButton endGameButton;
     private final JButton endRoundButton;
-    CardLayout cardLayout;
+    private JPanel endGameButtonPane;
+    private JPanel endRoundButtonPane;
+    private JTextArea textArea_right;
+
     JPanel cardPanel;
+    CardLayout cardLayout;
 
 
 
@@ -35,9 +39,13 @@ public class GUI extends JPanel {
 
     public GUI(Game game, CardLayout cardLayout, JPanel cardPanel) {
         setBackground(Color.BLACK);
+        setLayout(new BorderLayout());
         this.game  = game;
         this.cardLayout = cardLayout;
         this.cardPanel = cardPanel;
+
+        setRightText("test");
+
 
         // checks if mouse is clicked
         addMouseListener(new MouseAdapter() {
@@ -64,6 +72,7 @@ public class GUI extends JPanel {
                             game.getBoard().removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
 
+
                     }
 
                     if(game.getCurrentAction() == Game.Action.PLACE_RAY ) {
@@ -74,13 +83,20 @@ public class GUI extends JPanel {
                             // code to place ray.... should check which side of the hexagon was clicked and shoot ray from that direction
                             Ray newRay = new Ray(game.getBoard(), clickedHexagon, directionOfRay);
                             game.getBoard().numRaysPlaced++;
+
+                            // increment ray placed for player
+                            game.getCurrentSetter().incrementRayCounter();
                         }
+
+
+
 
                     }
                     if(game.getCurrentAction() == Game.Action.GUESS_ATOM){
                         toggleEndGameButtonVisibility(false);
                         toggleEndRoundButtonVisibility(false);
                         game.getBoard().addGuessAtom(clickedHexagon.getX(), clickedHexagon.getY());
+
                     }
 
                     repaint();  // Repaint the panel
@@ -99,6 +115,12 @@ public class GUI extends JPanel {
 
         // Create the JButton
         endGameButton = new JButton("Click to Guess Atoms");
+
+        // create a JPanel for the button
+        JPanel endGameButtonPanel = new JPanel();
+        endGameButtonPanel.add(endGameButton);
+        endGameButtonPanel.setBackground(Color.BLACK);
+
         endGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,15 +128,19 @@ public class GUI extends JPanel {
             }
         });
 
+
         // Initially hide and disable the button
-        endGameButton.setVisible(false);
-        endGameButton.setEnabled(false);
+        //endGameButton.setVisible(false);
+        //endGameButton.setEnabled(false);
 
         // Add the button to the GUI
-        add(endGameButton);
+        add(endGameButtonPanel, BorderLayout.NORTH);
 
         // Create the JButton
         endRoundButton = new JButton("End Round");
+
+        JPanel endRoundButtonPanel = new JPanel();
+        endRoundButtonPanel.setBackground(Color.BLACK);
         endRoundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,11 +150,17 @@ public class GUI extends JPanel {
 
 
         // Initially hide and disable the button
-        endRoundButton.setVisible(false);
-        endRoundButton.setEnabled(false);
+       // endRoundButtonPanel.setVisible(false);
+        //endRoundButton.setEnabled(false);
+
+        endRoundButtonPanel.add(endRoundButton);
 
         // Add the button to the GUI
-        add(endRoundButton);
+        add(endRoundButtonPanel, BorderLayout.WEST);
+
+        this.endGameButtonPane = endGameButtonPanel;
+        this.endRoundButtonPane = endGameButtonPanel;
+
 
     }
 
@@ -179,6 +211,7 @@ public class GUI extends JPanel {
                     yValueHex += HEX_HOVER_INCREMENT;
                 }
 
+
                 drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getHexagonNumFromCord(hexagon.getX(), hexagon.getY())));
                 //drawText(g, xValueHex, yValueHex, String.valueOf(hexagon.getX()) + " " + hexagon.getY());
 
@@ -190,6 +223,7 @@ public class GUI extends JPanel {
                 toggleEndGameButtonVisibility(false);
                 toggleEndRoundButtonVisibility(true);
             }
+
 
 
         }
@@ -221,14 +255,18 @@ public class GUI extends JPanel {
                 drawMarker(g, ray);
 
         }
+
+        updateRightTextBasedOnState(game.getCurrentAction());
+
+
     }
 
     public void toggleEndGameButtonVisibility(boolean visible) {
-        endGameButton.setVisible(visible);
+        endGameButtonPane.setVisible(visible);
         endGameButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
     public void toggleEndRoundButtonVisibility(boolean visible) {
-        endRoundButton.setVisible(visible);
+        endRoundButtonPane.setVisible(visible);
         endRoundButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
     public static void drawHexagon(Graphics g, int x, int y, int sideLength) {
@@ -298,6 +336,10 @@ public class GUI extends JPanel {
         }else{
             startHex = ray.getPath().getFirst();
             endHex = ray.getPath().getLast();
+        }
+
+        if(endHex == null) {
+            endHex = startHex;
         }
 
 
@@ -808,5 +850,69 @@ public class GUI extends JPanel {
         return scorecardPanel;
 
     }
+
+    public void setRightText(String text) {
+        //Create a JPanel to hold the text area and set its background color to black
+        JPanel textAreaPanel = new JPanel(new BorderLayout());
+        textAreaPanel.setBackground(Color.BLACK);
+
+        // Create the JTextArea and set its properties
+        JTextArea textAreaRight = new JTextArea(30, 30);
+        this.textArea_right = textAreaRight;
+        textArea_right.setEditable(false); // Make sure the user can't edit it
+        textArea_right.setForeground(Color.YELLOW); // Set text color to yellow
+        textArea_right.setBackground(Color.BLACK); // Set background color to black
+
+        textArea_right.append(text);
+
+        // Add the JTextArea to the text area panel
+        textAreaPanel.add(textArea_right, BorderLayout.SOUTH);
+
+        // Add the text area panel to the right side of the GUI panel
+        this.add(textAreaPanel, BorderLayout.EAST);
+
+    }
+
+
+    public void updateRightText(String text) {
+        textArea_right.setText(text);
+    }
+
+    private String placeAtomInfo(int numOfAtomsLeft) {
+        return "PLACING ATOMS ROUND\nThis round involves placing atoms on the board.\nClick a hexagon to place an atom.\nYou are allowed to place 6 atoms.\nNumber of atoms left to place: " + numOfAtomsLeft;
+    }
+
+    private String placeRayInfo(int raysPlaced) {
+        return "PLACING RAYS ROUND\nPass over to the next player.\nPlace as many rays as you need\nto guess where atoms are.\nEach ray placed adds score to the other player\nRays placed: " + raysPlaced;
+    }
+
+    private String guessAtomInfo() {
+        return "GUESSING ATOMS ROUND\nBased on your rays guess where atoms are\nEach incorrectly guessed atom\nadds score to the other player.";
+    }
+
+
+    private void updateRightTextBasedOnState(Game.Action currentAction) {
+
+        switch(currentAction) {
+            case PLACE_ATOM:
+                SwingUtilities.invokeLater(() -> {
+                    updateRightText(placeAtomInfo(6 - game.getBoard().numAtomsPlaced));
+                });
+                break;
+            case PLACE_RAY:
+                // update the GUI text
+                SwingUtilities.invokeLater(() -> {
+                    updateRightText(placeRayInfo(game.getCurrentSetter().getRaysPlaced()));
+                });
+                break;
+            case GUESS_ATOM:
+                SwingUtilities.invokeLater(() -> {
+                    updateRightText(guessAtomInfo());
+                });
+                break;
+        }
+
+    }
+
 }
 

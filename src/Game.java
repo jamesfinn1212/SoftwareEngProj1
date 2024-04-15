@@ -37,6 +37,8 @@ public class Game {
         JFrame framePlayer1 = new JFrame("Player 1's Turn");
         framePlayer1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
+
         // home screen panel
         JPanel homescreen = guiPlayer1.setHomeScreen();
 
@@ -51,7 +53,6 @@ public class Game {
 
         // Start player 1's turn
         player1.setScore(startRound(guiPlayer1));
-
 
         // Now, let's open GUI for player 2 after player 1's turn
         // First, dispose the JFrame for player 1
@@ -69,6 +70,7 @@ public class Game {
         framePlayer2.setVisible(true);
 
 
+        player1.setSetter(false); // player 1 is no longer setter
         // Start player 2's turn
         player2.setScore(startRound(guiPlayer2));
 
@@ -85,29 +87,23 @@ public class Game {
         Draw.drawBoard(board);
 
 
-
-
-
-
         // place atoms
         while (board.numAtomsPlaced < 6) {
             setCurrentAction(Action.PLACE_ATOM);
-            // System.out.println(board.numAtomsPlaced);
-
         }
 
 
 
         while (!isOver) {
             setCurrentAction(Action.PLACE_RAY);
-           // System.out.println(board.getRays().size());
+            // System.out.println(board.getRays().size());
         }
 
 
         while(board.numGuessAtomsPlaced < 6) {
 
             setCurrentAction(Action.GUESS_ATOM);
-             //System.out.println("Num atoms palced " + board.numGuessAtomsPlaced);
+            //System.out.println("Num atoms palced " + board.numGuessAtomsPlaced);
         }
 
 
@@ -175,6 +171,15 @@ public class Game {
 
     public Player getPlayer2(){
         return this.player2;
+    }
+
+    public Player getCurrentSetter() {
+        if(player1.isSetter()) {
+            return player1;
+        }
+        else {
+            return player2;
+        }
     }
 
 }
