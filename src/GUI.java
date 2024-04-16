@@ -159,8 +159,20 @@ public class GUI extends JPanel {
 
         this.endGuessButtonPane = endGuessButtonPanel;
         this.endRoundButtonPane = endGuessButtonPanel;
-        toggleEndGuessButtonVisibility(false);
-        toggleEndRoundButtonVisibility(false);
+        if(game.getCurrentAction() == Game.Action.PLACE_RAY){
+            toggleEndGuessButtonVisibility(true);
+        }else{
+            toggleEndGuessButtonVisibility(false);
+        }
+        if(game.getCurrentAction() == Game.Action.PLACE_RAY){
+            toggleEndRoundButtonVisibility(true);
+        }else{
+            toggleEndRoundButtonVisibility(false);
+        }
+
+
+
+
 
     }
 
@@ -204,7 +216,7 @@ public class GUI extends JPanel {
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
             if(game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.GUESS_ATOM){
-                toggleEndRoundButtonVisibility(false);
+                ;
                 // dont want the text to be affected by being hovered over so undo the increment
                 if(hexagon == hoveredHexagon) {
                     xValueHex += HEX_HOVER_INCREMENT;
@@ -218,10 +230,6 @@ public class GUI extends JPanel {
             }
             if(game.getCurrentAction() == Game.Action.PLACE_RAY){
                 drawHexSideNum(g, xValueHex, yValueHex);
-            }
-            if(game.getCurrentAction() == Game.Action.SHOW_BOARD){
-                toggleEndGuessButtonVisibility(false);
-                toggleEndRoundButtonVisibility(true);
             }
 
 
