@@ -8,11 +8,7 @@ public class Hexagon {
     private final int hexagonNum;
     private boolean containsAtom;
     private boolean containsGuessAtom;
-
-    private boolean isHidden = false;
     private boolean hasNeighbourAtom;
-
-
     private boolean hasInfluence;
     private ArrayList<Board.Direction> directionsOfInfluence;
 
@@ -46,15 +42,6 @@ public class Hexagon {
     public int getY() {
         return y;
     }
-    public boolean containsAtom() {
-        return containsAtom;
-    }
-
-
-
-
-    public int getHexagonNum() { return hexagonNum; }
-
 
     public boolean hasInfluence(){
         return hasInfluence;
@@ -99,21 +86,15 @@ public class Hexagon {
         return "(" + x + ", " + y + ")";
     }
 
-
+    //return directionOfInfluence
     public ArrayList<Board.Direction> getDirectionsOfInfluence() {
         return directionsOfInfluence;
     }
 
-    public void setDirectionsOfInfluenced(ArrayList<Board.Direction> directionsInfluecedFrom) {
-        this.directionsOfInfluence = directionsInfluecedFrom;
-    }
 
     public boolean isHasNeighbourAtom() {
         return hasNeighbourAtom;
     }
-
-    public void hideAtom() {isHidden = true;}
-    public void showAtom() {isHidden = false;}
 
     public boolean hasGuessAtom() {
         return containsGuessAtom;
@@ -122,8 +103,6 @@ public class Hexagon {
         this.containsGuessAtom = bool;
     }
 
-
-    public boolean isHidden() {return isHidden;}
 
     public void setHasNeighbourAtom(boolean bool) {
         this.hasNeighbourAtom = bool;

@@ -152,18 +152,15 @@ public class Board {
     }
 
 
-
-    public int getStringBoardLength(){
-        return this.stringBoardLength;
-    }
-
+    //returns string representation of the board
     public String[] getStringBoard(){
         return this.stringBoard;
     }
+    //returns entire list on hexagons on board
     public ArrayList<Hexagon> getListBoard() {
         return listBoard;
     }
-
+//returns all the rays
     public ArrayList<Ray> getRays() {
         return rays;
     }
@@ -171,7 +168,7 @@ public class Board {
 
 
 
-
+//find the hexagon from teh list of hexagons retruns null if not found
     public Hexagon getListHexagon(int x, int y) {
 
         // iterate over board
@@ -183,26 +180,26 @@ public class Board {
             }
         }
 
-        return null; // if hexagon not found, return the first hexagon on the board (this is to satisfy the IDE, there is definitely a better way of doing this lol)
-    }
-
-    // function to get hexagon from number
-    public Hexagon getHexagonFromNumber(int hexagonNum) {
-
-        // iterate over board
-        for(Hexagon hexagon : listBoard) {
-
-            // if the hexagon is of that number
-            if(hexagon.getHexagonNum() == hexagonNum) {
-                return hexagon;
-            }
-
-        }
-
         return null;
     }
 
+    // function to get hexagon from number
+//    public Hexagon getHexagonFromNumber(int hexagonNum) {
+//
+//        // iterate over board
+//        for(Hexagon hexagon : listBoard) {
+//
+//            // if the hexagon is of that number
+//            if(hexagon.getHexagonNum() == hexagonNum) {
+//                return hexagon;
+//            }
+//
+//        }
+//
+//        return null;
+//    }
 
+//add a guessed atom to board
     public void addGuessAtom(int x, int y){
         if(!getListHexagon(x, y).hasGuessAtom()) {
             getListHexagon(x, y).setContainsGuessAtom(true);
@@ -215,7 +212,6 @@ public class Board {
 
 
     // Method to add a character into the center of hexagon using the (x, y) co-ordinates.
-
     public void addChar(int x, int y, char c) {
 
         // Polar co-ordinates conversion
@@ -235,6 +231,7 @@ public class Board {
 
     }
 
+    //adds atoms to baord
     public void addAtom(int x, int y){
         addChar(x, y, '*');
         getListHexagon(x, y).setContainsAtom(true);
@@ -243,7 +240,7 @@ public class Board {
         numAtomsPlaced++;
 
     }
-
+    //removes an atoms
     public void removeAtom(int x, int y) {
         addChar(x, y, ' ');
         getListHexagon(x, y).setContainsAtom(false);
@@ -251,6 +248,7 @@ public class Board {
         numAtomsPlaced--;
     }
 
+    //adds ray to board
     public void addRay(Ray ray) {
         rays.add(ray);
     }
@@ -317,7 +315,7 @@ public class Board {
 
         return null;
     }
-
+    //
     public ArrayList<Hexagon> neighbouringHexagons(int x, int y){
 
 
