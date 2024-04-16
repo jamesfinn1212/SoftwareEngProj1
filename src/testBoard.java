@@ -179,25 +179,7 @@ public class testBoard {
 
     }
 
-    @Test
-    public void testHideAtom(){
-        //draw an empty board
-        Board board1 = new Board();
-        //draw another board
-        Board board = new Board();
-        //populate board
-        board.addAtom(1, 1);
-        board.addAtom(-3 ,-2);
-        board.addAtom(4,4);
-        //hide atoms for this board
-        board.hideAtoms();
 
-
-
-
-       assertTrue(Arrays.equals(board.getStringBoard(), board1.getStringBoard()));
-
-    }
 
 
 

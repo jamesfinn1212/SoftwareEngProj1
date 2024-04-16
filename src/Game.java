@@ -131,6 +131,7 @@ public class Game {
     }
     private void reset(){
         this.isOver = false;
+        this.isRoundOver = false;
         currentAction = Action.GUESS_ATOM;
         board.numGuessAtomsPlaced = 0;
         board.numAtomsPlaced = 0;
@@ -139,8 +140,10 @@ public class Game {
             hexagon.setHasNeighbourAtom(false);
             hexagon.setContainsAtom(false);
             hexagon.setContainsGuessAtom(false);
-
+            hexagon.getDirectionsOfInfluence().clear();;
+            System.out.println();
         }
+
     }
 
 

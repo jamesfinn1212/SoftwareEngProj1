@@ -14,9 +14,9 @@ public class GUI extends JPanel {
 
     private static final int HEX_HOVER_INCREMENT = 2;
 
-    private final JButton endGameButton;
+    private final JButton endGuessButton;
     private final JButton endRoundButton;
-    private JPanel endGameButtonPane;
+    private JPanel endGuessButtonPane;
     private JPanel endRoundButtonPane;
     private JTextArea textArea_right;
 
@@ -76,7 +76,7 @@ public class GUI extends JPanel {
                     }
 
                     if(game.getCurrentAction() == Game.Action.PLACE_RAY ) {
-                        toggleEndGameButtonVisibility(true);
+                        toggleEndGuessButtonVisibility(true);
                         // only shoot ray if hexagon is a side hexagon
                         if(clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon) ) {
 
@@ -93,7 +93,7 @@ public class GUI extends JPanel {
 
                     }
                     if(game.getCurrentAction() == Game.Action.GUESS_ATOM){
-                        toggleEndGameButtonVisibility(false);
+                        toggleEndGuessButtonVisibility(false);
                         toggleEndRoundButtonVisibility(false);
                         game.getBoard().addGuessAtom(clickedHexagon.getX(), clickedHexagon.getY());
 
@@ -114,27 +114,27 @@ public class GUI extends JPanel {
         });
 
         // Create the JButton
-        endGameButton = new JButton("Click to Guess Atoms");
+        endGuessButton = new JButton("Click to Guess Atoms");
 
         // create a JPanel for the button
-        JPanel endGameButtonPanel = new JPanel();
-        endGameButtonPanel.add(endGameButton);
-        endGameButtonPanel.setBackground(Color.BLACK);
+        JPanel endGuessButtonPanel = new JPanel();
+        endGuessButtonPanel.add(endGuessButton);
+        endGuessButtonPanel.setBackground(Color.BLACK);
 
-        endGameButton.addActionListener(new ActionListener() {
+        endGuessButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.setIsOver(true); // Call the endGame() method of the Game class when the button is clicked
+                game.setIsOver(true); // Call the endGuess() method of the Game class when the button is clicked
             }
         });
 
 
         // Initially hide and disable the button
-        //endGameButton.setVisible(false);
-        //endGameButton.setEnabled(false);
+//        endGuessButton.setVisible(false);
+//        endGuessButton.setEnabled(false);
 
         // Add the button to the GUI
-        add(endGameButtonPanel, BorderLayout.NORTH);
+        add(endGuessButtonPanel, BorderLayout.NORTH);
 
         // Create the JButton
         endRoundButton = new JButton("End Round");
@@ -144,22 +144,22 @@ public class GUI extends JPanel {
         endRoundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.setIsRoundOver(true); // Call the endGame() method of the Game class when the button is clicked
+                game.setIsRoundOver(true); // Call the endGuess() method of the Game class when the button is clicked
             }
         });
 
 
         // Initially hide and disable the button
-       // endRoundButtonPanel.setVisible(false);
-        //endRoundButton.setEnabled(false);
+//         endRoundButtonPanel.setVisible(false);
+//        endRoundButton.setEnabled(false);
 
         endRoundButtonPanel.add(endRoundButton);
 
         // Add the button to the GUI
         add(endRoundButtonPanel, BorderLayout.WEST);
 
-        this.endGameButtonPane = endGameButtonPanel;
-        this.endRoundButtonPane = endGameButtonPanel;
+        this.endGuessButtonPane = endGuessButtonPanel;
+        this.endRoundButtonPane = endGuessButtonPanel;
 
 
     }
@@ -204,7 +204,7 @@ public class GUI extends JPanel {
             drawHexagon(g, xValueHex, yValueHex, sideLength);
 
             if(game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.GUESS_ATOM){
-                    toggleEndRoundButtonVisibility(false);
+                toggleEndRoundButtonVisibility(false);
                 // dont want the text to be affected by being hovered over so undo the increment
                 if(hexagon == hoveredHexagon) {
                     xValueHex += HEX_HOVER_INCREMENT;
@@ -220,7 +220,7 @@ public class GUI extends JPanel {
                 drawHexSideNum(g, xValueHex, yValueHex);
             }
             if(game.getCurrentAction() == Game.Action.SHOW_BOARD){
-                toggleEndGameButtonVisibility(false);
+                toggleEndGuessButtonVisibility(false);
                 toggleEndRoundButtonVisibility(true);
             }
 
@@ -252,7 +252,7 @@ public class GUI extends JPanel {
                 drawRay(g, ray);
             }
 
-                drawMarker(g, ray);
+            drawMarker(g, ray);
 
         }
 
@@ -261,9 +261,9 @@ public class GUI extends JPanel {
 
     }
 
-    public void toggleEndGameButtonVisibility(boolean visible) {
-        endGameButtonPane.setVisible(visible);
-        endGameButton.setEnabled(visible); // Enable/disable the button based on visibility
+    public void toggleEndGuessButtonVisibility(boolean visible) {
+        endGuessButtonPane.setVisible(visible);
+        endGuessButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
     public void toggleEndRoundButtonVisibility(boolean visible) {
         endRoundButtonPane.setVisible(visible);
@@ -915,4 +915,3 @@ public class GUI extends JPanel {
     }
 
 }
-

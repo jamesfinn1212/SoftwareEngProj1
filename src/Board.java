@@ -257,26 +257,6 @@ public class Board {
 
 
 
-
-
-
-    public void hideAtoms(){
-        for(Hexagon hexagon : listBoard) {
-            addChar(hexagon.getX(), hexagon.getY(), ' ');
-            hexagon.hideAtom();
-        }
-
-
-    }
-
-    public void showAtoms() {
-        for(Hexagon hexagon : listBoard) {
-            hexagon.showAtom();
-        }
-    }
-
-
-
     public Direction findDirection(int i){
 
         if(i < 10 && i%2 == 1){

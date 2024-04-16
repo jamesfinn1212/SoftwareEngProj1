@@ -34,11 +34,13 @@ public class Ray {
 
     }
 
+
     public void createRay(Board board, Hexagon startHexagon){
 
         // add next hexagon into linked list based on direction
         // while next hexagon is not null
         while(board.getNextHexagon(path.getLast(), direction) != null) {
+
             //if the start hexagon has an atom
             if(startHexagon.hasAtom()){
                 //never gets to first hexagon as it contains atom
@@ -74,9 +76,10 @@ public class Ray {
                 }
 
                 direction = newDirection; // set direction to new direction so the while loop contines
-
-                // add hexagon into path
-                path.add(board.getNextHexagon(path.getLast(), direction));
+                if(board.getNextHexagon(path.getLast(), direction) != null) {
+                    // add hexagon into path
+                    path.add(board.getNextHexagon(path.getLast(), direction));
+                }
             }
         }
     }
