@@ -40,7 +40,7 @@ public class Ray {
                 System.out.println("Ray absorbed start hex");
                 absorbed = true;
                 break;
-            } else if (startHexagon.isHasNeighbourAtom()) {
+            } else if (startHexagon.getNumNeighbourAtom() > 0) {
                 System.out.println("Ray absorbed beside start hex");
                 System.out.println("Atom beside ray");
                 absorbed = true;
@@ -58,6 +58,7 @@ public class Ray {
                     break;
                 }
                 direction = newDirection; // set direction to new direction so the while loop continues
+                //edge case if delfects in and out of board from same hexagon
                 if (board.getNextHexagon(path.getLast(), direction) != null) {
                     // add hexagon into path
                     path.add(board.getNextHexagon(path.getLast(), direction));

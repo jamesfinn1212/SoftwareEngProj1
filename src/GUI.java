@@ -718,9 +718,9 @@ public class GUI extends JPanel {
         // Determine winner
         JLabel winnerLabel = new JLabel();
         if (game.getPlayer1().getScore() > game.getPlayer2().getScore()) {
-            winnerLabel.setText("Player 1 wins!");
-        } else if (game.getPlayer1().getScore() < game.getPlayer2().getScore()) {
             winnerLabel.setText("Player 2 wins!");
+        } else if (game.getPlayer1().getScore() < game.getPlayer2().getScore()) {
+            winnerLabel.setText("Player 1 wins!");
         } else {
             winnerLabel.setText("It's a tie!");
         }

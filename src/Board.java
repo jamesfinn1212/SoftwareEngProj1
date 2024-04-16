@@ -343,7 +343,7 @@ public class Board {
         if(getListHexagon(x, y).isSide()){
             for(Hexagon hexagon : neighbouringHexes){
                 if(hexagon.isSide()){
-                    hexagon.setHasNeighbourAtom(true);
+                    hexagon.setNumNeighbourAtom(hexagon.getNumNeighbourAtom() + 1);
                 }
             }
         }
@@ -381,25 +381,15 @@ public class Board {
     }
 
     public void removeCircleOfInfluence(int x, int y) {
-        if(getListHexagon(x+1, y) != null){
-            getListHexagon(x+1, y).removeInfluence();
-            getListHexagon(x+1, y).removeHasNeighbourAtom();
-        }if(getListHexagon(x, y-1) != null){
-            getListHexagon(x, y-1).removeInfluence();
-            getListHexagon(x, y-1).removeHasNeighbourAtom();
-        }if(getListHexagon(x-1, y-1) != null){
-            getListHexagon(x-1, y-1).removeInfluence();
-            getListHexagon(x-1, y-1).removeHasNeighbourAtom();
-        }if(getListHexagon(x-1, y) != null){
-            getListHexagon(x-1, y).removeInfluence();
-            getListHexagon(x-1, y).removeHasNeighbourAtom();
-        }if(getListHexagon(x, y+1) != null) {
-            getListHexagon(x, y+1).removeInfluence();
-            getListHexagon(x, y+1).removeHasNeighbourAtom();
-        }if(getListHexagon(x+1, y+1) != null){
-            getListHexagon(x+1, y+1).removeInfluence();
-            getListHexagon(x+1, y+1).removeHasNeighbourAtom();
+        ArrayList<Hexagon> neighbouringHexes = neighbouringHexagons(x, y);
+        Hexagon centreHex = getListHexagon(x, y);
+        for(Hexagon hexagon : neighbouringHexes){
+            hexagon.removeInfluence();
+            if(centreHex.isSide()){
+                hexagon.setNumNeighbourAtom(hexagon.getNumNeighbourAtom()+1);
+            }
         }
+
 
 
     }

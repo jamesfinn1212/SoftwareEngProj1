@@ -154,7 +154,7 @@ public class Game {
 
         // Reset each hexagon on the board
         for (Hexagon hexagon : board.getListBoard()) {
-            hexagon.setHasNeighbourAtom(false);
+            hexagon.setNumNeighbourAtom(0);
             hexagon.setContainsAtom(false);
             hexagon.setContainsGuessAtom(false);
             hexagon.getDirectionsOfInfluence().clear();
