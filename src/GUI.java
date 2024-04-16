@@ -150,8 +150,7 @@ public class GUI extends JPanel {
 
 
         // Initially hide and disable the button
-//         endRoundButtonPanel.setVisible(false);
-//        endRoundButton.setEnabled(false);
+
 
         endRoundButtonPanel.add(endRoundButton);
 
@@ -160,7 +159,8 @@ public class GUI extends JPanel {
 
         this.endGuessButtonPane = endGuessButtonPanel;
         this.endRoundButtonPane = endGuessButtonPanel;
-
+        toggleEndGuessButtonVisibility(false);
+        toggleEndRoundButtonVisibility(false);
 
     }
 
