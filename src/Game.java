@@ -127,7 +127,7 @@ public class Game {
     }
 
     // Method to calculate the score
-    private int calculateScore() {
+    public int calculateScore() {
         int score = 0;
 
         // Score based on the number of rays
@@ -154,7 +154,6 @@ public class Game {
 
         // Reset each hexagon on the board
         for (Hexagon hexagon : board.getListBoard()) {
-            hexagon.setNumNeighbourAtom(0);
             hexagon.setContainsAtom(false);
             hexagon.setContainsGuessAtom(false);
             hexagon.getDirectionsOfInfluence().clear();

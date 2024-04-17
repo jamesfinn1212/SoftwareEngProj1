@@ -8,7 +8,6 @@ public class Hexagon {
     private final int hexagonNum;
     private boolean containsAtom;
     private boolean containsGuessAtom;
-    private int numNeighbourAtom;
     private boolean hasInfluence;
     private ArrayList<Board.Direction> directionsOfInfluence;
 
@@ -28,7 +27,6 @@ public class Hexagon {
         this.x = x;
         this.y = y;
         this.containsAtom = false;
-        this.numNeighbourAtom = 0;
         this.hasInfluence = false;
         this.directionsOfInfluence = new ArrayList<>();
         this.hexagonNum = getHexagonNumFromCord(x, y);
@@ -92,10 +90,6 @@ public class Hexagon {
     }
 
 
-    public int getNumNeighbourAtom() {
-        return this.numNeighbourAtom;
-
-    }
 
     public boolean hasGuessAtom() {
         return containsGuessAtom;
@@ -105,10 +99,6 @@ public class Hexagon {
     }
 
 
-    public void setNumNeighbourAtom(int i) {
-        if(i>=0)
-            this.numNeighbourAtom = i;
-    }
 
 
     // method that calculates hexagon number from a given co-ordinate

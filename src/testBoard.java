@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class testBoard {
     //test for string and arraylist;
     @Test
-    public void testPlaceAtom(){
+    public void testAddAtom(){
         Board board1 = new Board();
         //test origin
         board1.addAtom(0, 0);

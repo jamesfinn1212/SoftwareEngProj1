@@ -22,12 +22,12 @@ public class testRay {
 
         // this ray should get absorbed by the atom at (2,2), therefore should stop right behind
         Ray ray2 = new Ray(board, board.getListHexagon(-2, 2), Board.Direction.EAST);
-        String ray2ExpectedPath = "[(-2, 2), (-1, 2), (0, 2), (1, 2)]";
+        String ray2ExpectedPath = "[(-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2)]";
         assertEquals(ray2ExpectedPath, ray2.toString());
 
         // This ray is coming at (2,2) from different direction, should still get absorbed
         Ray ray3 = new Ray(board, board.getListHexagon(-4, -4), Board.Direction.NORTHEAST);
-        String ray3ExpectedPath = "[(-4, -4), (-3, -3), (-2, -2), (-1, -1), (0, 0), (1, 1)]";
+        String ray3ExpectedPath = "[(-4, -4), (-3, -3), (-2, -2), (-1, -1), (0, 0), (1, 1), (2, 2)]";
         assertEquals(ray3ExpectedPath, ray3.toString());
 
     }
@@ -58,9 +58,8 @@ public class testRay {
         assertTrue(thrown);
 
     }
-
     @Test
-    void testAbsorbedFromSide(){
+    void testAbsorbedStartAtom(){
         Board board = new Board();
         board.addAtom(-2, -4);
         board.addAtom(4, 2);
@@ -71,9 +70,17 @@ public class testRay {
         ray1 = new Ray(board, board.findStartHexagon(24), board.findDirection(24));
         s = "[]";
         assertEquals(s, ray1.toString());
+    }
 
-        ray1 = new Ray(board, board.findStartHexagon(25), board.findDirection(25));
-        s = "[(-1, -4)]";
+
+    @Test
+    void testAbsorbedFromSide(){
+        Board board = new Board();
+        board.addAtom(-2, -4);
+        board.addAtom(4, 2);
+
+        Ray ray1 = new Ray(board, board.findStartHexagon(25), board.findDirection(25));
+        String s = "[(-1, -4)]";
         assertEquals(s, ray1.toString());
 
         ray1 = new Ray(board, board.findStartHexagon(26), board.findDirection(26));
@@ -99,27 +106,27 @@ public class testRay {
         board.addAtom(0, 0);
         //from northwest
         Ray ray1 = new Ray(board, board.findStartHexagon(19), board.findDirection(19));
-        String s = "[(-4, -4), (-3, -3), (-2, -2), (-1, -1)]";
+        String s = "[(-4, -4), (-3, -3), (-2, -2), (-1, -1), (0, 0)]";
         assertEquals(s, ray1.toString());
         //from north-east
         ray1 = new Ray(board, board.findStartHexagon(28), board.findDirection(28));
-        s = "[(0, -4), (0, -3), (0, -2), (0, -1)]";
+        s = "[(0, -4), (0, -3), (0, -2), (0, -1), (0, 0)]";
         assertEquals(s, ray1.toString());
         //from east
         ray1 = new Ray(board, board.findStartHexagon(10), board.findDirection(10));
-        s = "[(-4, 0), (-3, 0), (-2, 0), (-1, 0)]";
+        s = "[(-4, 0), (-3, 0), (-2, 0), (-1, 0), (0, 0)]";
         assertEquals(s, ray1.toString());
         //from west
         ray1 = new Ray(board, board.findStartHexagon(37), board.findDirection(37));
-        s = "[(4, 0), (3, 0), (2, 0), (1, 0)]";
+        s = "[(4, 0), (3, 0), (2, 0), (1, 0), (0, 0)]";
         assertEquals(s, ray1.toString());
         //from south-east
         ray1 = new Ray(board, board.findStartHexagon(1), board.findDirection(1));
-        s = "[(0, 4), (0, 3), (0, 2), (0, 1)]";
+        s = "[(0, 4), (0, 3), (0, 2), (0, 1), (0, 0)]";
         assertEquals(s, ray1.toString());
         //from south-west
         ray1 = new Ray(board, board.findStartHexagon(46), board.findDirection(46));
-        s = "[(4, 4), (3, 3), (2, 2), (1, 1)]";
+        s = "[(4, 4), (3, 3), (2, 2), (1, 1), (0, 0)]";
         assertEquals(s, ray1.toString());
 
     }

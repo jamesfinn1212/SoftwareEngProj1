@@ -40,7 +40,7 @@ public class Ray {
                 System.out.println("Ray absorbed start hex");
                 absorbed = true;
                 break;
-            } else if (startHexagon.getNumNeighbourAtom() > 0) {
+            } else if (atomToSideStartHexagon(path.getLast(), this)) {
                 System.out.println("Ray absorbed beside start hex");
                 System.out.println("Atom beside ray");
                 absorbed = true;
@@ -57,6 +57,7 @@ public class Ray {
                     absorbed = true;
                     break;
                 }
+               
                 direction = newDirection; // set direction to new direction so the while loop continues
                 //edge case if delfects in and out of board from same hexagon
                 if (board.getNextHexagon(path.getLast(), direction) != null) {
@@ -65,6 +66,8 @@ public class Ray {
                 }
             }
         }
+        if(!path.isEmpty())
+            direction = calculateNewDirection(path.getLast(), direction);
     }
 
     // method that determines turn direction of the ray and returns it
@@ -126,6 +129,21 @@ public class Ray {
             return n;
         }
         return n + 6;
+    }
+
+    private boolean atomToSideStartHexagon(Hexagon h, Ray ray){
+        if(h.isSide()){
+
+            for(Board.Direction direction : h.getDirectionsOfInfluence()){
+                int diff1 = positiveModulo_6(direction.getValue(), 1);
+                int diff2 = positiveModulo_6(direction.getValue(), -1);
+
+                if(diff1 == ray.direction.getValue()|| diff2 == ray.direction.getValue())
+                    return true;
+
+            }
+        }
+        return false;
     }
 
     // Getters and setters

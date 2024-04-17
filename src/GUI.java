@@ -47,11 +47,13 @@ public class GUI extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 Hexagon clickedHexagon = getFromPixelPosition(e.getX(), e.getY());
-                Hexagon_Section sectionClicked = getSectionClicked(e.getX(), e.getY(), clickedHexagon);
-                Board.Direction directionOfRay = getDirectionFromSection(sectionClicked);
+
 
                 if (clickedHexagon != null) {
+                    Hexagon_Section sectionClicked = getSectionClicked(e.getX(), e.getY(), clickedHexagon);
+                    Board.Direction directionOfRay = getDirectionFromSection(sectionClicked);
                     // Handle different game actions based on current action
                     if (game.getCurrentAction() == Game.Action.PLACE_ATOM) {
                         if (!clickedHexagon.hasAtom()) {

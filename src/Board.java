@@ -183,21 +183,6 @@ public class Board {
         return null;
     }
 
-    // function to get hexagon from number
-//    public Hexagon getHexagonFromNumber(int hexagonNum) {
-//
-//        // iterate over board
-//        for(Hexagon hexagon : listBoard) {
-//
-//            // if the hexagon is of that number
-//            if(hexagon.getHexagonNum() == hexagonNum) {
-//                return hexagon;
-//            }
-//
-//        }
-//
-//        return null;
-//    }
 
 //add a guessed atom to board
     public void addGuessAtom(int x, int y){
@@ -236,7 +221,6 @@ public class Board {
         addChar(x, y, '*');
         getListHexagon(x, y).setContainsAtom(true);
         addCircleOfInfluence(x, y);
-        edgeCaseNeighbouringHasAtom(x, y);
         numAtomsPlaced++;
 
     }
@@ -337,18 +321,7 @@ public class Board {
         return neighbouringHexes;
     }
 
-    //for the edge case when way is entred and hexagon beside it on the edge contains an atom
-    public void edgeCaseNeighbouringHasAtom(int x, int y ){
-        ArrayList<Hexagon> neighbouringHexes = neighbouringHexagons(x, y);
-        if(getListHexagon(x, y).isSide()){
-            for(Hexagon hexagon : neighbouringHexes){
-                if(hexagon.isSide()){
-                    hexagon.setNumNeighbourAtom(hexagon.getNumNeighbourAtom() + 1);
-                }
-            }
-        }
 
-    }
 
 
 
@@ -385,9 +358,6 @@ public class Board {
         Hexagon centreHex = getListHexagon(x, y);
         for(Hexagon hexagon : neighbouringHexes){
             hexagon.removeInfluence();
-            if(centreHex.isSide()){
-                hexagon.setNumNeighbourAtom(hexagon.getNumNeighbourAtom()+1);
-            }
         }
 
 
