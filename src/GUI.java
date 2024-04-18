@@ -101,7 +101,8 @@ public class GUI extends JPanel {
         endGuessButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.setIsOver(true); // Call the endGuess() method of the Game class when the button is clicked
+                if(game.getCurrentAction() == Game.Action.PLACE_RAY)
+                    game.setIsOver(true); // Call the endGuess() method of the Game class when the button is clicked
             }
         });
 
@@ -115,7 +116,8 @@ public class GUI extends JPanel {
         endRoundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.setIsRoundOver(true); // Call the endRound() method of the Game class when the button is clicked
+                if(game.getCurrentAction() == Game.Action.SHOW_BOARD)
+                    game.setIsRoundOver(true); // Call the endRound() method of the Game class when the button is clicked
             }
         });
 
@@ -651,103 +653,8 @@ public class GUI extends JPanel {
     }
 
     // method for the Home Screen, returns a panel of Home Screen
-    public JPanel setHomeScreen() {
-        JPanel homePanel;
-        JLabel titleLabel;
 
-        // Create home panel
-        homePanel = new JPanel();
-        homePanel.setLayout(new BoxLayout(homePanel, BoxLayout.PAGE_AXIS));
-        homePanel.setBorder(BorderFactory.createEmptyBorder(50, 20, 50, 20));
-        homePanel.setBackground(Color.BLACK);
 
-        // Create title label
-        titleLabel = new JLabel("Black Box game");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 50));
-        titleLabel.setAlignmentX(CENTER_ALIGNMENT);
-        titleLabel.setForeground(Color.YELLOW);
-        homePanel.add(titleLabel);
-
-        // Add vertical glue to push components to the top
-        homePanel.add(Box.createVerticalGlue());
-
-        // create button
-        JButton startButton = new HexagonButton("Start Game");
-        startButton.setPreferredSize(new Dimension(300, 300));
-        startButton.setFocusPainted(false);
-
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Switch to the GUI panel
-                cardLayout.show(cardPanel, "guiPlayer1");
-            }
-        });
-
-        startButton.setAlignmentX(CENTER_ALIGNMENT);
-        startButton.setAlignmentY(CENTER_ALIGNMENT);
-
-        homePanel.add(startButton);
-
-        homePanel.add(Box.createVerticalGlue());
-
-        return homePanel;
-    }
-
-    public static JPanel generateScorecard() {
-        JPanel scorecardPanel = new JPanel();
-        scorecardPanel.setLayout(new BoxLayout(scorecardPanel, BoxLayout.PAGE_AXIS));
-        scorecardPanel.setBackground(Color.BLACK); // Set background color
-
-        JLabel titleLabel = new JLabel("Scorecard");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 36)); // Increase font size
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setForeground(Color.YELLOW); // Set text color
-        scorecardPanel.add(titleLabel);
-        scorecardPanel.add(Box.createVerticalStrut(50)); // Add some spacing
-
-        // Display scores for player 1 and player 2
-        JLabel player1ScoreLabel = new JLabel("Player 1 Score: " + game.getPlayer1().getScore());
-        JLabel player2ScoreLabel = new JLabel("Player 2 Score: " + game.getPlayer2().getScore());
-        player1ScoreLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
-        player2ScoreLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
-        player1ScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        player2ScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        player1ScoreLabel.setForeground(Color.YELLOW); // Set text color
-        player2ScoreLabel.setForeground(Color.YELLOW); // Set text color
-        scorecardPanel.add(player1ScoreLabel);
-        scorecardPanel.add(player2ScoreLabel);
-
-        // Determine winner
-        JLabel winnerLabel = new JLabel();
-        if (game.getPlayer1().getScore() > game.getPlayer2().getScore()) {
-            winnerLabel.setText("Player 2 wins!");
-        } else if (game.getPlayer1().getScore() < game.getPlayer2().getScore()) {
-            winnerLabel.setText("Player 1 wins!");
-        } else {
-            winnerLabel.setText("It's a tie!");
-        }
-        winnerLabel.setFont(new Font("Arial", Font.BOLD, 30)); // Increase font size
-        winnerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        winnerLabel.setForeground(Color.YELLOW); // Set text color
-        scorecardPanel.add(winnerLabel);
-        scorecardPanel.add(Box.createVerticalStrut(50)); // Add some spacing
-
-        // Add "End Game" button
-        JButton endGameButton = new JButton("End Game");
-        endGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        endGameButton.setFont(new Font("Arial", Font.BOLD, 24)); // Increase font size
-        endGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Close the application
-                System.exit(0);
-            }
-        });
-        scorecardPanel.add(endGameButton);
-
-        return scorecardPanel;
-
-    }
 
     public void setRightText(String text) {
         //Create a JPanel to hold the text area and set its background color to black

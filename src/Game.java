@@ -37,15 +37,16 @@ public class Game {
         this.player1 = new Player();
         this.player2 = new Player();
         player2.setSetter(false); // Player 2 starts as a guesser
+
     }
 
     // Method to start the game
     public void startGame() {
         // Create a panel with CardLayout to manage different screens
+
         JPanel cardPanel = new JPanel();
         CardLayout cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
-
         // Create GUI for player 1
         GUI guiPlayer1 = new GUI(this, cardLayout, cardPanel);
 
@@ -57,7 +58,7 @@ public class Game {
         framePlayer1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Add home screen panel
-        JPanel homescreen = guiPlayer1.setHomeScreen();
+        JPanel homescreen = new HomeScreenGUI(cardLayout, cardPanel).setHomeScreen();
         cardPanel.add(homescreen, "homeScreen");
 
         // Add GUI panels for player 1 and player 2
@@ -92,7 +93,7 @@ public class Game {
         player2.setScore(startRound(guiPlayer2));
 
         // Display the scorecard
-        JPanel scorecardPanel = GUI.generateScorecard();
+        JPanel scorecardPanel = new ScoreCardGUI(this).generateScorecard();
         cardPanel.add(scorecardPanel, "scorecard");
         cardLayout.show(cardPanel, "scorecard");
     }
