@@ -1,5 +1,8 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+
 
 // This class represents the rays on the board.
 public class Ray {
@@ -11,6 +14,8 @@ public class Ray {
     private final Hexagon startHexagon;
     private final Board.Direction startDirection; // direction the ray is going at the start
 
+    private Color color;
+
     // constructor
     public Ray(Board board, Hexagon startHexagon, Board.Direction direction) {
         this.direction = direction;
@@ -18,6 +23,7 @@ public class Ray {
         // add first hexagon into linked list
         path.add(startHexagon);
         this.startHexagon = startHexagon;
+        this.color = Color.RED;
 
         // check if hexagon is on the side
         if (!startHexagon.isSide()) {
@@ -39,11 +45,13 @@ public class Ray {
                 path.remove(startHexagon);
                 System.out.println("Ray absorbed start hex");
                 absorbed = true;
+                color = Color.green;
                 break;
             } else if (atomToSideStartHexagon(path.getLast(), this)) {
                 System.out.println("Ray absorbed beside start hex");
                 System.out.println("Atom beside ray");
                 absorbed = true;
+                color = Color.green;
                 break;
             } else if (!path.getLast().hasInfluence()) { // if the next hexagon does not have influence, add it to the path
                 path.add(board.getNextHexagon(path.getLast(), direction)); // add 1 to num of arrays
@@ -55,6 +63,7 @@ public class Ray {
                     path.add(board.getNextHexagon(path.getLast(), direction));
                     System.out.println("Ray absorbed");
                     absorbed = true;
+                    color = Color.green;
                     break;
                 }
                
@@ -78,6 +87,7 @@ public class Ray {
         // if only influenced from one bordering atom
         if (currentHexagon.getDirectionsOfInfluence().size() == 1) {
             newDirection = influencedFrom1Atom(currentHexagon, directionOfRay);
+
         } else if (currentHexagon.getDirectionsOfInfluence().size() == 2) {
             newDirection = influencedFrom2Atom(currentHexagon, directionOfRay);
         } else if (currentHexagon.getDirectionsOfInfluence().size() == 3) {
@@ -92,9 +102,11 @@ public class Ray {
         // if the difference between the ray and the direction of circle of influence is 3 than ray has to be absorbed
         if (positiveModulo_6(directionOfRay.getValue(), -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3) {
             return directionOfRay; // return same direction as where ray is going
+
+            // if it is 2 bigger clockwise ray changes direction one clockwise and the opposite for counter-clockwise
         } else if (positiveModulo_6(directionOfRay.getValue(), +2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue() ||
                 (positiveModulo_6(directionOfRay.getValue(), -2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue())) {
-            // if it is 2 bigger clockwise ray changes direction one clockwise and the opposite for counter-clockwise
+            setColor(Color.BLUE);
             if ((directionOfRay.getValue() + 2) % 6 == currentHexagon.getDirectionsOfInfluence().get(0).getValue()) {
                 return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 1));
             } else {
@@ -108,16 +120,23 @@ public class Ray {
     private Board.Direction influencedFrom2Atom(Hexagon currentHexagon, Board.Direction directionOfRay) {
         ArrayList<Board.Direction> listOfDirection = new ArrayList<>();
         if (positiveModulo_6(directionOfRay.getValue(), -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3) {
+            setColor(Color.MAGENTA);
             return currentHexagon.getDirectionsOfInfluence().get(1);
         } else if (positiveModulo_6(directionOfRay.getValue(), -currentHexagon.getDirectionsOfInfluence().get(1).getValue()) == 3) {
+            setColor(Color.MAGENTA);
             return currentHexagon.getDirectionsOfInfluence().get(0);
         } else {
+            System.out.println("IM here reflected");
+            this.color = new Color(148, 0, 211);
             return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 3));
         }
     }
 
     // Method to handle ray direction when influenced by three atoms
     private Board.Direction influencedFrom3Atom(Hexagon currentHexagon, Board.Direction directionOfRay) {
+        //sets ray marker shade purple
+        System.out.println("IM here reflected");
+        this.color = new Color(148, 0, 211);
         return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 3));
     }
 
@@ -171,4 +190,35 @@ public class Ray {
     public String toString() {
         return path.toString();
     }
+
+    public Color getColor() {
+        return color;
+    }
+
+    private void setColor(Color newColor){
+
+//        switch (newColor.getRGB()) {
+//            case Color.BLUE -> {
+//                if (color.getRGB() == Color.red.getRGB())
+//                    color = newColor;
+//            }
+//            case Color.magenta -> {
+//                if (color.getRGB() == Color.blue.getRGB() || color.getRGB() == Color.red.getRGB())
+//                    color = newColor;
+//            }
+//        }
+        int newColorRGB = newColor.getRGB();
+        int colorRGB = color.getRGB();
+
+        if (newColorRGB == Color.BLUE.getRGB()) {
+            if (colorRGB == Color.RED.getRGB()) {
+                color = newColor;
+            }
+        } else if (newColorRGB == Color.MAGENTA.getRGB()) {
+            if (colorRGB == Color.BLUE.getRGB() || colorRGB == Color.RED.getRGB()) {
+                color = newColor;
+            }
+        }
+    }
+
 }

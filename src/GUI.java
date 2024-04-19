@@ -56,6 +56,8 @@ public class GUI extends JPanel {
                     Board.Direction directionOfRay = getDirectionFromSection(sectionClicked);
                     // Handle different game actions based on current action
                     if (game.getCurrentAction() == Game.Action.PLACE_ATOM) {
+                        toggleEndGuessButtonVisibility(false);
+                        System.out.println(endGuessButton.isVisible());
                         if (!clickedHexagon.hasAtom()) {
                             game.getBoard().addAtom(clickedHexagon.getX(), clickedHexagon.getY());
                             Draw.drawBoard(game.getBoard());
@@ -66,6 +68,7 @@ public class GUI extends JPanel {
 
                     if (game.getCurrentAction() == Game.Action.PLACE_RAY ) {
                         toggleEndGuessButtonVisibility(true);
+
                         if (clickedHexagon.isSide() && sectionOnSide(sectionClicked, clickedHexagon)) {
                             Ray newRay = new Ray(game.getBoard(), clickedHexagon, directionOfRay);
                             game.getBoard().numRaysPlaced++;
@@ -98,6 +101,7 @@ public class GUI extends JPanel {
         JPanel endGuessButtonPanel = new JPanel();
         endGuessButtonPanel.add(endGuessButton);
         endGuessButtonPanel.setBackground(Color.BLACK);
+
         endGuessButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,6 +117,7 @@ public class GUI extends JPanel {
         endRoundButton = new JButton("End Round");
         JPanel endRoundButtonPanel = new JPanel();
         endRoundButtonPanel.setBackground(Color.BLACK);
+
         endRoundButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,6 +133,8 @@ public class GUI extends JPanel {
         // Store button panels for toggling visibility
         this.endGuessButtonPane = endGuessButtonPanel;
         this.endRoundButtonPane = endRoundButtonPanel;
+        toggleEndGuessButtonVisibility(false);
+        toggleEndRoundButtonVisibility(false);
     }
 
 
@@ -171,7 +178,7 @@ public class GUI extends JPanel {
             // Draw text on hexagons based on current game action
             if (game.getCurrentAction() == Game.Action.PLACE_ATOM || game.getCurrentAction() == Game.Action.GUESS_ATOM) {
                 toggleEndRoundButtonVisibility(false);
-
+                toggleEndRoundButtonVisibility(false);
                 // Adjust position if hexagon is hovered over
                 if (hexagon == hoveredHexagon) {
                     xValueHex += HEX_HOVER_INCREMENT;
@@ -221,11 +228,13 @@ public class GUI extends JPanel {
     }
     public void toggleEndGuessButtonVisibility(boolean visible) {
         endGuessButtonPane.setVisible(visible);
+        endGuessButton.setVisible(visible);
         endGuessButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
 
     public void toggleEndRoundButtonVisibility(boolean visible) {
         endRoundButtonPane.setVisible(visible);
+        endRoundButton.setVisible(visible);
         endRoundButton.setEnabled(visible); // Enable/disable the button based on visibility
     }
 
@@ -318,16 +327,13 @@ public class GUI extends JPanel {
             yEndPoints[a] = (int) (yEndCentre + sideLength * Math.sin(angle));
         }
 
-        // Generate a unique color for the marker
-        int uniqueColor = ray.hashCode(); // Using ray's hash code for uniqueness
-        Color color = new Color(uniqueColor * 1079 % 333 * 1088);
 
         // Draw start marker
         int point1 = (5 - startDirection.getValue());
         int point2 = (point1 + 1) % 6;
         double xMidPoint = midpoint(xStartPoints[point1], xStartPoints[point2]);
         double yMidPoint = midpoint(yStartPoints[point1], yStartPoints[point2]);
-        g2d.setColor(color);
+        g2d.setColor(ray.getColor());
         g2d.fillOval((int) xMidPoint - 6, (int) yMidPoint - 6, 13, 13);
 
         // Draw end marker if ray is not absorbed
