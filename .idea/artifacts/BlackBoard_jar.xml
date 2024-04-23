@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="BlackBoard:jar">
+  <artifact type="jar" name="BlackBoard:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/BlackBoard_jar</output-path>
     <root id="archive" name="BlackBoard.jar">
       <element id="module-output" name="BlackBoard" />

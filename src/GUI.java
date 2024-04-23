@@ -407,14 +407,69 @@ public class GUI extends JPanel {
 
     private void drawHexSideNum(Graphics g, int x, int y){
         // Draw numbers on hexagon sides
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setFont(new Font("Arial", Font.BOLD, 12));
-        g2d.setColor(Color.WHITE);
-        FontMetrics metrics = g2d.getFontMetrics();
-        int textWidth = metrics.stringWidth("High");
-        int textHeight = metrics.getHeight();
-        Hexagon hexagon = getFromPixelPosition(x + 30, y + 30); // Get the hexagon
-        // Draw numbers based on hexagon position and orientation
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            g2d.setColor(Color.WHITE);
+
+            FontMetrics metrics = g2d.getFontMetrics();
+            int textWidth = metrics.stringWidth("High");
+            int textHeight = metrics.getHeight();
+            Hexagon hexagon = getFromPixelPosition(x+30, y+30);
+            if(hexagon.getY() - hexagon.getX() == 4){
+                int entryNum = ((hexagon.getX() * -1) + 1) * 2;
+                String string1 = String.valueOf((entryNum-1));
+                String string2 = String.valueOf((entryNum));
+                g2d.drawString(string1, x+10, y+5);
+                g2d.drawString(string2, x - 12, y + HEX_RADIUS + textHeight / 4);
+            }
+            if(hexagon.getX() == -4){
+                int entryNum = 10 + (-2* hexagon.getY());
+                String string1 = String.valueOf((entryNum));
+                String string2 = String.valueOf((entryNum+1));
+
+                g2d.drawString(string1, x - 12, y + HEX_RADIUS + textHeight / 4);
+                g2d.drawString(string2, x+3, y + HEX_RADIUS + textHeight / 4+30);
+            }
+            if(hexagon.getY() == -4){
+
+                int entryNum = 20 + 2 * (4 +hexagon.getX());
+                String string1 = String.valueOf((entryNum-1));
+                String string2 = String.valueOf((entryNum));
+                g2d.drawString(string1, x+3, y + HEX_RADIUS + textHeight / 4+30);
+                g2d.drawString(string2, x+40, y + HEX_RADIUS + textHeight / 4+30);
+            }
+            if(hexagon.getX() - hexagon.getY() == 4){
+                int entryNum = 28 + 2 * hexagon.getX();
+                String string1 = String.valueOf((entryNum));
+                String string2 = String.valueOf((entryNum+1));
+
+                g2d.drawString(string1, x+40, y + HEX_RADIUS + textHeight / 4+30);
+                g2d.drawString(string2, x+57, y + HEX_RADIUS + textHeight / 4);
+
+            }
+            if(hexagon.getX() == 4){
+                int entryNum = 37 + 2 * hexagon.getY();
+                String string1 = String.valueOf((entryNum));
+                String string2 = String.valueOf((entryNum+1));
+
+                g2d.drawString(string1, x+57, y + HEX_RADIUS + textHeight / 4);
+                g2d.drawString(string2, x+41, y + HEX_RADIUS + textHeight / 4 - 28);
+            }
+            if(hexagon.getY() == 4){
+                int entryNum = 46 + 2 * (4-hexagon.getX());
+                String string1 = String.valueOf((entryNum));
+                String string2 = String.valueOf((entryNum+1));
+
+                g2d.drawString(string1, x+41, y + HEX_RADIUS + textHeight / 4 - 28);
+                if(entryNum != 54){
+                    g2d.drawString(string2, x+6, y + HEX_RADIUS + textHeight / 4 - 28);
+
+                }
+            }
+
+
+
     }
 
     //draws ray on to GUI

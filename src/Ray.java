@@ -39,6 +39,9 @@ public class Ray {
         // add next hexagon into linked list based on direction
         // while next hexagon is not null
         while (board.getNextHexagon(path.getLast(), direction) != null) {
+            System.out.println("Hexagon" + board.getNextHexagon(path.getLast(), direction));
+            System.out.println("Has Atom " + board.getNextHexagon(path.getLast(), direction).hasAtom());
+            System.out.println("get directions"+board.getNextHexagon(path.getLast(), direction).getDirectionsOfInfluence());
             // if the start hexagon has an atom
             if (startHexagon.hasAtom()) {
                 // never gets to first hexagon as it contains atom
@@ -55,8 +58,10 @@ public class Ray {
                 break;
             } else if (!path.getLast().hasInfluence()) { // if the next hexagon does not have influence, add it to the path
                 path.add(board.getNextHexagon(path.getLast(), direction)); // add 1 to num of arrays
+                System.out.println("im here 2");
             } else { // if the next hexagon has influence, we want to add that hexagon into the path but our direction will have to change (or get absorbed)
                 // determine new direction
+                System.out.println("im here 1");
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
                 // if direction and new direction are the same it is a direct collision
                 if (newDirection == direction) {
@@ -197,16 +202,6 @@ public class Ray {
 
     private void setColor(Color newColor){
 
-//        switch (newColor.getRGB()) {
-//            case Color.BLUE -> {
-//                if (color.getRGB() == Color.red.getRGB())
-//                    color = newColor;
-//            }
-//            case Color.magenta -> {
-//                if (color.getRGB() == Color.blue.getRGB() || color.getRGB() == Color.red.getRGB())
-//                    color = newColor;
-//            }
-//        }
         int newColorRGB = newColor.getRGB();
         int colorRGB = color.getRGB();
 

@@ -58,7 +58,7 @@ public class Game {
         framePlayer1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Add home screen panel
-        JPanel homescreen = new HomeScreenGUI(cardLayout, cardPanel).setHomeScreen();
+        JPanel homescreen = new HomeScreenGUI(cardLayout, cardPanel).generateHomeScreen();
         cardPanel.add(homescreen, "homeScreen");
 
         // Add GUI panels for player 1 and player 2
@@ -158,6 +158,12 @@ public class Game {
             hexagon.setContainsAtom(false);
             hexagon.setContainsGuessAtom(false);
             hexagon.getDirectionsOfInfluence().clear();
+            hexagon.removeInfluence();
+        }
+        for (Hexagon hexagon : board.getListBoard()) {
+            System.out.println(hexagon.toString());
+            System.out.println("contains atom: " + hexagon.hasAtom());
+            System.out.println(("directions of influnce " + hexagon.getDirectionsOfInfluence()));
         }
     }
 

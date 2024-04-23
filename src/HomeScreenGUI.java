@@ -11,7 +11,7 @@ public class HomeScreenGUI {
         this.cardPanel = cardPanel;
     }
 
-    public JPanel setHomeScreen() {
+    public JPanel generateHomeScreen() {
         JPanel homePanel;
         JLabel titleLabel;
 
