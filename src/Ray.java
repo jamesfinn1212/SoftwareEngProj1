@@ -50,6 +50,7 @@ public class Ray {
                 absorbed = true;
                 color = Color.green;
                 break;
+                //case if atom beside hexagon contains atom
             } else if (atomToSideStartHexagon(path.getLast(), this)) {
                 System.out.println("Ray absorbed beside start hex");
                 System.out.println("Atom beside ray");
@@ -58,10 +59,9 @@ public class Ray {
                 break;
             } else if (!path.getLast().hasInfluence()) { // if the next hexagon does not have influence, add it to the path
                 path.add(board.getNextHexagon(path.getLast(), direction)); // add 1 to num of arrays
-                System.out.println("im here 2");
+
             } else { // if the next hexagon has influence, we want to add that hexagon into the path but our direction will have to change (or get absorbed)
                 // determine new direction
-                System.out.println("im here 1");
                 Board.Direction newDirection = calculateNewDirection(path.getLast(), direction);
                 // if direction and new direction are the same it is a direct collision
                 if (newDirection == direction) {
@@ -80,6 +80,7 @@ public class Ray {
                 }
             }
         }
+        //calculate the end direction of the atom as it leaves the board
         if(!path.isEmpty())
             direction = calculateNewDirection(path.getLast(), direction);
     }
@@ -89,16 +90,20 @@ public class Ray {
         // randomly set by the end shouldn't have any effect of outcome
         Board.Direction newDirection = directionOfRay;
         // cases for ray direction
-        // if only influenced from one bordering atom
-        if (currentHexagon.getDirectionsOfInfluence().size() == 1) {
-            newDirection = influencedFrom1Atom(currentHexagon, directionOfRay);
 
-        } else if (currentHexagon.getDirectionsOfInfluence().size() == 2) {
-            newDirection = influencedFrom2Atom(currentHexagon, directionOfRay);
-        } else if (currentHexagon.getDirectionsOfInfluence().size() == 3) {
-            newDirection = influencedFrom3Atom(currentHexagon, directionOfRay);
+        switch (currentHexagon.getDirectionsOfInfluence().size()) {
+            case (1):
+                newDirection = influencedFrom1Atom(currentHexagon, directionOfRay);
+                break;
+            case (2):
+                newDirection = influencedFrom2Atom(currentHexagon, directionOfRay);
+                break;
+            case (3):
+                newDirection = influencedFrom3Atom(currentHexagon, directionOfRay);
+                break;
+
         }
-        // rest of if statements for rest of ray directions...
+
         return newDirection;
     }
 
@@ -108,13 +113,15 @@ public class Ray {
         if (positiveModulo_6(directionOfRay.getValue(), -currentHexagon.getDirectionsOfInfluence().get(0).getValue()) == 3) {
             return directionOfRay; // return same direction as where ray is going
 
-            // if it is 2 bigger clockwise ray changes direction one clockwise and the opposite for counter-clockwise
+            // if it is 2 side away from ray the side of the influence hexagon deflected 120 degrees
         } else if (positiveModulo_6(directionOfRay.getValue(), +2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue() ||
                 (positiveModulo_6(directionOfRay.getValue(), -2) == currentHexagon.getDirectionsOfInfluence().get(0).getValue())) {
             setColor(Color.BLUE);
+            //if it is to the left deflect 120 degrees to thr right
             if ((directionOfRay.getValue() + 2) % 6 == currentHexagon.getDirectionsOfInfluence().get(0).getValue()) {
                 return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), 1));
             } else {
+                //otherwise deflect 120 degrees to the left
                 return Board.Direction.fromValue(positiveModulo_6(directionOfRay.getValue(), -1));
             }
         }
@@ -155,6 +162,8 @@ public class Ray {
         return n + 6;
     }
 
+
+    //edge case for if atom beside hexagon contains atom
     private boolean atomToSideStartHexagon(Hexagon h, Ray ray){
         if(h.isSide()){
 
@@ -200,15 +209,19 @@ public class Ray {
         return color;
     }
 
+    //sets colour of the ray depending on order of importance, going from absorption
+    //reflection, deflection of 180, 60, 120
     private void setColor(Color newColor){
 
         int newColorRGB = newColor.getRGB();
         int colorRGB = color.getRGB();
 
+        //blue is for 180 relfection only change to blue if ray has not been deflected at all
         if (newColorRGB == Color.BLUE.getRGB()) {
             if (colorRGB == Color.RED.getRGB()) {
                 color = newColor;
             }
+            //if deflected 60 only change if has been only deflected 120 or not at all
         } else if (newColorRGB == Color.MAGENTA.getRGB()) {
             if (colorRGB == Color.BLUE.getRGB() || colorRGB == Color.RED.getRGB()) {
                 color = newColor;

@@ -57,10 +57,10 @@ public class GUI extends JPanel {
                     // Handle different game actions based on current action
                     if (game.getCurrentAction() == Game.Action.PLACE_ATOM) {
                         toggleEndGuessButtonVisibility(false);
-                        System.out.println(endGuessButton.isVisible());
+
                         if (!clickedHexagon.hasAtom()) {
                             game.getBoard().addAtom(clickedHexagon.getX(), clickedHexagon.getY());
-                            Draw.drawBoard(game.getBoard());
+
                         } else {
                             game.getBoard().removeAtom(clickedHexagon.getX(), clickedHexagon.getY());
                         }
@@ -217,7 +217,7 @@ public class GUI extends JPanel {
 
         // Draw rays and markers
         for (Ray ray : game.getBoard().getRays()) {
-            if (game.getCurrentAction() == Game.Action.PLACE_RAY || game.getCurrentAction() == Game.Action.SHOW_BOARD) {
+            if (game.getCurrentAction() == Game.Action.SHOW_BOARD) {
                 drawRay(g, ray);
             }
             drawMarker(g, ray);
@@ -413,7 +413,7 @@ public class GUI extends JPanel {
             g2d.setColor(Color.WHITE);
 
             FontMetrics metrics = g2d.getFontMetrics();
-            int textWidth = metrics.stringWidth("High");
+
             int textHeight = metrics.getHeight();
             Hexagon hexagon = getFromPixelPosition(x+30, y+30);
             if(hexagon.getY() - hexagon.getX() == 4){

@@ -101,7 +101,7 @@ public class Game {
     // Method to start a round
     public int startRound(GUI gui) {
         // Draw the empty board
-        Draw.drawBoard(board);
+
 
         // Place atoms
         while (board.numAtomsPlaced < 6) {
@@ -160,11 +160,7 @@ public class Game {
             hexagon.getDirectionsOfInfluence().clear();
             hexagon.removeInfluence();
         }
-        for (Hexagon hexagon : board.getListBoard()) {
-            System.out.println(hexagon.toString());
-            System.out.println("contains atom: " + hexagon.hasAtom());
-            System.out.println(("directions of influnce " + hexagon.getDirectionsOfInfluence()));
-        }
+
     }
 
     // Getter method for the board

@@ -1,86 +1,43 @@
 import java.util.ArrayList;
-
+/**
+ * The Board class represents the game board containing hexagonal cells.
+ * It manages the placement of atoms, rays, and guess atoms on the board,
+ * as well as the circle of influence around placed atoms.
+ */
 public class Board {
+    // Constants for the origin coordinates of the board
     private static final int xOrigin = 59;
     private static final int yOrigin = 28;
 
+    // List to hold all hexagonal cells on the board
     private final ArrayList<Hexagon> listBoard = new ArrayList<>();
+
+    // List to hold all rays on the board
     private ArrayList<Ray> rays;
 
-    //make private and getters and setter
+    // Number of atoms and rays placed on the board
     public int numAtomsPlaced = 0;
     public int numRaysPlaced = 0;
 
+    // Number of guessed atoms placed on the board
     public int numGuessAtomsPlaced = 0;
 
-    private final String[] stringBoard;
 
-    private final int stringBoardLength;
+
+    /**
+     * Constructs a new Board object with predefined string representation.
+     */
     public Board() {
-        this.stringBoard = new String[]{
-                "                                  * *  54 53  * *  52 51  * *  50 49  * *  48 47  * *",
-                "                            1   *     *     *     *     *     *     *     *     *     *   46",
-                "                              *         * *         * *         * *         * *         *",
-                "                             *           *           *           *           *           *",
-                "                         2   *           *           *           *           *           *   45",
-                "                             *           *           *           *           *           *",
-                "                            * *    1    * *    2    * *    3    * *    4    * *    5    * *",
-                "                      3   *     *     *     *     *     *     *     *     *     *     *     *   44",
-                "                        *         * *         * *         * *         * *         * *         *",
-                "                       *           *           *           *           *           *           *",
-                "                   4   *           *           *           *           *           *           *   43",
-                "                       *           *           *           *           *           *           *",
-                "                      * *    6    * *    7    * *    8    * *    9    * *    10   * *    11   * *",
-                "                5   *     *     *     *     *     *     *     *     *     *     *     *     *     *   42",
-                "                  *         * *         * *         * *         * *         * *         * *         *",
-                "                 *           *           *           *           *           *           *           *",
-                "             6   *           *           *           *           *           *           *           *   41",
-                "                 *           *           *           *           *           *           *           *",
-                "                * *    12   * *    13   * *    14   * *    15   * *    16   * *    17   * *    18   * *",
-                "          7   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   40",
-                "            *         * *         * *         * *         * *         * *         * *         * *         *",
-                "           *           *           *           *           *           *           *           *           *",
-                "       8   *           *           *           *           *           *           *           *           *   39",
-                "           *           *           *           *           *           *           *           *           *",
-                "          * *   19    * *    20   * *    21   * *    22   * *    23   * *    24   * *    25   * *    26   * *",
-                "    9   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   38",
-                "      *         * *         * *         * *         * *         * *         * *         * *         * *         *",
-                "     *           *           *           *           *           *           *           *           *           *",
-                "10   *           *           *           *           *           *           *           *           *           *   37",
-                "     *           *           *           *           *           *           *           *           *           *",
-                "      *    27   * *    28   * *    29   * *    30   * *    31   * *    32   * *    33   * *    34   * *    35   *",
-                "   11   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   36",
-                "          * *         * *         * *         * *         * *         * *         * *         * *         * *",
-                "           *           *           *           *           *           *           *           *           *",
-                "      12   *           *           *           *           *           *           *           *           *   35",
-                "           *           *           *           *           *           *           *           *           *",
-                "            *   36    * *    37   * *    38   * *    39   * *    40   * *    41   * *    42   * *    43   *",
-                "         13   *     *     *     *     *     *     *     *     *     *     *     *     *     *     *     *   34",
-                "                * *         * *         * *         * *         * *         * *         * *         * *",
-                "                 *           *           *           *           *           *           *           *",
-                "            14   *           *           *           *           *           *           *           *   33",
-                "                 *           *           *           *           *           *           *           *",
-                "                  *   44    * *    45   * *    46   * *    47   * *    48   * *    49   * *    50   *",
-                "               15   *     *     *     *     *     *     *     *     *     *     *     *     *     *   32",
-                "                      * *         * *         * *         * *         * *         * *         * *",
-                "                       *           *           *           *           *           *           *",
-                "                  16   *           *           *           *           *           *           *   31",
-                "                       *           *           *           *           *           *           *",
-                "                        *    51   * *    52   * *    53   * *    54   * *    55   * *    56   *",
-                "                     17   *     *     *     *     *     *     *     *     *     *     *     *   30",
-                "                            * *         * *         * *         * *         * *         * *",
-                "                             *           *           *           *           *           *",
-                "                        18   *           *           *           *           *           *   29",
-                "                             *           *           *           *           *           *",
-                "                              *    57   * *    58   * *    59   * *    60   * *    61   *",
-                "                           19   *     *     *     *     *     *     *     *     *     *   28",
-                "                                  * *  20 21  * *  22 23  * *  24 25  * *  26 27  * *",
 
-
-        };
-        this.stringBoardLength = stringBoard.length;
         this.rays = new ArrayList<>();
+        initialiseBoard();
 
+    }
+
+    /**
+     * Initializes the board by populating the list of hexagons based on predefined coordinates.
+     */
+    protected void initialiseBoard(){
         int key = 0; // this key ensures we don't fill in hexagons that do not exist
 
         // fill out board
@@ -152,15 +109,17 @@ public class Board {
     }
 
 
-    //returns string representation of the board
-    public String[] getStringBoard(){
-        return this.stringBoard;
-    }
+
     //returns entire list on hexagons on board
     public ArrayList<Hexagon> getListBoard() {
         return listBoard;
     }
-//returns all the rays
+    /**
+     * Returns the list of all hexagonal cells on the board.
+     *
+     * @return The ArrayList containing all hexagonal cells.
+     */
+    //returns all the rays
     public ArrayList<Ray> getRays() {
         return rays;
     }
@@ -168,6 +127,13 @@ public class Board {
 
 
 
+    /**
+     * Retrieves the hexagonal cell at the specified coordinates from the list of hexagons.
+     *
+     * @param x The x-coordinate of the hexagon.
+     * @param y The y-coordinate of the hexagon.
+     * @return The Hexagon object at the specified coordinates, or null if not found.
+     */
 //find the hexagon from teh list of hexagons retruns null if not found
     public Hexagon getListHexagon(int x, int y) {
 
@@ -183,7 +149,12 @@ public class Board {
         return null;
     }
 
-
+    /**
+     * Adds or removes a guessed atom at the specified coordinates on the board.
+     *
+     * @param x The x-coordinate of the cell.
+     * @param y The y-coordinate of the cell.
+     */
 //add a guessed atom to board
     public void addGuessAtom(int x, int y){
         if(!getListHexagon(x, y).hasGuessAtom()) {
@@ -197,41 +168,39 @@ public class Board {
 
 
     // Method to add a character into the center of hexagon using the (x, y) co-ordinates.
-    public void addChar(int x, int y, char c) {
-
-        // Polar co-ordinates conversion
-        // Each center of hexagon is 12 horizontal spaces away from each other.
-        // Changing y will need adjustments for the x co-ordinate also due to hexagons travelling diagonally.
-        int xPolar = (12*x + xOrigin + (-6*y));
-        int yPolar = yOrigin + (-6*y);
 
 
-        // Using StringBuilder, set character at (x,y) to c
-        StringBuilder newRow = new StringBuilder(stringBoard[yPolar]);
-        newRow.setCharAt(xPolar, c);
-
-        // Add new row into the board, replacing the old one
-        stringBoard[yPolar] = newRow.toString();
-
-
-    }
-
+    /**
+     * Adds an atom at the specified coordinates on the board.
+     *
+     * @param x The x-coordinate of the cell.
+     * @param y The y-coordinate of the cell.
+     */
     //adds atoms to baord
     public void addAtom(int x, int y){
-        addChar(x, y, '*');
         getListHexagon(x, y).setContainsAtom(true);
         addCircleOfInfluence(x, y);
         numAtomsPlaced++;
 
     }
+    /**
+     * Removes an atom at the specified coordinates on the board.
+     *
+     * @param x The x-coordinate of the cell.
+     * @param y The y-coordinate of the cell.
+     */
     //removes an atoms
     public void removeAtom(int x, int y) {
-        addChar(x, y, ' ');
         getListHexagon(x, y).setContainsAtom(false);
         removeCircleOfInfluence(x, y);
         numAtomsPlaced--;
     }
 
+    /**
+     * Adds a ray to the board.
+     *
+     * @param ray The ray object to be added.
+     */
     //adds ray to board
     public void addRay(Ray ray) {
         rays.add(ray);
@@ -239,6 +208,12 @@ public class Board {
 
 
 
+    /**
+     * Finds the direction of the specified index in the hexagonal grid.
+     *
+     * @param i The index in the hexagonal grid.
+     * @return The Direction enum representing the direction.
+     */
     public Direction findDirection(int i){
 
         if(i < 10 && i%2 == 1){
@@ -260,6 +235,12 @@ public class Board {
         return null;
     }
 
+    /**
+     * Finds the starting hexagon for the specified index in the hexagonal grid.
+     *
+     * @param i The index in the hexagonal grid.
+     * @return The Hexagon object representing the starting hexagon.
+     */
     public Hexagon findStartHexagon(int i){
         if(i < 11){
             if(i % 2 == 1){
@@ -299,7 +280,14 @@ public class Board {
 
         return null;
     }
-    //
+
+    /**
+     * Finds the neighbouring hexagons of the specified cell coordinates.
+     *
+     * @param x The x-coordinate of the cell.
+     * @param y The y-coordinate of the cell.
+     * @return The ArrayList containing neighbouring Hexagon objects.
+     */
     public ArrayList<Hexagon> neighbouringHexagons(int x, int y){
 
 
@@ -324,7 +312,12 @@ public class Board {
 
 
 
-
+    /**
+     * Adds the circle of influence around the specified atom coordinates on the board.
+     *
+     * @param x The x-coordinate of the atom.
+     * @param y The y-coordinate of the atom.
+     */
 
     public void addCircleOfInfluence(int x, int y) {
 //checks all surrounding hexagons if they exits and if sow and influence marker
@@ -342,17 +335,16 @@ public class Board {
             getListHexagon(x+1, y+1).placeInfluence(Direction.NORTHEAST);
         }
 
-        for(Hexagon hexagon: listBoard) {
 
-            // if the hexagon has an atom on it, draw the atom
-            if(hexagon.hasInfluence() && !hexagon.hasAtom()) {
-                addChar(hexagon.getX(), hexagon.getY(), '#');
-            }
-
-        }
 
     }
 
+    /**
+     * Removes the circle of influence around the specified atom coordinates on the board.
+     *
+     * @param x The x-coordinate of the atom.
+     * @param y The y-coordinate of the atom.
+     */
     public void removeCircleOfInfluence(int x, int y) {
         ArrayList<Hexagon> neighbouringHexes = neighbouringHexagons(x, y);
         Hexagon centreHex = getListHexagon(x, y);
@@ -360,10 +352,15 @@ public class Board {
             hexagon.removeInfluence();
         }
 
-
-
     }
 
+    /**
+     * Retrieves the next hexagon in the specified direction from the given hexagon.
+     *
+     * @param hexagon   The current hexagon.
+     * @param direction The direction in which to find the next hexagon.
+     * @return The Hexagon object representing the next hexagon in the specified direction.
+     */
     // Method to return the next hexagon on the board in a given direction
     public Hexagon getNextHexagon(Hexagon hexagon, Direction direction) {
 
@@ -395,3 +392,19 @@ public class Board {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
