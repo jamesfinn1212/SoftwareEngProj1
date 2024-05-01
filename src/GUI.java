@@ -7,7 +7,6 @@ public class GUI extends JPanel {
 
     // Constants for hexagon rendering
     private static final int HEX_RADIUS = 30;
-    private static final int HEX_DISTANCE = 2;
     private static final int CENTER_PIXEL_X = 600;
     private static final int CENTER_PIXEL_Y = 300;
     private static final int HEX_SIDE_LENGTH = 30;
